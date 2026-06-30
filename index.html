@@ -879,6 +879,208 @@ select.form-control{cursor:pointer}
 .toast.success{border-color:var(--accent);color:var(--accent)}
 .toast.error{border-color:var(--danger);color:var(--danger)}
 @keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ========== 新增：小说IP库页面样式 ========== */
+.ip-page-header{margin-bottom:16px}.ip-page-header h2{font-size:22px;font-weight:700;background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px}.ip-page-desc{font-size:13px;color:var(--text-secondary)}
+.ip-tab-panel{display:none;padding-top:8px}.ip-tab-panel.active{display:block}
+
+/* 试稿书单 */
+.trial-filter-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;font-size:13px}
+.filter-label{color:var(--text-secondary)}
+.filter-tags{display:flex;gap:6px}
+.filter-tag{padding:4px 14px;border-radius:16px;border:1px solid var(--border);cursor:pointer;font-size:12px;color:var(--text-secondary);transition:all .2s}
+.filter-tag.active,.filter-tag:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+.novel-card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.novel-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;gap:14px;transition:transform .2s,border-color .2s;cursor:pointer}
+.novel-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.novel-cover{width:90px;height:120px;flex-shrink:0;border-radius:8px;overflow:hidden}
+.novel-cover img{width:100%;height:100%;object-fit:cover}
+.novel-info{flex:1;min-width:0;display:flex;flex-direction:column}
+.novel-info h4{font-size:15px;font-weight:600;margin-bottom:2px}
+.novel-meta{font-size:12px;color:var(--text-muted);margin-bottom:6px}
+.novel-tags{display:flex;gap:6px;margin-bottom:6px}
+.tag-people{padding:2px 8px;border-radius:10px;background:rgba(255,180,0,.15);color:#f59e0b;font-size:11px}
+.tag-orange{padding:2px 8px;border-radius:10px;background:rgba(249,115,22,.15);color:#f97316;font-size:11px}
+.tag-red{padding:2px 8px;border-radius:10px;background:rgba(239,68,68,.15);color:#ef4444;font-size:11px}
+.tag-status{padding:2px 8px;border-radius:10px;font-size:11px}
+.tag-status.green{background:rgba(34,197,94,.15);color:#22c55e}
+.novel-stats{display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);margin-bottom:10px}
+.btn-cooperate,.btn-disabled{padding:6px 20px;border-radius:6px;font-size:13px;border:none;cursor:pointer;width:fit-content;transition:.2s}
+.btn-cooperate{background:var(--accent);color:#fff}
+.btn-cooperate:hover{opacity:.85}
+.btn-disabled{background:var(--bg-dark);color:var(--text-muted);cursor:not-allowed}
+
+/* AI创作面板 */
+.ai-create-panel{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:28px;max-width:720px}
+.form-grid-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:13px;color:var(--text-secondary);margin-bottom:6px;font-weight:500}
+.form-select{width:100%;padding:10px 14px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);font-size:14px;outline:none;cursor:pointer}
+.form-textarea{width:100%;padding:10px 14px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);font-size:14px;resize:vertical;outline:none;font-family:inherit;line-height:1.6}
+.form-textarea::placeholder{color:var(--text-muted)}
+.btn-generate-primary{display:inline-flex;align-items:center;padding:12px 28px;background:linear-gradient(135deg,#00DC82,#00B377);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;transition:all .3s;margin-top:4px}
+.btn-generate-primary:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,220,130,.35)}
+
+/* 上传区域 */
+.upload-zone-large{background:var(--card-bg);border:2px dashed var(--border);border-radius:12px;padding:60px;text-align:center;transition:border-color .3s;cursor:pointer}
+.upload-zone-large:hover{border-color:var(--accent)}
+.upload-icon-lg{font-size:48px;opacity:.6}
+
+/* ========== 新增：剧本库页面样式 ========== */
+.script-card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+.script-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:18px;display:flex;gap:14px;transition:transform .2s,border-color .2s}
+.script-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.script-cover{width:100px;height:130px;flex-shrink:0;border-radius:8px;overflow:hidden}
+.script-cover img{width:100%;height:100%;object-fit:cover}
+.script-info{flex:1;display:flex;flex-direction:column}
+.script-info h4{font-size:15px;font-weight:600;margin-bottom:2px}
+.script-meta{font-size:12px;color:var(--text-muted);margin-bottom:6px}
+.script-tags{margin-bottom:6px}
+.script-detail{font-size:12px;color:var(--text-secondary);margin-bottom:10px}
+.btn-start-drama{padding:6px 18px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;width:fit-content;transition:.2s}
+.btn-start-drama:hover{opacity:.85}
+
+/* ========== 新增：AI短剧创作页面样式 ========== */
+.comic-header-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.btn-new-project{padding:8px 20px;background:linear-gradient(135deg,#00DC82,#00B377);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}
+.flow-content-area{display:flex;gap:0;margin-top:16px;min-height:520px}
+.flow-panel{display:none;width:100%}.flow-panel.active{display:flex;gap:0}
+
+.episode-sidebar{width:160px;flex-shrink:0;padding:12px 0;border-right:1px solid var(--border)}
+.ep-label{font-size:12px;color:var(--text-muted);margin-bottom:10px;padding-left:12px}
+.ep-item{padding:8px 12px;font-size:13px;color:var(--text-secondary);cursor:pointer;border-radius:6px;margin-bottom:2px;transition:all .2s}
+.ep-item:hover{background:var(--bg-dark)}
+.ep-item.active{background:var(--accent);color:#fff;font-weight:500}
+.ep-main-content{flex:1;padding:20px 24px;overflow-y:auto}
+
+.section-title{font-size:15px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:6px}
+
+.source-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.source-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:28px 24px;text-align:center;transition:all .2s;cursor:pointer}
+.source-card.highlighted{border-color:var(--accent);background:rgba(0,220,130,.03)}
+.source-icon{font-size:36px;margin-bottom:12px}
+.source-card h4{font-size:16px;font-weight:600;margin-bottom:8px}
+.source-card p{font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:16px}
+.btn-outline-sm{padding:7px 18px;border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:6px;font-size:13px;cursor:pointer;transition:.2s}
+.btn-outline-sm:hover{background:var(--accent);color:#fff}
+.btn-outline-dark-sm{padding:7px 18px;border:1px solid var(--border);color:var(--text-secondary);background:transparent;border-radius:6px;font-size:13px;cursor:pointer;transition:.2s}
+.or-divider{text-align:center;color:var(--text-muted);font-size:13px;margin:16px 0 12px;position:relative}
+.project-chips{display:flex;gap:10px;flex-wrap:wrap}
+.proj-chip{padding:6px 14px;background:var(--bg-dark);border:1px solid var(--border);border-radius:20px;font-size:12px;color:var(--text-secondary)}
+
+/* 故事单元列表 */
+.story-unit-list{margin-bottom:20px}
+.story-unit{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;transition:all .2s}
+.story-unit.active{border-color:var(--accent);background:rgba(0,220,130,.03)}
+.su-num{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
+.su-body{flex:1}
+.su-body h4{font-size:14px;font-weight:600;margin-bottom:2px}
+.su-desc{font-size:12px;color:var(--text-muted)}
+.su-badge{padding:3px 10px;border-radius:12px;font-size:11px}
+.su-badge.current{background:rgba(0,220,130,.15);color:#00DC82}
+.su-badge.pending{background:rgba(107,114,128,.15);color:#6b7280}
+
+/* 剧本预览 */
+.script-preview-box{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.sp-header{padding:10px 16px;font-size:13px;font-weight:600;border-bottom:1px solid var(--border);background:var(--bg-dark)}
+.sp-body{padding:14px 16px;font-size:13px;line-height:1.9;color:var(--text-secondary)}
+.sp-body p{margin-bottom:6px}
+.hl-green{color:#00DC82;font-weight:500}
+.hl-blue{color:#4D7CFE;font-weight:500}
+
+/* 角色资产网格 */
+.asset-char-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:8px}
+.char-card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:transform .2s;cursor:pointer}
+.char-card:hover{transform:translateY(-3px);border-color:var(--accent)}
+.char-img{height:160px;overflow:hidden}
+.char-img img{width:100%;height:100%;object-fit:cover}
+.char-card h5{font-size:13px;font-weight:600;padding:8px 10px 2px}
+.char-angle{font-size:11px;color:var(--text-muted);padding:0 10px 10px}
+
+.asset-scene-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.scene-card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:transform .2s;cursor:pointer}
+.scene-card:hover{transform:translateY(-3px);border-color:var(--accent)}
+.scene-img{height:140px;overflow:hidden}
+.scene-img img{width:100%;height:100%;object-fit:cover}
+.scene-card h5{font-size:13px;font-weight:600;padding:8px 10px 2px}
+.scene-time{font-size:11px;color:var(--text-muted);padding:0 10px 10px}
+
+/* 视频制作布局 */
+.video-production-layout{display:flex;gap:20px;width:100%}
+.vp-preview{width:420px;flex-shrink:0;position:relative}
+.vp-playbar{margin-top:10px;display:flex;align-items:center;gap:10px}
+.play-btn{width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;flex-shrink:0}
+.progress-bar-bg{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.progress-bar-fill{height:100%;background:var(--accent);border-radius:2px}
+.time-text{font-size:12px;color:var(--text-muted);flex-shrink:0}
+.vp-shotlist{flex:1;display:flex;flex-direction:column;gap:8px}
+.shot-item{display:flex;gap:12px;padding:10px 14px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;transition:all .2s;cursor:pointer}
+.shot-item:hover{border-color:var(--accent)}
+.shot-item.active{border-color:var(--accent);background:rgba(0,220,130,.03)}
+.shot-thumb{width:80px;height:50px;flex-shrink:0;border-radius:6px;overflow:hidden}
+.shot-thumb img{width:100%;height:100%;object-fit:cover}
+.shot-info{flex:1;min-width:0}
+.shot-info strong{font-size:13px;display:block;margin-bottom:2px}
+.shot-info p{font-size:11px;color:var(--text-muted)}
+.shot-info small{font-size:11px;color:var(--text-accent)}
+
+/* 成片预览 */
+.preview-main{display:flex;gap:24px;width:100%}
+.preview-player{flex-shrink:0}
+.preview-right{flex:1;min-width:0}
+.timeline-list{display:flex;flex-direction:column;gap:6px;margin-bottom:20px}
+.tl-item{display:flex;align-items:center;gap:12px;padding:8px 12px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px}
+.tl-num{width:26px;height:26px;border-radius:6px;background:var(--card-bg);color:var(--text-secondary);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
+.tl-name{flex:1;font-size:13px}
+.tl-time{font-size:12px;color:var(--text-muted)}
+.action-buttons-row{display:flex;gap:10px;flex-wrap:wrap}
+.btn-action-pri{padding:9px 20px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
+.btn-action-pri:hover{opacity:.85}
+.btn-action-sec{padding:9px 20px;background:transparent;color:var(--text-secondary);border:1px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer;transition:.2s}
+.btn-action-sec:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ========== 新增：资产库页面样式 ========== */
+.assets-layout{display:flex;min-height:calc(100vh - 120px)}
+.assets-sidebar{width:180px;flex-shrink:0;background:var(--card-bg);border:1px solid var(--border);border-right:none;border-radius:12px 0 0 12px;padding:20px 0}
+.as-title{font-size:14px;font-weight:700;color:var(--text-muted);padding:0 20px;margin-bottom:16px}
+.as-nav-item{padding:10px 20px;font-size:14px;color:var(--text-secondary);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px}
+.as-nav-item.active{color:var(--accent);background:rgba(0,220,130,.06);border-right:3px solid var(--accent)}.as-nav-item:hover{background:var(--bg-dark)}
+.assets-main{flex:1;padding:20px 28px;overflow-y:auto}
+.am-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.am-header h2{font-size:20px;font-weight:700}
+.am-tabs{display:flex;gap:4px;background:var(--bg-dark);border-radius:8px;padding:3px}
+.am-tab{padding:6px 18px;border-radius:6px;font-size:13px;cursor:pointer;color:var(--text-secondary);transition:all .2s}
+.am-tab.active{background:#fff;color:var(--text-primary);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.am-subnav{display:flex;gap:6px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:12px}
+.ams-tab{padding:6px 16px;font-size:13px;color:var(--text-secondary);cursor:pointer;border-radius:6px 6px 0 0;transition:all .2s;position:relative}
+.ams-tab.active{color:var(--accent);font-weight:600}
+.ams-count{display:inline-block;margin-left:4px;font-size:11px;color:var(--text-muted);background:var(--bg-dark);padding:1px 7px;border-radius:10px}
+.am-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px;padding:12px 16px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px}
+.am-filter-sel{padding:6px 10px;background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;color:var(--text-primary);font-size:12px;outline:none;cursor:pointer}
+.am-check{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text-secondary);cursor:pointer}
+.am-check input{accent-color:var(--accent)}
+.am-search-input{padding:6px 12px;background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;color:var(--text-primary);font-size:12px;outline:none;width:150px}
+.am-search-btn,.am-reset-btn,.am-del-btn{padding:6px 14px;border-radius:6px;font-size:12px;border:none;cursor:pointer}
+.am-search-btn{background:var(--accent);color:#fff}
+.am-reset-btn{background:var(--bg-dark);color:var(--text-secondary);border:1px solid var(--border)}
+.am-del-btn{background:rgba(239,68,68,.08);color:#ef4444;border:1px solid rgba(239,68,68,.2)}
+.am-sort{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text-secondary);margin-left:auto}
+.am-sort-sel{padding:4px 8px;background:var(--bg-dark);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-size:11px;outline:none;cursor:pointer}
+.am-upload-hint{text-align:center;padding:40px;color:var(--text-muted);font-size:14px;border:2px dashed var(--border);border-radius:10px;margin-bottom:20px;cursor:pointer}
+.up-arrow{font-size:24px;margin-bottom:8px}
+.am-card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
+.am-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;transition:all .2s;cursor:pointer}
+.am-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08);transform:translateY(-2px)}
+.am-card-img{height:200px;overflow:hidden;background:#f3f4f6}
+.am-card-img img{width:100%;height:100%;object-fit:cover}
+.am-card-info{padding:10px 12px}
+.am-card-info h5{font-size:13px;font-weight:600;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.am-source{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;margin-right:6px}
+.am-source.ai{background:rgba(59,130,246,.08);color:#3b82f6}
+.am-views{font-size:11px;color:#9ca3af}
+.no-more{text-align:center;color:var(--text-muted);font-size:13px;padding:24px}
+
 </style>
 <script src="https://beacon.cdn.qq.com/sdk/4.5.9/beacon_web.min.js"></script>
 <script>
@@ -1272,21 +1474,93 @@ select.form-control{cursor:pointer}
         </div>
       </div>
 
-      <!-- 小说IP -->
-      <div class="page"       <div class="page" id="page-novel-ip">
+            <div class="page" id="page-novel-ip">
+        <div class="ip-page-header">
+          <h2>小说IP库</h2>
+          <p class="ip-page-desc">浏览精选小说IP，选择心仪作品开始漫剧创作之旅</p>
+        </div>
         <div class="ip-tabs">
           <div class="ip-tab active" onclick="switchIPTab(this,'ip-tab-trial')">📖 试稿书单</div>
           <div class="ip-tab" onclick="switchIPTab(this,'ip-tab-ai')">🤖 AI小说创作</div>
           <div class="ip-tab" onclick="switchIPTab(this,'ip-tab-upload')">📤 上传小说</div>
         </div>
-      </div><div class="page"       <div class="page" id="page-script">
+
+        <!-- 试稿书单 tab -->
+        <div id="ip-tab-trial" class="ip-tab-panel active">
+          <div class="trial-filter-row">
+            <span class="filter-label">分类</span>
+            <div class="filter-tags"><span class="filter-tag active">全部</span><span class="filter-tag">男频</span><span class="filter-tag">女频</span></div>
+            <span class="filter-label" style="margin-left:24px">状态</span>
+            <div class="filter-tags"><span class="filter-tag active">全部</span><span class="filter-tag">连载</span><span class="filter-tag">已完结</span></div>
+          </div>
+          <div class="novel-card-grid">
+            <div class="novel-card"><div class="novel-cover"><img src="img_cover_1.png" alt="cover"/></div><div class="novel-info"><h4>大秦风云录</h4><p class="novel-meta">秦朝·历史军事</p><div class="novel-tags"><span class="tag-people">人气</span><span class="tag-status green">已完结</span></div><div class="novel-stats"><span>1280章·380万人气</span><span>★ 9.2</span></div><button class="btn-cooperate">合作试稿</button></div></div>
+            <div class="novel-card"><div class="novel-cover"><img src="img_cover_2.png" alt="cover"/></div><div class="novel-info"><h4>都市最强修仙</h4><p class="novel-meta">流浪的蛤蟆·都市</p><div class="novel-tags"><span class="tag-orange">爆款</span><span class="tag-status green">已完结</span></div><div class="novel-stats"><span>2066章·620万人气</span><span>★ 8.9</span></div><button class="btn-disabled">已申领</button></div></div>
+            <div class="novel-card"><div class="novel-cover"><img src="img_cover_3.png" alt="cover"/></div><div class="novel-info"><h4>逆天邪神传</h4><p class="novel-meta">火星引力·仙侠</p><div class="novel-tags"><span class="tag-red">TOP1</span></div><div class="novel-stats"><span>3400章·1200万人气</span><span>★ 9.5</span></div><button class="btn-cooperate">合作试稿</button></div></div>
+            <div class="novel-card"><div class="novel-cover"><img src="img_cover_4.png" alt="cover"/></div><div class="novel-info"><h4>星海征途</h4><p class="novel-meta">天蚕土豆·科幻</p><div class="novel-tags"><span class="tag-status green">已完结</span></div><div class="novel-stats"><span>1890章·450万人气</span><span>★ 8.7</span></div><button class="btn-cooperate">合作试稿</button></div></div>
+            <div class="novel-card"><div class="novel-cover"><img src="img_cover_5.png" alt="cover"/></div><div class="novel-info"><h4>万界之主</h4><p class="novel-meta">辰东·玄幻</p><div class="novel-tags"><span class="tag-people">人气</span></div><div class="novel-stats"><span>5120章·2100万人气</span><span>★ 9.3</span></div><button class="btn-cooperate">合作试稿</button></div></div>
+            <div class="novel-card"><div class="novel-cover"><img src="img_cover_1.png" alt="cover"/></div><div class="novel-info"><h4>宠爱无度</h4><p class="novel-meta">甜妻·言情</p><div class="novel-tags"><span class="tag-status green">已完结</span></div><div class="novel-stats"><span>865章·280万人气</span><span>★ 8.8</span></div><button class="btn-cooperate">合作试稿</button></div></div>
+          </div>
+        </div>
+
+        <!-- AI小说创作 tab -->
+        <div id="ip-tab-ai" class="ip-tab-panel">
+          <div class="ai-create-panel">
+            <h3 style="font-size:16px;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:8px">🤖 AI智能创作小说</h3>
+            <div class="form-grid-2col"><div class="form-group"><label>创作方式</label><select class="form-select"><option>续写模式</option><option>全新创作</option><option>风格仿写</option></select></div><div class="form-group"><label>AI模型</label><select class="form-select"><option>GPT-4o（推荐）</option><option>Claude 3.5</option><option>文心一言</option></select></div></div>
+            <div class="form-group"><label>题材</label><select class="form-select"><option>仙侠玄幻</option><option>都市异能</option><option>历史军事</option><option>科幻未来</option><option>悬疑推理</option></select></div>
+            <div class="form-group"><label>核心提示词</label><textarea class="form-textarea" rows="4" placeholder="描述你的小说创意，AI将基于此进行智能创作..."></textarea></div>
+            <div class="form-group"><label>参考风格</label><select class="form-select"><option>玄幻史诗风</option><option>网文爽文风</option><option>文学严肃风</option><option>轻小说风</option></select></div>
+            <button class="btn-generate-primary" onclick="showToast('AI正在生成中，预计15-30秒...','success')">🚀 一键生成 <span style="opacity:0.6;font-size:12px;margin-left:8px">AI创作约需15-30秒</span></button>
+          </div>
+        </div>
+
+        <!-- 上传小说 tab -->
+        <div id="ip-tab-upload" class="ip-tab-panel">
+          <div class="upload-zone-large"><div class="upload-icon-lg">📤</div><p style="margin-top:16px;font-size:15px;font-weight:500">拖拽上传小说文件</p><p style="color:var(--text-muted);font-size:13px;margin-top:8px">支持 .txt / .docx / .pdf 格式，最大 50MB</p></div>
+        </div>
+      <div class="page" id="page-script">
+        <div class="ip-page-header">
+          <h2>剧本库</h2>
+          <p class="ip-page-desc">平台剧本库 + AI智能改编引擎</p>
+        </div>
         <div class="ip-tabs">
           <div class="ip-tab active" onclick="switchIPTab(this,'scr-tab-platform')">📚 平台剧本</div>
           <div class="ip-tab" onclick="switchIPTab(this,'scr-tab-ai')">🤖 AI创作</div>
           <div class="ip-tab" onclick="switchIPTab(this,'scr-tab-upload')">📤 上传剧本</div>
         </div>
-      </div><div class="page"       <div class="page" id="page-comic-create">
 
+        <!-- 平台剧本 tab -->
+        <div id="scr-tab-platform" class="ip-tab-panel active">
+          <div class="script-card-grid">
+            <div class="script-card"><div class="script-cover"><img src="img_cover_1.png" alt="cover"/></div><div class="script-info"><h4>大秦风云录·S1剧本</h4><p class="script-meta">来源IP: 大秦风云录</p><div class="script-tags"><span class="tag-status green">已完成</span></div><p class="script-detail">12集 · 分镜已标注</p><button class="btn-start-drama">开始漫剧 →</button></div></div>
+            <div class="script-card"><div class="script-cover"><img src="img_cover_2.png" alt="cover"/></div><div class="script-info"><h4>逆天邪神·改编剧本</h4><p class="script-meta">来源IP: 逆天邪神传</p><div class="script-tags"><span class="tag-orange">AI改编</span></div><p class="script-detail">20集 · 待重核</p><button class="btn-start-drama">开始漫剧 →</button></div></div>
+            <div class="script-card"><div class="script-cover"><img src="img_cover_3.png" alt="cover"/></div><div class="script-info"><h4>宠爱无度·S2剧本</h4><p class="script-meta">来源IP: 宠爱无度</p><div class="script-tags"><span class="tag-status green">已完成</span></div><p class="script-detail">8集 · 分镜已标注</p><button class="btn-start-drama">开始漫剧 →</button></div></div>
+          </div>
+        </div>
+
+        <!-- AI创作 tab -->
+        <div id="scr-tab-ai" class="ip-tab-panel">
+          <div class="ai-create-panel">
+            <h3 style="font-size:16px;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:8px">🤖 AI智能改编剧本</h3>
+            <div class="form-grid-2col"><div class="form-group"><label>选择源小说IP</label><select class="form-select"><option>大秦风云录</option><option>逆天邪神传</option><option>星海征途</option><option>万界之主</option></select></div><div class="form-group"><label>AI模型</label><select class="form-select"><option>GPT-4o（推荐）</option><option>Claude 3.5</option></select></div></div>
+            <div class="form-grid-2col"><div class="form-group"><label>集数</label><select class="form-select"><option>12集（短剧）</option><option>24集（中篇）</option><option>36集（长篇）</option></select></div><div class="form-group"><label>风格倾向</label><select class="form-select"><option>尊重原著</option><option>快节奏改编</option><option>情感强化</option></select></div></div>
+            <div class="form-group"><label>目标时长</label><select class="form-select"><option>每集约1分钟</option><option>每集约2分钟</option><option>每集约3分钟</option></select></div>
+            <button class="btn-generate-primary" onclick="showToast('AI改编启动，预计30-60秒...','success')">🚀 开始AI改编 <span style="opacity:0.6;font-size:12px;margin-left:8px">AI改编约需30-60秒</span></button>
+          </div>
+        </div>
+
+        <!-- 上传剧本 tab -->
+        <div id="scr-tab-upload" class="ip-tab-panel">
+          <div class="upload-zone-large"><div class="upload-icon-lg">📄</div><p style="margin-top:16px;font-size:15px;font-weight:500">上传自有剧本</p><p style="color:var(--text-muted);font-size:13px;margin-top:8px">支持 .docx / .pdf / .fountain 格式</p></div>
+        </div>
+      </div>
+
+<div class="page" id="page-comic-create">
+        <div class="comic-header-bar">
+          <div><h2 style="display:inline;font-size:20px;font-weight:700;background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">AI短剧创作</h2><p style="display:inline;color:var(--text-muted);font-size:13px;margin-left:10px">大秦风云录 · 第一季 · 第1集</p></div>
+          <button class="btn-new-project" onclick="showToast('新建项目','info')">+ 新建项目</button>
+        </div>
         <div class="flow-nav">
           <div class="flow-step active" onclick="switchFlow(this,0)"><span class="fs-num">1</span>内容解析</div>
           <div class="flow-step" onclick="switchFlow(this,1)"><span class="fs-num">2</span>剧本拆分</div>
@@ -1294,50 +1568,165 @@ select.form-control{cursor:pointer}
           <div class="flow-step" onclick="switchFlow(this,3)"><span class="fs-num">4</span>视频制作</div>
           <div class="flow-step" onclick="switchFlow(this,4)"><span class="fs-num">5</span>成片预览</div>
         </div>
+        <div class="flow-content-area">
 
-      </div><div class="page"       <div class="page" id="page-assets">
-        <div class="asset-nav">
-          <div class="asset-nav-tab active" onclick="switchAssetNav(this,'personal')" style="background:var(--accent-bg);color:var(--accent)">👤 个人资产</div>
-          <div class="asset-nav-tab" onclick="switchAssetNav(this,'public')">🌐 公共资产</div>
+          <!-- 步骤1：内容解析 -->
+          <div id="flow-panel-0" class="flow-panel active">
+            <div class="episode-sidebar"><div class="ep-label">集数列表</div><div class="ep-item active">第1集 · 朝堂变法</div><div class="ep-item">第2集 · 暗流涌动</div><div class="ep-item">第3集 · 初显锋芒</div><div class="ep-item">第4集 · 风云际会</div><div class="ep-item">第5集 · 群雄逐鹿</div></div>
+            <div class="ep-main-content">
+              <div class="section-title">📥 选择内容来源，开始漫剧创作</div>
+              <div class="source-cards">
+                <div class="source-card highlighted"><div class="source-icon">📘</div><h4>从小说开始</h4><p>从书单选择或上传小说，AI自动解析章节结构、人物关系、场景地点，智能改编为漫剧脚本</p><button class="btn-outline-sm">选择小说 →</button></div>
+                <div class="source-card"><div class="source-icon">📝</div><h4>从剧本开始</h4><p>上传已有剧本文件，AI自动识别景别、拆分叙事单元，快速进入资产生成与视频制作流程</p><button class="btn-outline-dark-sm">上传剧本 →</button></div>
+              </div>
+              <div class="recent-projects"><p class="or-divider">或者从最近项目继续</p><div class="project-chips"><span class="proj-chip">⭕ 大秦风云录 · 第1集 · 剧本拆分</span><span class="proj-chip">⭕ 逆天邪神 · 第5集 · 资产生成</span></div></div>
+            </div>
+          </div>
+
+          <!-- 步骤2：剧本拆分 -->
+          <div id="flow-panel-1" class="flow-panel">
+            <div class="episode-sidebar"><div class="ep-label">集数列表</div><div class="ep-item active">第1集 · 朝堂变法</div><div class="ep-item">第2集 · 暗流涌动</div><div class="ep-item">第3集 · 初显锋芒</div><div class="ep-item">第4集 · 风云际会</div><div class="ep-item">第5集 · 群雄逐鹿</div></div>
+            <div class="ep-main-content">
+              <div class="section-title">📋 故事单元列表（共 5 个单元）</div>
+              <div class="story-unit-list">
+                <div class="story-unit active"><div class="su-num">1</div><div class="su-body"><h4>咸阳大殿·李斯谏言变法</h4><p class="su-desc">全景/中景/特写 · 角色:秦始皇、李斯、扶苏</p></div><span class="su-badge current">当前</span></div>
+                <div class="story-unit"><div class="su-num">2</div><div class="su-body"><h4>密室密谋·反对派筹划</h4><p class="su-desc">暗景/近景 · 角色:反对派大臣</p></div><span class="su-badge pending">待处理</span></div>
+                <div class="story-unit"><div class="su-num">3</div><div class="su-body"><h4>摄宫夜话·扶苏思察</h4><p class="su-desc">暗调/中式 · 角色:扶苏</p></div><span class="su-badge pending">待处理</span></div>
+                <div class="story-unit"><div class="su-num">4</div><div class="su-body"><h4>集市风波·变法微澜</h4><p class="su-desc">外景/全景 · 角色:群臣、民众</p></div><span class="su-badge pending">待处理</span></div>
+              </div>
+              <div class="script-preview-box"><div class="sp-header">📄 剧本原文（AI影别标注）</div><div class="sp-body"><p>咸阳宫内，晨曦初透。<span class="hl-green">【景别:全景】</span></p><p>李斯长身而起，手捧竹简，大步上前。<span class="hl-green">【景别:中景·移镜】</span></p><p>"陛下，臣有一策，可令大秦永固。"<span class="hl-blue">【景别:近景·对焦】</span></p><p>始皇帝端坐御案之后，目光深邃。群臣窃窃私语，面色各异。<span class="hl-green">【景别:中景·摇镜】</span></p></div></div>
+            </div>
+          </div>
+
+          <!-- 步骤3：资产生成 -->
+          <div id="flow-panel-2" class="flow-panel">
+            <div class="episode-sidebar"><div class="ep-label">集数列表</div><div class="ep-item active">第1集 · 朝堂变法</div><div class="ep-item">第2集 · 暗流涌动</div><div class="ep-item">第3集 · 初显锋芒</div><div class="ep-item">第4集 · 风云际会</div><div class="ep-item">第5集 · 群雄逐鹿</div></div>
+            <div class="ep-main-content">
+              <div class="section-title">👤 角色资产（可切换多视图）</div>
+              <div class="asset-char-grid">
+                <div class="char-card"><div class="char-img"><img src="img_cover_1.png"/></div><h5>秦始皇·嬴政</h5><p class="char-angle">正面·侧面·45°</p></div>
+                <div class="char-card"><div class="char-img"><img src="img_cover_2.png"/></div><h5>李斯·丞相</h5><p class="char-angle">正面·半身·全身</p></div>
+                <div class="char-card"><div class="char-img"><img src="img_cover_3.png"/></div><h5>扶苏·公子</h5><p class="char-angle">正面·侧面·45°</p></div>
+                <div class="char-card"><div class="char-img"><img src="img_cover_4.png"/></div><h5>蒙恬·将军</h5><p class="char-angle">正面·半身·45°</p></div>
+              </div>
+              <div class="section-title" style="margin-top:24px">🏛 场景资产（含时段变体）</div>
+              <div class="asset-scene-grid">
+                <div class="scene-card"><div class="scene-img"><img src="img_cover_2.png"/></div><h5>咸阳宫大殿</h5><p class="scene-time">白天·傍晚</p></div>
+                <div class="scene-card"><div class="scene-img"><img src="img_cover_3.png"/></div><h5>朝堂侧殿</h5><p class="scene-time">暮色·烛光</p></div>
+                <div class="scene-card"><div class="scene-img"><img src="img_cover_4.png"/></div><h5>咸阳街道</h5><p class="scene-time">白天·晴</p></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 步骤4：视频制作 -->
+          <div id="flow-panel-3" class="flow-panel">
+            <div class="episode-sidebar"><div class="ep-label">集数列表</div><div class="ep-item active">第1集 · 朝堂变法</div><div class="ep-item">第2集 · 暗流涌动</div><div class="ep-item">第3集 · 初显锋芒</div><div class="ep-item">第4集 · 风云际会</div><div class="ep-item">第5集 · 群雄逐鹿</div></div>
+            <div class="video-production-layout">
+              <div class="vp-preview"><img src="img_cover_1.png" style="width:100%;border-radius:8px;aspect-ratio:16/9;object-fit:cover"/><div class="vp-playbar"><div class="play-btn">▶</div><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:30%"></div></div><span class="time-text">00:03 / 00:10</span></div></div>
+              <div class="vp-shotlist">
+                <div class="shot-item active"><div class="shot-thumb"><img src="img_cover_1.png"/></div><div class="shot-info"><strong>镜头 #01 · 全景</strong><p>咸阳宫大殿晨曦进入</p><small>时长 3s · 状态 ✅</small></div></div>
+                <div class="shot-item"><div class="shot-thumb"><img src="img_cover_2.png"/></div><div class="shot-info"><strong>镜头 #02 · 中景</strong><p>李斯出列进言谏法令</p><small>时长 4s · 状态 ✅</small></div></div>
+                <div class="shot-item"><div class="shot-thumb"><img src="img_cover_3.png"/></div><div class="shot-info"><strong>镜头 #03 · 特写</strong><p>竹简展开文字特写</p><small>时长 2s · 状态 ⏳</small></div></div>
+                <div class="shot-item"><div class="shot-thumb"><img src="img_cover_4.png"/></div><div class="shot-info"><strong>镜头 #04 · 中景</strong><p>群臣窃窃私语反应</p><small>时长 3s · 状态 ⏳</small></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 步骤5：成片预览 -->
+          <div id="flow-panel-4" class="flow-panel">
+            <div class="episode-sidebar"><div class="ep-label">集数列表</div><div class="ep-item active">第1集 · 朝堂变法</div><div class="ep-item">第2集 · 暗流涌动</div><div class="ep-item">第3集 · 初显锋芒</div><div class="ep-item">第4集 · 风云际会</div><div class="ep-item">第5集 · 群雄逐鹿</div></div>
+            <div class="preview-main">
+              <div class="preview-player"><img src="img_cover_2.png" style="width:100%;border-radius:8px;aspect-ratio:16/9;object-fit:cover;max-width:480px"/></div>
+              <div class="preview-right">
+                <h3 style="font-size:18px;font-weight:700;margin-bottom:8px">大秦风云录 · 第1集</h3>
+                <span class="tag-status green" style="display:inline-block;margin-bottom:14px">精读版 · 12集系列</span>
+                <p style="font-size:13px;line-height:1.7;color:var(--text-secondary);margin-bottom:18px">咸阳宫内，晨曦初透。李斯长身而起，手捧竹简，大步上前。"陛下，臣有一策，可令大秦永固。"始皇帝端坐御案之后，目光深邃。群臣窃窃私语，面色各异......</p>
+                <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px">分镜序列</p>
+                <div class="timeline-list">
+                  <div class="tl-item"><span class="tl-num">01</span><span class="tl-name">咸阳宫全景</span><span class="tl-time">3s</span></div>
+                  <div class="tl-item"><span class="tl-num">02</span><span class="tl-name">李斯出列</span><span class="tl-time">4s</span></div>
+                  <div class="tl-item"><span class="tl-num">03</span><span class="tl-name">竹简特写</span><span class="tl-time">2s</span></div>
+                  <div class="tl-item"><span class="tl-num">04</span><span class="tl-name">群臣反应</span><span class="tl-time">3s</span></div>
+                </div>
+                <div class="action-buttons-row">
+                  <button class="btn-action-pri" onclick="showToast('导出视频...','success')">🎬 导出视频</button>
+                  <button class="btn-action-sec" onclick="showToast('生成字幕...','info')">📄 生成字幕</button>
+                  <button class="btn-action-sec" onclick="showToast('发布作品...','info')">🚀 发布作品</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
-        <div class="asset-search"><input type="text" placeholder="搜索资产..." /><select><option>全部项目</option><option>大秦风云录</option><option>逆天邪神</option></select></div>
-      </div><div class="page"       <div class="page" id="page-tools">
-        <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;display:flex;align-items:center;gap:8px">
-          <span style="color:var(--accent)">→</span> 左右滑动浏览全部工具
+      </div>
+
+
+      <div class="page" id="page-assets">
+        <div class="assets-layout">
+          <div class="assets-sidebar">
+            <div class="as-title">资产管理</div>
+            <div class="as-nav-item active">📂 创作资产</div>
+            <div class="as-nav-item">🗑 回收站</div>
+          </div>
+          <div class="assets-main">
+            <div class="am-header"><h2>创作资产</h2><div class="am-tabs"><span class="am-tab active">个人资产</span><span class="am-tab">公共资产</span></div></div>
+            <div class="am-subnav"><span class="ams-tab active">角色库<span class="ams-count">3</span></span><span class="ams-tab">场景库<span class="ams-count">2</span></span><span class="ams-tab">道具库<span class="ams-count">1</span></span><span class="ams-tab">通用素材库<span class="ams-count">1</span></span></div>
+            <div class="am-toolbar">
+              <select class="am-filter-sel"><option>全部项目</option></select>
+              <select class="am-filter-sel"><option>全部来源</option></select>
+              <label class="am-check"><input type="checkbox"/> 我收藏的</label>
+              <input type="text" class="am-search-input" placeholder="搜索关键词"/>
+              <button class="am-search-btn">搜索</button>
+              <button class="am-reset-btn">重置</button>
+              <button class="am-del-btn">批量删除</button>
+              <div class="am-sort">排序：<select class="am-sort-sel"><option>按创建时间↓</option><option>按使用次数↓</option></select></div>
+            </div>
+            <div class="am-upload-hint"><div class="up-arrow">↑</div>拖拽或点击上传角色图</div>
+            <div class="am-card-grid">
+              <div class="am-card"><div class="am-card-img"><img src="img_cover_1.png"/></div><div class="am-card-info"><h5>武魂密殿及门前青石阶....</h5><span class="am-source">本地上传</span><span class="am-views">👁 0次</span></div></div>
+              <div class="am-card"><div class="am-card-img"><img src="img_cover_2.png"/></div><div class="am-card-info"><h5>警察/主形象/三视图1</h5><span class="am-source ai">AI生成</span><span class="am-views">测试·李飞</span><span class="am-views">👁 0次</span></div></div>
+              <div class="am-card"><div class="am-card-img"><img src="img_cover_3.png"/></div><div class="am-card-info"><h5>警察/主形象/主视图1</h5><span class="am-source ai">AI生成</span><span class="am-views">测试·李飞</span><span class="am-views">👁 3次</span></div></div>
+              <div class="am-card"><div class="am-card-img"><img src="img_cover_4.png"/></div><div class="am-card-info"><h5>陈岁陈岁（素色修士长袍...</h5><span class="am-source ai">AI生成</span><span class="am-views">排查问题</span><span class="am-views">👁 0次</span></div></div>
+              <div class="am-card"><div class="am-card-img"><img src="img_cover_5.png"/></div><div class="am-card-info"><h5>老者/老者（光阴囚禁）/主...</h5><span class="am-source ai">AI生成</span><span class="am-views">排查问题</span><span class="am-views">👁 0次</span></div></div>
+              <div class="am-card"><div class="am-card-img"><img src="img_cover_1.png"/></div><div class="am-card-info"><h5>陈岁/陈岁（岁月反噬）/主...</h5><span class="am-source ai">AI生成</span><span class="am-views">排查问题</span><span class="am-views">👁 0次</span></div></div>
+              <div class="am-card"><div class="am-card-img"><img src="img_cover_2.png"/></div><div class="am-card-info"><h5>老者/老者（风化消散）/主...</h5><span class="am-source ai">AI生成</span><span class="am-views">排查问题</span><span class="am-views">👁 0次</span></div></div>
+            </div>
+            <div class="no-more">没有更多了</div>
+          </div>
         </div>
+      </div>
+
+      <div class="page" id="page-tools">
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;display:flex;align-items:center;gap:8px"><span style="color:var(--accent)">→</span> 左右滑动浏览全部工具</div>
         <div class="tools-grid">
           <div class="tool-card">
-            <div class="tool-icon" style="background:rgba(77,124,254,.1);color:#4D7CFE">📖</div>
-            <h4>AI 拆书工具</h4><p>智能拆解小说章节，提取人物关系、场景地点、关键剧情节点</p>
-            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('工具已启动','success')">启动</button><button class="tool-btn secondary">文档</button></div>
+            <div class="tool-icon" style="background:rgba(77,124,254,.1);color:#4D7CFE">🎙️</div>
+            <h4>配音创作</h4><p>AI智能配音合成，支持多角色音色分配、情感语调控制</p>
+            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('配音创作已启动','success')">启动</button><button class="tool-btn secondary">文档</button></div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:rgba(167,139,250,.1);color:#A78BFA">✍️</div>
-            <h4>AI 改编引擎</h4><p>小说→剧本自动改编，支持景别标注、台词优化、冲突强化</p>
-            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('工具已启动','success')">启动</button><button class="tool-btn secondary">文档</button></div>
+            <div class="tool-icon" style="background:rgba(167,139,250,.1);color:#A78BFA">✨</div>
+            <h4>图片创作</h4><p>AIGC图像生成引擎，支持角色/场景/道具多类型创作</p>
+            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('图片创作已启动','success')">启动</button><button class="tool-btn secondary">文档</button></div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:rgba(0,220,130,.1);color:#00DC82">🎨</div>
-            <h4>AI 资产生成</h4><p>角色/场景/道具一站式生成，支持多视图、多时段变体</p>
-            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('工具已启动','success')">启动</button><button class="tool-btn secondary">文档</button></div>
+            <div class="tool-icon" style="background:rgba(0,220,130,.1);color:#00DC82">🎬</div>
+            <h4>视频创作</h4><p>AI视频合成与剪辑，支持镜头编排、转场特效一键生成</p>
+            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('视频创作已启动','success')">启动</button><button class="tool-btn secondary">文档</button></div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:rgba(0,210,255,.1);color:#00D2FF">🎬</div>
-            <h4>AI 分镜工具</h4><p>剧本转分镜脚本，自动规划景别、镜头调度、时长预估</p>
-            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('工具已启动','success')">启动</button><button class="tool-btn secondary">文档</button></div>
+            <div class="tool-icon" style="background:rgba(255,165,0,.1);color:#FFA500">🔍</div>
+            <h4>视频超分</h4><p>低分辨率视频超分辨率增强，提升画质至4K级别清晰度</p>
+            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('视频超分已启动','success')">启动</button><button class="tool-btn secondary">文档</button></div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon" style="background:rgba(255,107,53,.1);color:#FF6B35">🎞️</div>
-            <h4>AI 视频合成</h4><p>分镜→视频自动合成，AI字幕+配音+背景音乐</p>
-            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('工具已启动','success')">启动</button><button class="tool-btn secondary">文档</button></div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon" style="background:rgba(245,158,11,.1);color:#F59E0B">🎙️</div>
-            <h4>AI 配音工具</h4><p>多角色情感配音，支持音色定制、语速调节</p>
-            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('工具已启动','success')">启动</button><button class="tool-btn secondary">文档</button></div>
+            <div class="tool-icon" style="background:rgba(236,72,153,.1);color:#EC4899">🔊</div>
+            <h4>音色库</h4><p>海量AI音色资源管理，支持自定义音色训练与克隆</p>
+            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('音色库已打开','success')">启动</button><button class="tool-btn secondary">文档</button></div>
           </div>
         </div>
-      </div><div class="page" id="page-data-view">
+      </div>
+<div class="page" id="page-data-view">
         
 
         <div class="data-header" style="justify-content:flex-end">
