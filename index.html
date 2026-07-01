@@ -1281,7 +1281,7 @@ select.form-control{cursor:pointer}
 }
 .proj-card:hover { box-shadow: var(--shadow); border-color: var(--accent); }
 .proj-card-cover {
-  width: 100%; height: 110px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  width: 100%; height: 130px; background-color: #1a1a2e;
   display: flex; align-items: center; justify-content: center;
   color: var(--text-muted); position: relative; overflow: hidden;
 }
@@ -1327,6 +1327,35 @@ select.form-control{cursor:pointer}
 .proj-more-item:hover { background: var(--bg-hover); color: var(--accent); }
 .proj-more-item.danger:hover { background: rgba(239,68,68,.1); color: var(--danger); }
 .proj-more-item .mi-icon { font-size: 15px; width: 18px; text-align: center; }
+
+/* Version Update Toast */
+.version-update-toast {
+  position: fixed; bottom: 28px; right: 28px; z-index: 999;
+  background: #fff; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,.18);
+  padding: 16px 20px; min-width: 280px; max-width: 340px;
+  animation: versionSlideIn .35s ease-out;
+}
+@keyframes versionSlideIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.version-update-title {
+  font-size: 14px; font-weight: 600; color: #111; margin-bottom: 6px;
+}
+.version-update-body {
+  font-size: 12.5px; color: #555; line-height: 1.5; margin-bottom: 12px;
+}
+.version-update-actions {
+  display: flex; justify-content: flex-end; gap: 14px;
+}
+.version-update-ignore {
+  font-size: 13px; color: #999; cursor: pointer; transition: color .2s;
+}
+.version-update-ignore:hover { color: #555; }
+.version-update-refresh {
+  font-size: 13px; color: #2563eb; cursor: pointer; font-weight: 500; transition: color .2s;
+}
+.version-update-refresh:hover { color: #1d4ed8; }
 
 /* Create project card */
 .proj-create-card {
@@ -1818,7 +1847,7 @@ select.form-control{cursor:pointer}
             <option value="done">已完结</option>
           </select>
           <div class="filter-search">
-            <input type="text" id="proj-search" placeholder="搜索项目名称..." oninput="filterProjects()">
+            <input type="text" id="proj-search" placeholder="请输入项目名称" oninput="filterProjects()">
           </div>
           <button class="btn btn-secondary btn-sm" onclick="resetProjFilters()">重置</button>
         </div>
@@ -1836,7 +1865,7 @@ select.form-control{cursor:pointer}
         </div>
 
         <!-- My Projects -->
-        <div>
+        <div style="position:relative">
           <div class="proj-quick-title">我的项目</div>
           <div class="proj-grid" id="proj-list-grid"></div>
           <div class="empty-state" id="proj-empty" style="display:none;">
@@ -1845,6 +1874,15 @@ select.form-control{cursor:pointer}
             <div class="empty-desc">点击「新建项目」开始你的第一个项目</div>
           </div>
           <div class="proj-scroll-sentinel" id="proj-scroll-sentinel"></div>
+          <!-- 发现新版本浮层 -->
+          <div class="version-update-toast" id="versionUpdateToast">
+            <div class="version-update-title">🔔 发现新版本</div>
+            <div class="version-update-body">系统已更新，请刷新页面获取最新功能</div>
+            <div class="version-update-actions">
+              <span class="version-update-ignore" onclick="dismissVersionUpdate()">忽略</span>
+              <span class="version-update-refresh" onclick="refreshPage()">立即刷新</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -2906,26 +2944,26 @@ select.form-control{cursor:pointer}
 
   // ===== Project Management =====
   var projects = [
-    { id: 1, name: '秒针死寂', team: 'team-a', type: '批量制作', status: 'active', creator: '邹孟汉', episodes: '2 集', createDate: '2026-05-10' },
-    { id: 2, name: '测试-李飞', team: 'team-b', type: '手动创建', status: 'active', creator: '李 飞', episodes: '1 集', createDate: '2026-05-12' },
-    { id: 3, name: 'GMH测试资产项目', team: 'team-a', type: '批量制作', status: 'done', creator: '邹孟汉', episodes: '7 集', createDate: '2026-05-15' },
-    { id: 4, name: '测试编辑', team: 'team-b', type: '手动创建', status: 'active', creator: 'TEST0', episodes: '1 集', createDate: '2026-05-18' },
-    { id: 5, name: '邻居举报我卖假药...', team: 'team-c', type: '批量制作', status: 'active', creator: '张 鹏', episodes: '18 集', createDate: '2026-05-20' },
-    { id: 6, name: '邻居举报我卖假药...', team: 'team-c', type: '手动创建', status: 'active', creator: '张 鹏', episodes: '18 集', createDate: '2026-05-22' },
-    { id: 7, name: '瞿靖松测试用', team: 'team-b', type: '手动创建', status: 'deleted', creator: '瞿靖松', episodes: '1 集', createDate: '2026-05-25' },
-    { id: 8, name: '1111', team: 'team-a', type: '批量制作', status: 'active', creator: '刘双0', episodes: '0 集', createDate: '2026-05-28' },
-    { id: 9, name: '魂', team: 'team-a', type: '批量制作', status: 'active', creator: '邹孟汉', episodes: '7 集', createDate: '2026-06-01' },
-    { id: 10, name: '邻居举报我卖假药...', team: 'team-c', type: '手动创建', status: 'active', creator: '张鹏', episodes: '30 集', createDate: '2026-06-03' },
-    { id: 11, name: '邻居举报我卖假药...', team: 'team-c', type: '批量制作', status: 'active', creator: '张鹏', episodes: '30 集', createDate: '2026-06-05' },
-    { id: 12, name: '测试111', team: 'team-b', type: '手动创建', status: 'done', creator: '刘双0', episodes: '0 集', createDate: '2026-06-08' },
-    { id: 13, name: '测试1221', team: 'team-a', type: '手动创建', status: 'done', creator: '瞿靖松', episodes: '3 集', createDate: '2026-04-15' },
-    { id: 14, name: '测试删除', team: 'team-b', type: '手动创建', status: 'done', creator: '瞿靖松', episodes: '1 集', createDate: '2026-06-08' },
-    { id: 15, name: 'ceshi111', team: 'team-c', type: '手动创建', status: 'done', creator: '瞿靖松', episodes: '1 集', createDate: '2026-06-10' },
-    { id: 16, name: '测试1123', team: 'team-b', type: '手动创建', status: 'done', creator: '瞿靖松', episodes: '1 集', createDate: '2026-04-10' },
-    { id: 17, name: '归去来兮', team: 'team-a', type: 'AI辅写', status: 'active', creator: '赵六', episodes: '70 集', createDate: '2026-06-05' },
-    { id: 18, name: '月满西楼', team: 'team-b', type: '旁白解说', status: 'active', creator: '李四', episodes: '55 集', createDate: '2026-06-08' },
-    { id: 19, name: '逆光飞行', team: 'team-c', type: '手动创建', status: 'active', creator: '王五', episodes: '30 集', createDate: '2026-06-10' },
-    { id: 20, name: '风起云涌', team: 'team-a', type: 'AI辅写', status: 'done', creator: '张三', episodes: '100 集', createDate: '2026-03-20' },
+    { id: 1, name: '秒针死寂', team: 'team-a', type: '批量制作', status: 'active', creator: '邹孟汉', episodes: '2 集', createDate: '2026-05-10', cover: '' },
+    { id: 2, name: '测试-李飞', team: 'team-b', type: '手动创建', status: 'active', creator: '李 飞', episodes: '1 集', createDate: '2026-05-12', cover: '' },
+    { id: 3, name: 'GMH测试资产项目', team: 'team-a', type: '批量制作', status: 'done', creator: '邹孟汉', episodes: '7 集', createDate: '2026-05-15', cover: 'img_cover_3.png' },
+    { id: 4, name: '测试编辑', team: 'team-b', type: '手动创建', status: 'active', creator: 'TEST0', episodes: '1 集', createDate: '2026-05-18', cover: '' },
+    { id: 5, name: '邻居举报我卖假药...', team: 'team-c', type: '批量制作', status: 'active', creator: '张 鹏', episodes: '18 集', createDate: '2026-05-20', cover: '' },
+    { id: 6, name: '邻居举报我卖假药...', team: 'team-c', type: '手动创建', status: 'active', creator: '张 鹏', episodes: '18 集', createDate: '2026-05-22', cover: '' },
+    { id: 7, name: '瞿靖松测试用', team: 'team-b', type: '手动创建', status: 'deleted', creator: '瞿靖松', episodes: '1 集', createDate: '2026-05-25', cover: '' },
+    { id: 8, name: '1111', team: 'team-a', type: '批量制作', status: 'active', creator: '刘双0', episodes: '0 集', createDate: '2026-05-28', cover: '' },
+    { id: 9, name: '魂', team: 'team-a', type: '批量制作', status: 'active', creator: '邹孟汉', episodes: '7 集', createDate: '2026-06-01', cover: 'img_cover_4.png' },
+    { id: 10, name: '邻居举报我卖假药...', team: 'team-c', type: '手动创建', status: 'active', creator: '张鹏', episodes: '30 集', createDate: '2026-06-03', cover: '' },
+    { id: 11, name: '邻居举报我卖假药...', team: 'team-c', type: '批量制作', status: 'active', creator: '张鹏', episodes: '30 集', createDate: '2026-06-05', cover: '' },
+    { id: 12, name: '测试111', team: 'team-b', type: '手动创建', status: 'done', creator: '刘双0', episodes: '0 集', createDate: '2026-06-08', cover: '' },
+    { id: 13, name: '测试1221', team: 'team-a', type: '手动创建', status: 'done', creator: '瞿靖松', episodes: '3 集', createDate: '2026-04-15', cover: '' },
+    { id: 14, name: '测试删除', team: 'team-b', type: '手动创建', status: 'done', creator: '瞿靖松', episodes: '1 集', createDate: '2026-06-08', cover: '' },
+    { id: 15, name: 'ceshi111', team: 'team-c', type: '手动创建', status: 'done', creator: '瞿靖松', episodes: '1 集', createDate: '2026-06-10', cover: '' },
+    { id: 16, name: '测试1123', team: 'team-b', type: '手动创建', status: 'done', creator: '瞿靖松', episodes: '1 集', createDate: '2026-04-10', cover: '' },
+    { id: 17, name: '归去来兮', team: 'team-a', type: 'AI辅写', status: 'active', creator: '赵六', episodes: '70 集', createDate: '2026-06-05', cover: 'material_2.png' },
+    { id: 18, name: '月满西楼', team: 'team-b', type: '旁白解说', status: 'active', creator: '李四', episodes: '55 集', createDate: '2026-06-08', cover: 'material_3.png' },
+    { id: 19, name: '逆光飞行', team: 'team-c', type: '手动创建', status: 'active', creator: '王五', episodes: '30 集', createDate: '2026-06-10', cover: '' },
+    { id: 20, name: '风起云涌', team: 'team-a', type: 'AI辅写', status: 'done', creator: '张三', episodes: '100 集', createDate: '2026-03-20', cover: 'material_4.png' },
   ];
   var nextProjId = 21;
   var PROJ_PAGE_SIZE = 8;
@@ -3007,24 +3045,32 @@ select.form-control{cursor:pointer}
     };
     var teamMap = { 'team-a': '制作一组', 'team-b': '制作二组', 'team-c': '制作三组' };
 
-    var coverStyles = [
-      'linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)',
-      'linear-gradient(135deg, #2d1b69 0%, #1b3a4b 50%, #312244 100%)',
-      'linear-gradient(135deg, #3e1f47 0%, #1a1a2e 50%, #4a1942 100%)',
-      'linear-gradient(135deg, #0d1b2a 0%, #1b2838 60%, #415a77 100%)',
-      'linear-gradient(135deg, #2c0735 0%, #1a0533 50%, #3d0c5e 100%)',
-      'linear-gradient(135deg, #0a1628 0%, #1e3a5f 50%, #2c5282 100%)',
+    var coverImages = [
+      'img_cover_1.png', 'img_cover_2.png', 'img_cover_5.png',
+      'carousel_1.png', 'carousel_2.png', 'carousel_4.png'
+    ];
+    var placeholderColors = [
+      '#1a1a2e', '#2d1b69', '#3e1f47', '#0d1b2a', '#2c0735', '#0a1628'
     ];
 
     var html = itemsToLoad.map(function(p, idx) {
-      var bg = coverStyles[(projLoadedCount + idx) % coverStyles.length];
+      var hasCover = p.cover && p.cover.length > 0;
+      var coverBg = hasCover
+        ? ('url(' + p.cover + ') center/cover no-repeat')
+        : placeholderColors[(projLoadedCount + idx) % placeholderColors.length];
+      var coverInner = hasCover
+        ? ''
+        : '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:rgba(255,255,255,.35);">'
+          + '<div style="font-size:32px;line-height:1;">🖼️</div>'
+          + '<div style="font-size:11px;color:rgba(255,255,255,.25);">封面图</div>'
+          + '</div>';
       return '<div class="proj-card" onclick="enterProject(' + p.id + ')">'
-        + '<div class="proj-card-cover" style="background:' + bg + ';display:flex;align-items:center;justify-content:center;color:#fff;position:relative;">'
-        + '<div style="font-size:28px;margin-bottom:4px;opacity:.7;">🖼️</div>'
+        + '<div class="proj-card-cover" style="background:' + coverBg + ';position:relative;overflow:hidden;">'
+        + coverInner
         + '<div class="proj-type-tag">' + p.type + '</div>'
         + '</div>'
         + '<div class="proj-card-body">'
-        + '<div class="proj-card-name">' + p.name + ' ' + (statusBadge[p.status] || '') + '</div>'
+        + '<div class="proj-card-name">' + p.name + (statusBadge[p.status] || '') + '</div>'
         + '<div class="proj-card-meta">'
         + '技术部 · <span class="creator">' + p.creator + '</span>'
         + '</div>'
@@ -3074,6 +3120,13 @@ select.form-control{cursor:pointer}
     document.getElementById(id).classList.remove('open');
   }
 
+  // Version Update Toast
+  function dismissVersionUpdate() {
+    var el = document.getElementById('versionUpdateToast');
+    if (el) { el.style.opacity = '0'; el.style.transform = 'translateY(16px)';
+      setTimeout(function(){ el.remove(); },300); } }
+  function refreshPage() { location.reload(); }
+
   // Close wb-modal-overlay on backdrop click
   document.addEventListener('click', function(e) {
     if (e.target.classList.contains('wb-modal-overlay') && e.target.classList.contains('open')) {
@@ -3094,7 +3147,7 @@ select.form-control{cursor:pointer}
 
     projects.unshift({
       id: nextProjId++, name: name, team: team, type: gen || type, status: 'active',
-      creator: '当前用户', episodes: episodes, createDate: new Date().toISOString().slice(0,10)
+      creator: '当前用户', episodes: episodes, createDate: new Date().toISOString().slice(0,10), cover: ''
     });
 
     closeProjModal('create-project-modal');
