@@ -1081,6 +1081,109 @@ select.form-control{cursor:pointer}
 .am-views{font-size:11px;color:#9ca3af}
 .no-more{text-align:center;color:var(--text-muted);font-size:13px;padding:24px}
 
+
+/* ===== Novel IP Library (from reference) ===== */
+
+
+/* ===== IP / Script / Comic pages ===== */
+.ip-header{margin:20px 0 16px}
+
+.ip-header h2{font-size:22px;font-weight:700;margin-bottom:4px}
+
+.ip-header h2 span{background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+.ip-header p{font-size:13px;color:var(--text-secondary)}
+
+.ip-tabs{display:flex;gap:6px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:12px}
+
+.ip-tab{padding:7px 18px;border-radius:20px;font-size:13px;cursor:pointer;color:var(--text-secondary);
+  transition:all .2s;display:flex;align-items:center;gap:6px;border:1px solid transparent}
+
+.ip-tab:hover{color:var(--text);background:var(--bg-hover)}
+
+.ip-tab.active{background:var(--accent-bg);color:var(--accent);border-color:var(--accent);font-weight:600}
+
+.ip-subbar{display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+
+.chip{padding:6px 14px;border:1px solid var(--border);border-radius:20px;font-size:12px;cursor:pointer;
+  color:var(--text-secondary);transition:all .2s}
+
+.chip:hover,.chip.active{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
+
+.ip-tab-panel{display:none}
+
+.ip-tab-panel.active{display:block}
+
+
+/* Novel Cards */
+.ip-novel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+
+.novel-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:14px;display:flex;gap:14px;cursor:pointer;transition:all .2s}
+
+.novel-card:hover{border-color:var(--accent)}
+
+.novel-cover{width:72px;height:96px;border-radius:6px;flex-shrink:0;background-size:cover;background-position:center}
+
+.novel-info{flex:1;min-width:0}
+
+.novel-title{font-size:15px;font-weight:600;margin-bottom:4px}
+
+.novel-author{font-size:12px;color:var(--text-muted);margin-bottom:6px}
+
+.novel-tags{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap}
+
+.novel-stats{font-size:11px;color:var(--text-muted);margin-bottom:8px}
+
+.novel-btn{padding:6px 16px;background:var(--accent);color:#000;border:none;border-radius:6px;font-size:12px;
+  font-weight:600;cursor:pointer;transition:all .2s}
+
+.novel-btn:hover{box-shadow:0 0 16px rgba(0,220,130,.2)}
+
+.novel-btn.claimed{background:transparent;color:var(--text-muted);border:1px solid var(--border);cursor:default}
+
+
+/* ===== Form Components ===== */
+.form-group{margin-bottom:16px}
+
+.form-label{display:block;font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:6px}
+
+.form-control{width:100%;padding:10px 14px;background:var(--bg-hover);border:1px solid var(--border);
+  border-radius:8px;color:var(--text);font-size:13px;outline:none;transition:border-color .2s;
+  box-sizing:border-box}
+
+.form-control:focus{border-color:var(--accent)}
+
+textarea.form-control{resize:vertical;font-family:inherit;line-height:1.5}
+
+select.form-control{cursor:pointer}
+
+/* AI 创作面板布局 */
+.ai-create-panel{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:32px;margin-top:8px;
+}
+
+.ai-create-panel .ai-panel-header{
+  margin-bottom:24px;font-size:15px;font-weight:700;
+  display:flex;align-items:center;gap:8px;
+}
+
+.ai-create-form{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+
+.ai-create-form .form-full{grid-column:1/-1}
+
+.ai-create-form .ai-submit-row{
+  grid-column:1/-1;display:flex;align-items:center;gap:12px;
+  margin-top:8px;padding-top:16px;border-top:1px solid var(--border);
+}
+
+@media(max-width:640px){
+  .ai-create-form{grid-template-columns:1fr}
+
+  .ai-create-panel{padding:20px}
+
+.data-filter .chip{padding:5px 12px;font-size:11px}
 </style>
 <script src="https://beacon.cdn.qq.com/sdk/4.5.9/beacon_web.min.js"></script>
 <script>
@@ -1475,50 +1578,116 @@ select.form-control{cursor:pointer}
       </div>
 
             <div class="page" id="page-novel-ip">
-        <div class="ip-page-header">
-          <h2>小说IP库</h2>
-          <p class="ip-page-desc">浏览精选小说IP，选择心仪作品开始漫剧创作之旅</p>
-        </div>
+        <div class="ip-header"><h2><span>小说IP库</span></h2><p>浏览精选小说IP，选择心仪作品开始漫剧创作之旅</p></div>
         <div class="ip-tabs">
           <div class="ip-tab active" onclick="switchIPTab(this,'ip-tab-trial')">📖 试稿书单</div>
           <div class="ip-tab" onclick="switchIPTab(this,'ip-tab-ai')">🤖 AI小说创作</div>
           <div class="ip-tab" onclick="switchIPTab(this,'ip-tab-upload')">📤 上传小说</div>
         </div>
-
-        <!-- 试稿书单 tab -->
-        <div id="ip-tab-trial" class="ip-tab-panel active">
-          <div class="trial-filter-row">
-            <span class="filter-label">分类</span>
-            <div class="filter-tags"><span class="filter-tag active">全部</span><span class="filter-tag">男频</span><span class="filter-tag">女频</span></div>
-            <span class="filter-label" style="margin-left:24px">状态</span>
-            <div class="filter-tags"><span class="filter-tag active">全部</span><span class="filter-tag">连载</span><span class="filter-tag">已完结</span></div>
+        <div class="ip-tab-panel active" id="ip-tab-trial">
+          <div class="ip-subbar">
+            <span style="font-size:12px;color:var(--text-muted);margin-right:4px">分类</span>
+            <span class="chip active">全部</span><span class="chip">男频</span><span class="chip">女频</span>
+            <span style="font-size:12px;color:var(--text-muted);margin:0 4px">状态</span>
+            <span class="chip active">全部</span><span class="chip">连载</span><span class="chip">已完结</span>
           </div>
-          <div class="novel-card-grid">
-            <div class="novel-card"><div class="novel-cover"><img src="img_cover_1.png" alt="cover"/></div><div class="novel-info"><h4>大秦风云录</h4><p class="novel-meta">秦朝·历史军事</p><div class="novel-tags"><span class="tag-people">人气</span><span class="tag-status green">已完结</span></div><div class="novel-stats"><span>1280章·380万人气</span><span>★ 9.2</span></div><button class="btn-cooperate">合作试稿</button></div></div>
-            <div class="novel-card"><div class="novel-cover"><img src="img_cover_2.png" alt="cover"/></div><div class="novel-info"><h4>都市最强修仙</h4><p class="novel-meta">流浪的蛤蟆·都市</p><div class="novel-tags"><span class="tag-orange">爆款</span><span class="tag-status green">已完结</span></div><div class="novel-stats"><span>2066章·620万人气</span><span>★ 8.9</span></div><button class="btn-disabled">已申领</button></div></div>
-            <div class="novel-card"><div class="novel-cover"><img src="img_cover_3.png" alt="cover"/></div><div class="novel-info"><h4>逆天邪神传</h4><p class="novel-meta">火星引力·仙侠</p><div class="novel-tags"><span class="tag-red">TOP1</span></div><div class="novel-stats"><span>3400章·1200万人气</span><span>★ 9.5</span></div><button class="btn-cooperate">合作试稿</button></div></div>
-            <div class="novel-card"><div class="novel-cover"><img src="img_cover_4.png" alt="cover"/></div><div class="novel-info"><h4>星海征途</h4><p class="novel-meta">天蚕土豆·科幻</p><div class="novel-tags"><span class="tag-status green">已完结</span></div><div class="novel-stats"><span>1890章·450万人气</span><span>★ 8.7</span></div><button class="btn-cooperate">合作试稿</button></div></div>
-            <div class="novel-card"><div class="novel-cover"><img src="img_cover_5.png" alt="cover"/></div><div class="novel-info"><h4>万界之主</h4><p class="novel-meta">辰东·玄幻</p><div class="novel-tags"><span class="tag-people">人气</span></div><div class="novel-stats"><span>5120章·2100万人气</span><span>★ 9.3</span></div><button class="btn-cooperate">合作试稿</button></div></div>
-            <div class="novel-card"><div class="novel-cover"><img src="img_cover_1.png" alt="cover"/></div><div class="novel-info"><h4>宠爱无度</h4><p class="novel-meta">甜妻·言情</p><div class="novel-tags"><span class="tag-status green">已完结</span></div><div class="novel-stats"><span>865章·280万人气</span><span>★ 8.8</span></div><button class="btn-cooperate">合作试稿</button></div></div>
+          <div class="ip-novel-grid">
+            <div class="novel-card">
+              <div class="novel-cover" style="background-image:url(img_cover_1.png)"></div>
+              <div class="novel-info">
+                <div class="novel-title">大秦风云录</div><div class="novel-author">萧鼎 · 历史军事</div>
+                <div class="novel-tags"><span class="tag hot">人气</span><span class="tag done">已完结</span></div>
+                <div class="novel-stats">1280章 · 380万人气 · ⭐9.2</div>
+                <button class="novel-btn" onclick="showToast('试稿申请已发送','success')">合作试稿</button>
+              </div>
+            </div>
+            <div class="novel-card">
+              <div class="novel-cover" style="background-image:url(img_cover_2.png)"></div>
+              <div class="novel-info">
+                <div class="novel-title">都市最强修仙</div><div class="novel-author">流浪的蛤蟆 · 都市</div>
+                <div class="novel-tags"><span class="tag hot">爆款</span><span class="tag done">已完结</span></div>
+                <div class="novel-stats">2056章 · 620万人气 · ⭐8.9</div>
+                <button class="novel-btn claimed">已申请</button>
+              </div>
+            </div>
+            <div class="novel-card">
+              <div class="novel-cover" style="background-image:url(img_cover_3.png)"></div>
+              <div class="novel-info">
+                <div class="novel-title">逆天邪神传</div><div class="novel-author">火星引力 · 仙侠</div>
+                <div class="novel-tags"><span class="tag hot">TOP1</span></div>
+                <div class="novel-stats">3400章 · 1200万人气 · ⭐9.5</div>
+                <button class="novel-btn" onclick="showToast('试稿申请已发送','success')">合作试稿</button>
+              </div>
+            </div>
+            <div class="novel-card">
+              <div class="novel-cover" style="background-image:url(img_cover_4.png)"></div>
+              <div class="novel-info">
+                <div class="novel-title">星海征途</div><div class="novel-author">天蚕土豆 · 科幻</div>
+                <div class="novel-tags"><span class="tag done">已完结</span></div>
+                <div class="novel-stats">1890章 · 450万人气 · ⭐8.7</div>
+                <button class="novel-btn" onclick="showToast('试稿申请已发送','success')">合作试稿</button>
+              </div>
+            </div>
+            <div class="novel-card">
+              <div class="novel-cover" style="background-image:url(img_cover_5.png)"></div>
+              <div class="novel-info">
+                <div class="novel-title">万界之主</div><div class="novel-author">辰东 · 玄幻</div>
+                <div class="novel-tags"><span class="tag hot">人气</span></div>
+                <div class="novel-stats">5120章 · 2100万人气 · ⭐9.3</div>
+                <button class="novel-btn" onclick="showToast('试稿申请已发送','success')">合作试稿</button>
+              </div>
+            </div>
+            <div class="novel-card">
+              <div class="novel-cover" style="background-image:url(img_cover_1.png)"></div>
+              <div class="novel-info">
+                <div class="novel-title">宠爱无度</div><div class="novel-author">顾漫 · 言情</div>
+                <div class="novel-tags"><span class="tag done">已完结</span></div>
+                <div class="novel-stats">865章 · 280万人气 · ⭐8.8</div>
+                <button class="novel-btn" onclick="showToast('试稿申请已发送','success')">合作试稿</button>
+              </div>
+            </div>
           </div>
         </div>
-
-        <!-- AI小说创作 tab -->
-        <div id="ip-tab-ai" class="ip-tab-panel">
+        <div class="ip-tab-panel" id="ip-tab-ai">
           <div class="ai-create-panel">
-            <h3 style="font-size:16px;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:8px">🤖 AI智能创作小说</h3>
-            <div class="form-grid-2col"><div class="form-group"><label>创作方式</label><select class="form-select"><option>续写模式</option><option>全新创作</option><option>风格仿写</option></select></div><div class="form-group"><label>AI模型</label><select class="form-select"><option>GPT-4o（推荐）</option><option>Claude 3.5</option><option>文心一言</option></select></div></div>
-            <div class="form-group"><label>题材</label><select class="form-select"><option>仙侠玄幻</option><option>都市异能</option><option>历史军事</option><option>科幻未来</option><option>悬疑推理</option></select></div>
-            <div class="form-group"><label>核心提示词</label><textarea class="form-textarea" rows="4" placeholder="描述你的小说创意，AI将基于此进行智能创作..."></textarea></div>
-            <div class="form-group"><label>参考风格</label><select class="form-select"><option>玄幻史诗风</option><option>网文爽文风</option><option>文学严肃风</option><option>轻小说风</option></select></div>
-            <button class="btn-generate-primary" onclick="showToast('AI正在生成中，预计15-30秒...','success')">🚀 一键生成 <span style="opacity:0.6;font-size:12px;margin-left:8px">AI创作约需15-30秒</span></button>
+            <div class="ai-panel-header">🤖 AI智能创作小说</div>
+            <div class="ai-create-form">
+              <div class="form-group">
+                <label class="form-label">创作方式</label>
+                <select class="form-control"><option>续写模式</option><option>从零生成</option><option>风格仿写</option></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">AI模型</label>
+                <select class="form-control"><option>GPT-4o（推荐）</option><option>Claude 3.5 Sonnet</option><option>DeepSeek-V3</option><option>文心一言 4.0</option><option>通义千问 2.5</option></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">题材</label>
+                <select class="form-control"><option>仙侠玄幻</option><option>都市言情</option><option>科幻未来</option></select>
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">核心提示词</label>
+                <textarea class="form-control" rows="3" placeholder="描述你的小说创意，AI将基于此进行智能创作..."></textarea>
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">参考风格</label>
+                <select class="form-control"><option>玄幻史诗风</option><option>轻松爽文风</option><option>悬疑推理风</option></select>
+              </div>
+              <div class="ai-submit-row">
+                <button class="novel-btn" style="padding:10px 24px;font-size:14px" onclick="showToast('AI开始创作...','success')">🚀 一键生成</button>
+                <span style="font-size:12px;color:var(--text-muted)">AI创作约需15-30秒</span>
+              </div>
+            </div>
           </div>
         </div>
-
-        <!-- 上传小说 tab -->
-        <div id="ip-tab-upload" class="ip-tab-panel">
-          <div class="upload-zone-large"><div class="upload-icon-lg">📤</div><p style="margin-top:16px;font-size:15px;font-weight:500">拖拽上传小说文件</p><p style="color:var(--text-muted);font-size:13px;margin-top:8px">支持 .txt / .docx / .pdf 格式，最大 50MB</p></div>
+        <div class="ip-tab-panel" id="ip-tab-upload">
+          <div style="background:var(--bg-card);border:1px dashed var(--border);border-radius:var(--radius);padding:48px;text-align:center;color:var(--text-muted);margin-top:8px;cursor:pointer">
+            <div style="font-size:36px;margin-bottom:12px">📤</div>
+            <div style="font-weight:600;color:var(--text);margin-bottom:4px">拖拽上传小说文件</div>
+            <div style="font-size:12px">支持 .txt / .docx / .pdf 格式，最大 50MB</div>
+          </div>
         </div>
+      </div>
+
       <div class="page" id="page-script">
         <div class="ip-page-header">
           <h2>剧本库</h2>
