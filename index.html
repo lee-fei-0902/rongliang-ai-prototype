@@ -473,6 +473,38 @@ a{color:var(--accent);text-decoration:none}
 .fc-desc{font-size:12px;color:#9CA3AF;line-height:1.5}
 .fc-tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:4px;margin-top:10px;font-weight:600}
 
+/* 快速创作 & 商务合作 */
+.quick-actions-section{display:flex;align-items:center;justify-content:space-between;margin-top:28px;padding:28px 32px;
+  background:linear-gradient(135deg,rgba(99,102,241,.06),rgba(0,220,130,.04));border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;gap:24px}
+.qa-left{flex:1}
+.qa-left h3{font-size:20px;font-weight:800;color:#F0F0F0;margin-bottom:4px}
+.qa-left p{font-size:13px;color:#6B7280}
+.qa-right{display:flex;gap:12px;flex-shrink:0}
+.qa-btn{display:flex;align-items:center;gap:8px;padding:14px 24px;border-radius:12px;border:none;font-size:14px;font-weight:600;
+  cursor:pointer;transition:all .25s}
+.qa-btn-primary{background:linear-gradient(135deg,#6366F1,#8B5CF6);color:#fff;box-shadow:0 4px 16px rgba(99,102,241,.3)}
+.qa-btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(99,102,241,.45)}
+.qa-btn-outline{background:transparent;color:#D0D0D0;border:1px solid rgba(255,255,255,.2)}
+.qa-btn-outline:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,220,130,.15)}
+.qa-btn-icon{font-size:18px}
+.qa-btn-arrow{font-size:14px;opacity:.7;transition:transform .2s}
+.qa-btn:hover .qa-btn-arrow{transform:translateX(3px);opacity:1}
+
+/* 素材展览 */
+.material-showcase-section{margin-top:28px}
+.section-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.section-header-row h3{font-size:16px;font-weight:700;color:#F0F0F0}
+.section-header-row a{font-size:12px;color:var(--accent)}
+.material-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.material-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;
+  cursor:pointer;transition:all .2s}
+.material-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.material-thumb{aspect-ratio:16/10;background-size:cover;background-position:center}
+.material-info{padding:8px 10px}
+.material-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px}
+.material-count{font-size:10px;color:var(--text-muted)}
+
 /* 数据展示区 */
 .stats-bar{display:flex;gap:0;margin-top:28px;padding:20px 28px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
   border-radius:16px}
@@ -1403,69 +1435,77 @@ select.form-control{cursor:pointer}
             </div>
             <div class="ws-item">
               <div class="ws-num c2">02</div>
-              <div class="ws-title">分镜生成</div>
-              <div class="ws-desc">智能拆分镜头序列，批量生成分镜图</div>
+              <div class="ws-title">OPC一人创作</div>
+              <div class="ws-desc">一个人即是一个剧组，AI赋能全流程独立创作</div>
             </div>
             <div class="ws-item">
               <div class="ws-num c3">03</div>
-              <div class="ws-title">视频生成</div>
-              <div class="ws-desc">调用顶级模型，一键生成高清视频</div>
+              <div class="ws-title">海量IP库</div>
+              <div class="ws-desc">精选优质小说IP，一键启动漫剧改编项目</div>
             </div>
             <div class="ws-item">
               <div class="ws-num c4">04</div>
-              <div class="ws-title">智能剪辑</div>
-              <div class="ws-desc">拼接片段、加字幕、配BGM一体化</div>
+              <div class="ws-title">爆款项目孵化</div>
+              <div class="ws-desc">数据驱动选题，AI辅助打磨爆款漫剧内容</div>
             </div>
             <div class="ws-item">
               <div class="ws-num c5">05</div>
-              <div class="ws-title">成片审阅</div>
-              <div class="ws-desc">帧级标注审片，多格式导出交付</div>
+              <div class="ws-title">政企合作</div>
+              <div class="ws-desc">开放平台能力，赋能政企数字内容创作</div>
             </div>
           </div>
         </div>
 
-                <!-- 特色功能 -->
-        <div class="features-section">
-          <div class="features-header">
-            <h3>核心能力</h3>
-            <p>为专业AI短剧创作而生的全栈工具链</p>
+                <!-- 快速创作 & 商务合作 -->
+        <div class="quick-actions-section">
+          <div class="qa-left">
+            <h3>开启新的AI故事灵感</h3>
+            <p>无论是创作漫剧、孵化IP，还是商务合作，从这里开始</p>
           </div>
-          <div class="features-grid">
-            <div class="feature-card fc-1" onclick="showLoginModal()">
-              <div class="fc-icon" style="background:rgba(77,124,254,.12);color:#4D7CFE">📝</div>
-              <div class="fc-title">智能剧本创作</div>
-              <div class="fc-desc">上传剧本或输入灵感，AI自动拆解剧情结构、润色台词、调节奏，10万字小说一键拆成多集大纲</div>
-              <span class="fc-tag" style="background:rgba(77,124,254,.12);color:#4D7CFE">AI驱动</span>
+          <div class="qa-right">
+            <button class="qa-btn qa-btn-primary" onclick="navToPage('comic-create')">
+              <span class="qa-btn-icon">🚀</span>
+              <span class="qa-btn-text">快速创作</span>
+              <span class="qa-btn-arrow">→</span>
+            </button>
+            <button class="qa-btn qa-btn-outline" onclick="showBizQR()">
+              <span class="qa-btn-icon">🤝</span>
+              <span class="qa-btn-text">商务合作</span>
+              <span class="qa-btn-arrow">→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 素材展览 -->
+        <div class="material-showcase-section">
+          <div class="section-header-row">
+            <h3>素材展览</h3>
+            <a href="#" onclick="navTo(document.querySelector('[data-page=assets]'),'assets')">查看更多 →</a>
+          </div>
+          <div class="material-grid">
+            <div class="material-card">
+              <div class="material-thumb" style="background:linear-gradient(135deg,#1a1a2e,#16213e);display:flex;align-items:center;justify-content:center;font-size:36px">🏯</div>
+              <div class="material-info"><div class="material-name">古风建筑</div><div class="material-count">128 套</div></div>
             </div>
-            <div class="feature-card fc-2" onclick="showLoginModal()">
-              <div class="fc-icon" style="background:rgba(139,92,246,.12);color:#A78BFA">🎬</div>
-              <div class="fc-title">无限画布</div>
-              <div class="fc-desc">无限画布可视化节点图，拖拽连线搭建创作流程，支持版本回溯与资产复用</div>
-              <span class="fc-tag" style="background:rgba(139,92,246,.12);color:#A78BFA">节点化</span>
+            <div class="material-card">
+              <div class="material-thumb" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);display:flex;align-items:center;justify-content:center;font-size:36px">👤</div>
+              <div class="material-info"><div class="material-name">角色模型</div><div class="material-count">256 套</div></div>
             </div>
-            <div class="feature-card fc-3" onclick="showLoginModal()">
-              <div class="fc-icon" style="background:rgba(0,220,130,.12);color:#00DC82">🎭</div>
-              <div class="fc-title">AI短剧创作</div>
-              <div class="fc-desc">全流程AI制作，角色场景智能生成，分镜视频一键合成，一站式短剧生产</div>
-              <span class="fc-tag" style="background:rgba(0,220,130,.12);color:#00DC82">全流程</span>
+            <div class="material-card">
+              <div class="material-thumb" style="background:linear-gradient(135deg,#1a1a2e,#1a1a3e);display:flex;align-items:center;justify-content:center;font-size:36px">🎨</div>
+              <div class="material-info"><div class="material-name">场景素材</div><div class="material-count">512 套</div></div>
             </div>
-            <div class="feature-card fc-4" onclick="showLoginModal()">
-              <div class="fc-icon" style="background:rgba(245,158,11,.12);color:#F59E0B">🔀</div>
-              <div class="fc-title">Agent工具</div>
-              <div class="fc-desc">AI驱动的创作工具箱，覆盖从拆书到成片的每个环节，智能体自动规划任务</div>
-              <span class="fc-tag" style="background:rgba(245,158,11,.12);color:#F59E0B">AI驱动</span>
+            <div class="material-card">
+              <div class="material-thumb" style="background:linear-gradient(135deg,#1a1a2e,#0d1f3c);display:flex;align-items:center;justify-content:center;font-size:36px">✨</div>
+              <div class="material-info"><div class="material-name">特效资源</div><div class="material-count">196 套</div></div>
             </div>
-            <div class="feature-card fc-5" onclick="showLoginModal()">
-              <div class="fc-icon" style="background:rgba(244,114,182,.12);color:#F472B6">🎙️</div>
-              <div class="fc-title">音色库</div>
-              <div class="fc-desc">海量AI音色，情感配音与多语言支持，为角色匹配专属声线，音画精准同步</div>
-              <span class="fc-tag" style="background:rgba(244,114,182,.12);color:#F472B6">海量音色</span>
+            <div class="material-card">
+              <div class="material-thumb" style="background:linear-gradient(135deg,#1a1a2e,#1a1a3e);display:flex;align-items:center;justify-content:center;font-size:36px">🎵</div>
+              <div class="material-info"><div class="material-name">音效素材</div><div class="material-count">320 套</div></div>
             </div>
-            <div class="feature-card fc-6" onclick="showLoginModal()">
-              <div class="fc-icon" style="background:rgba(0,210,255,.12);color:#00D2FF">✂️</div>
-              <div class="fc-title">在线快剪与审片</div>
-              <div class="fc-desc">内置剪辑工具，帧级标注审片，版本对比和快照回溯，云端加密交付</div>
-              <span class="fc-tag" style="background:rgba(0,210,255,.12);color:#00D2FF">专业剪辑</span>
+            <div class="material-card">
+              <div class="material-thumb" style="background:linear-gradient(135deg,#1a1a2e,#16213e);display:flex;align-items:center;justify-content:center;font-size:36px">📦</div>
+              <div class="material-info"><div class="material-name">模板库</div><div class="material-count">84 套</div></div>
             </div>
           </div>
         </div>
@@ -2097,6 +2137,22 @@ select.form-control{cursor:pointer}
   </div>
 </div>
 
+<!-- 商务合作二维码弹窗 -->
+<div class="modal-overlay" id="modal-biz-qr">
+  <div class="modal-box" style="max-width:400px;text-align:center;padding:32px 24px">
+    <button class="modal-close" onclick="closeModal('modal-biz-qr')" style="position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--text-secondary);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center">✕</button>
+    <h3 style="font-size:18px;font-weight:700;margin-bottom:8px;color:#F0F0F0">商务合作</h3>
+    <p style="font-size:13px;color:#6B7280;margin-bottom:20px">扫码添加企业微信，了解更多合作详情</p>
+    <div style="width:200px;height:200px;margin:0 auto 16px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center">
+      <div style="text-align:center;color:var(--text-muted)">
+        <div style="font-size:48px;margin-bottom:8px">📱</div>
+        <div style="font-size:12px">企业微信二维码</div>
+      </div>
+    </div>
+    <p style="font-size:11px;color:var(--text-muted)">或搜索企业微信：容量AI商务</p>
+  </div>
+</div>
+
 <!-- Toast -->
 <div class="toast-stack" id="toastStack"></div>
 
@@ -2326,7 +2382,7 @@ select.form-control{cursor:pointer}
   })();
 
   // ===== Navigation =====  // ===== Navigation =====
-  var pageTitles={home:'首页','my-works':'工作台','novel-ip':'小说IP库',script:'剧本库',assets:'资产库',tools:'Agent工具','data-view':'数据分析',team:'团队管理'};
+  var pageTitles={home:'首页','my-works':'工作台','novel-ip':'小说IP库',script:'剧本库','comic-create':'新建项目',assets:'资产库',tools:'Agent工具','data-view':'数据分析',team:'团队管理'};
   var isLoggedIn = false;
 
   function navTo(el,pageId){
@@ -2502,6 +2558,7 @@ select.form-control{cursor:pointer}
   function openPerm(){document.getElementById('modal-perm').classList.add('visible')}
   function openPoints(){document.getElementById('modal-points').classList.add('visible')}
   function closeModal(id){document.getElementById(id).classList.remove('visible')}
+  function showBizQR(){document.getElementById('modal-biz-qr').classList.add('visible')}
 
   // ===== Toast =====
   function showToast(msg,type){
