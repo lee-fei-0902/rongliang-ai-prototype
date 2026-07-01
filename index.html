@@ -901,6 +901,12 @@ select.form-control{cursor:pointer}
 .modal-btn.primary{background:var(--accent);color:#000;border:none}
 .modal-btn.primary:hover{box-shadow:0 0 16px rgba(0,220,130,.2)}
 .modal-btn.cancel{background:transparent;color:var(--text-secondary);border:1px solid var(--border)}
+.modal-box{position:relative;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-lg);
+  box-shadow:0 24px 64px rgba(0,0,0,.8)}
+.modal-close{position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;
+  border:1px solid var(--border);background:transparent;color:var(--text-secondary);cursor:pointer;
+  font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.modal-close:hover{background:var(--bg-hover);color:var(--text);border-color:var(--text-muted)}
 .modal-btn.cancel:hover{border-color:var(--text-secondary);color:var(--text)}
 
 /* ===== Toast ===== */
@@ -1464,7 +1470,7 @@ select.form-control{cursor:pointer}
             <p>无论是创作漫剧、孵化IP，还是商务合作，从这里开始</p>
           </div>
           <div class="qa-right">
-            <button class="qa-btn qa-btn-primary" onclick="navToPage('comic-create')">
+            <button class="qa-btn qa-btn-primary" onclick="navToPage('my-works')">
               <span class="qa-btn-icon">🚀</span>
               <span class="qa-btn-text">快速创作</span>
               <span class="qa-btn-arrow">→</span>
@@ -2141,7 +2147,7 @@ select.form-control{cursor:pointer}
 <!-- 商务合作二维码弹窗 -->
 <div class="modal-overlay" id="modal-biz-qr">
   <div class="modal-box" style="max-width:400px;text-align:center;padding:32px 24px">
-    <button class="modal-close" onclick="closeModal('modal-biz-qr')" style="position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--text-secondary);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center">✕</button>
+    <button class="modal-close" onclick="closeModal('modal-biz-qr')">✕</button>
     <h3 style="font-size:18px;font-weight:700;margin-bottom:8px;color:#F0F0F0">商务合作</h3>
     <p style="font-size:13px;color:#6B7280;margin-bottom:20px">扫码添加企业微信，了解更多合作详情</p>
     <div style="width:200px;height:200px;margin:0 auto 16px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center">
