@@ -3207,15 +3207,15 @@ select.form-control{cursor:pointer}
     var origNavTo = navTo;
     navTo = function(el, pageId) {
       origNavTo(el, pageId);
-      if (pageId === 'my-works' && isLoggedIn) {
-        setTimeout(renderProjects, 50);
+      if (pageId === 'my-works') {
+        setTimeout(function() { try { renderProjects(); } catch(e) { console.error('renderProjects error:', e); } }, 50);
       }
     };
     var origNavToPage = navToPage;
     navToPage = function(pageId) {
       origNavToPage(pageId);
-      if (pageId === 'my-works' && isLoggedIn) {
-        setTimeout(renderProjects, 50);
+      if (pageId === 'my-works') {
+        setTimeout(function() { try { renderProjects(); } catch(e) { console.error('renderProjects error:', e); } }, 50);
       }
     };
     // Also render on login
@@ -3225,10 +3225,17 @@ select.form-control{cursor:pointer}
       setTimeout(function() {
         var activePage = document.querySelector('.page.active');
         if (activePage && activePage.id === 'page-my-works') {
-          renderProjects();
+          try { renderProjects(); } catch(e) { console.error('renderProjects error:', e); }
         }
       }, 100);
     };
+    // Auto-render if my-works page is already active on load (e.g. after refresh with login state)
+    setTimeout(function() {
+      var activePage = document.querySelector('.page.active');
+      if (activePage && activePage.id === 'page-my-works' && document.getElementById('proj-list-grid')) {
+        try { renderProjects(); } catch(e) { console.error('auto renderProjects error:', e); }
+      }
+    }, 200);
   })();
 </script>
 </body>
