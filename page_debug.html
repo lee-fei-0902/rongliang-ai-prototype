@@ -1,0 +1,2521 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>容量AI 漫剧 - CodeBuddy风格原型</title>
+<style>
+/* ===== CSS Reset & CodeBuddy Dark Theme ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#000000;--bg-elevated:#0D0D0D;--bg-hover:#1A1A1A;--bg-card:#0F0F0F;
+  --border:#1F1F1F;--border-lt:#2A2A2A;
+  --text:#EDEDED;--text-secondary:#9B9B9B;--text-muted:#666666;
+  --accent:#00DC82;--accent-hover:#00F090;--accent-bg:rgba(0,220,130,.1);
+  --blue:#4D7CFE;--cyan:#00D2FF;--purple:#A78BFA;--pink:#F472B6;--orange:#FF6B35;--amber:#F59E0B;
+  --success:#00DC82;--warning:#F59E0B;--danger:#EF4444;
+  --radius:12px;--radius-sm:8px;--radius-lg:16px;
+  --shadow:0 2px 8px rgba(0,0,0,.6);--shadow-lg:0 8px 32px rgba(0,0,0,.8);
+  --gradient-accent:linear-gradient(135deg,#4D7CFE,#00D2FF);
+}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','PingFang SC','Microsoft YaHei',sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;
+  overflow:hidden;height:100vh;
+}
+a{color:var(--accent);text-decoration:none}
+::selection{background:var(--accent-bg);color:var(--accent)}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#555}
+
+/* ===== Login — 左右分栏 (视频左 + 表单右) v52 ===== */
+@keyframes loginFadeIn{from{opacity:0}to{opacity:1}}
+@keyframes loginSlideLeft{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+
+.login-overlay{
+  position:fixed;inset:0;z-index:9999;
+  display:flex;
+  animation:loginOverlayIn .6s ease;
+}
+@keyframes loginOverlayIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+/* ===== 左侧：视频展示区 ===== */
+.login-video-section{
+  flex:0 0 50%;
+  position:relative;overflow:hidden;
+  min-height:0;
+}
+
+.login-video-bg{
+  position:absolute;inset:0;z-index:0;
+  object-fit:cover;width:100%;height:100%;
+}
+
+/* Ken Burns 动效海报层 */
+@keyframes kenBurns{
+  0%{transform:scale(1) translate(0,0)}
+  33%{transform:scale(1.06) translate(-1.5%,-0.5%)}
+  66%{transform:scale(1.03) translate(0.8%,0.5%)}
+  100%{transform:scale(1) translate(0,0)}
+}
+.login-poster-fallback{
+  position:absolute;inset:0;z-index:0;
+  background:url(login-poster.jpg) center/cover no-repeat;
+  animation:kenBurns 24s ease-in-out infinite;
+  will-change:transform;
+  transition:opacity 1.2s ease;
+}
+.login-poster-fallback.hidden{opacity:0;pointer-events:none}
+
+/* 从视频左边缘到右侧的渐变蒙层 */
+.login-video-overlay{
+  position:absolute;inset:0;z-index:1;
+  background:linear-gradient(to right,
+    rgba(0,0,0,.05) 0%,
+    rgba(0,0,0,.02) 30%,
+    rgba(8,8,24,.18) 60%,
+    rgba(8,8,24,.45) 85%,
+    rgba(10,13,36,.7) 100%
+  );
+}
+
+/* 页面左上角品牌标识 */
+.login-brand-overlay{
+  position:absolute;top:24px;left:28px;z-index:3;
+  display:flex;flex-direction:row;align-items:center;gap:10px;
+}
+.login-brand-overlay .lb-logo{
+  width:40px;height:40px;border-radius:10px;overflow:hidden;
+  background:linear-gradient(135deg,#6366F1,#8B5CF6);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 30px rgba(99,102,241,.25);
+  flex-shrink:0;
+}
+.login-brand-overlay .lb-logo img{width:100%;height:100%;object-fit:contain}
+.login-brand-overlay .lb-name{
+  font-size:18px;font-weight:800;color:#fff;letter-spacing:.03em;white-space:nowrap;
+}
+.login-brand-overlay .lb-name span{
+  background:linear-gradient(135deg,#A5B4FC,#C4B5FD);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+/* ===== 右侧：表单区 ===== */
+.login-form-section{
+  flex:1;
+  background:linear-gradient(180deg,#0A0D24 0%,#0E1235 100%);
+  display:flex;align-items:center;justify-content:center;
+  padding:60px 48px;
+  position:relative;
+  animation:loginSlideLeft .6s cubic-bezier(.22,.61,.36,1);
+  box-shadow:-8px 0 60px rgba(0,0,0,.5);
+}
+
+.login-form-inner{
+  width:100%;max-width:380px;
+}
+
+.login-close-btn{
+  position:absolute;top:20px;right:20px;z-index:5;
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);
+  color:rgba(255,255,255,.3);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.login-close-btn:hover{background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)}
+
+.login-form-section .login-title{
+  font-size:26px;font-weight:750;color:#fff;margin-bottom:6px;letter-spacing:.02em;
+}
+.login-form-section .login-subtitle{
+  font-size:13px;color:rgba(255,255,255,.35);margin-bottom:32px;
+}
+
+/* Tab */
+.login-tabs{
+  display:flex;gap:4px;margin-bottom:28px;
+  background:rgba(255,255,255,.03);border-radius:10px;
+  padding:4px;
+}
+.login-tab{
+  flex:1;padding:9px 0;text-align:center;border-radius:8px;
+  font-size:13px;font-weight:600;cursor:pointer;
+  color:rgba(255,255,255,.35);border:none;
+  background:transparent;transition:all .25s;
+  letter-spacing:.02em;
+}
+.login-tab:hover{color:rgba(255,255,255,.6)}
+.login-tab.active{
+  color:#fff;background:rgba(99,102,241,.2);
+  box-shadow:0 2px 8px rgba(99,102,241,.15);
+}
+
+.login-tab-panel{display:none;animation:loginTabFade .3s ease}
+.login-tab-panel.active{display:block}
+@keyframes loginTabFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* 输入框 */
+.login-field-wrap{margin-bottom:15px}
+.login-input{
+  width:100%;padding:13px 16px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:10px;
+  font-size:14px;color:#fff;outline:none;
+  transition:all .25s;box-sizing:border-box;
+}
+.login-input:focus{
+  border-color:rgba(99,102,241,.4);
+  background:rgba(99,102,241,.05);
+  box-shadow:0 0 0 3px rgba(99,102,241,.06);
+}
+.login-input::placeholder{color:rgba(255,255,255,.18)}
+
+.login-phone-wrap{display:flex}
+.login-phone-prefix{
+  display:flex;align-items:center;gap:4px;
+  padding:13px 12px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+  border-right:none;border-radius:10px 0 0 10px;
+  font-size:13px;color:rgba(255,255,255,.45);font-weight:600;
+  white-space:nowrap;
+}
+.login-phone-prefix svg{width:10px;height:10px;opacity:.5}
+.login-phone-wrap .login-input{border-radius:0 10px 10px 0}
+
+.login-sms-wrap{display:flex;gap:10px}
+.login-sms-wrap .login-input{flex:1}
+.login-sms-send{
+  flex-shrink:0;height:46px;padding:0 14px;
+  background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.15);
+  border-radius:10px;color:rgba(165,180,252,.85);
+  font-size:12.5px;font-weight:600;cursor:pointer;
+  transition:all .2s;white-space:nowrap;
+}
+.login-sms-send:hover{background:rgba(99,102,241,.18);color:#C7D2FE}
+
+/* 主按钮 */
+.login-submit{
+  width:100%;padding:14px;margin-top:24px;
+  background:linear-gradient(135deg,#6366F1,#8B5CF6);
+  color:#fff;border:none;border-radius:10px;
+  font-size:15px;font-weight:650;cursor:pointer;
+  transition:all .3s;letter-spacing:.03em;
+  box-shadow:0 4px 20px rgba(99,102,241,.25);
+}
+.login-submit:hover{
+  box-shadow:0 8px 32px rgba(99,102,241,.4);
+  transform:translateY(-1px);
+}
+.login-submit:active{transform:translateY(0)}
+
+/* 条款 */
+.login-terms{
+  display:flex;align-items:center;gap:8px;margin-top:22px;
+  font-size:12px;color:rgba(255,255,255,.2);
+}
+.login-terms input[type=checkbox]{
+  width:14px;height:14px;accent-color:#6366F1;cursor:pointer;
+  flex-shrink:0;
+}
+.login-terms a{color:rgba(99,102,241,.6);text-decoration:none}
+.login-terms a:hover{color:rgba(99,102,241,.9)}
+
+/* 底部品牌 */
+.login-modal-footer{
+  margin-top:36px;text-align:center;
+}
+.login-modal-footer .ft-brand{
+  display:inline-flex;align-items:center;gap:7px;
+}
+.login-modal-footer .ft-brand img{
+  width:22px;height:22px;border-radius:5px;object-fit:contain;
+  background:linear-gradient(135deg,#6366F1,#8B5CF6);
+}
+.login-modal-footer .ft-name{
+  font-size:12px;font-weight:500;color:rgba(255,255,255,.2);
+}
+.login-modal-footer .ft-copy{
+  font-size:10px;color:rgba(255,255,255,.1);margin-top:3px;
+}
+
+/* 响应式 */
+@media(max-width:800px){
+  .login-video-section{flex:0 0 0;display:none}
+  .login-form-section{padding:48px 32px}
+}
+
+
+/* ===== Main Layout ===== */
+.main-layout{display:none;height:100vh;flex-direction:column}
+.main-layout.visible{display:flex}
+.topbar{height:52px;display:flex;align-items:center;padding:0 20px;
+  background:var(--bg-elevated);border-bottom:1px solid var(--border);gap:0;flex-shrink:0}
+.topbar-logo{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;color:var(--text);
+  white-space:nowrap;letter-spacing:.02em;flex-shrink:0;padding-right:20px}
+.topbar-logo img{width:34px;height:34px;border-radius:10px;object-fit:contain;
+  background:linear-gradient(135deg,#6366F1,#F59E0B);padding:2px}
+.topbar-search{flex:1;max-width:400px;position:relative}
+.topbar-search input{width:100%;padding:7px 12px 7px 34px;background:var(--bg);border:1px solid var(--border);
+  border-radius:var(--radius-sm);font-size:13px;color:var(--text);outline:none;transition:border .2s}
+.topbar-search input:focus{border-color:var(--accent)}
+.topbar-search::before{content:'🔍';position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:12px;opacity:.4}
+.topbar-actions{margin-left:auto;display:flex;align-items:center;gap:14px}
+.topbar-actions .avatar{width:30px;height:30px;border-radius:50%;background:var(--accent-bg);
+  display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:12px;font-weight:700}
+.topbar-breadcrumb{font-size:12px;color:var(--text-muted)}
+.topbar-breadcrumb .current{color:var(--text);font-weight:600}
+.topbar-badge{background:var(--accent-bg);color:var(--accent);padding:3px 8px;border-radius:10px;font-size:11px;font-weight:600}
+/* 个人中心 */
+.user-center{display:flex;align-items:center;gap:10px;cursor:pointer;padding:4px 12px 4px 6px;border-radius:var(--radius-sm);transition:all .2s}
+.user-center:hover{background:var(--bg-hover)}
+.user-center .avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--blue));
+  display:flex;align-items:center;justify-content:center;color:#000;font-size:13px;font-weight:700;flex-shrink:0}
+.user-meta{display:flex;flex-direction:column;line-height:1.3}
+.user-meta .user-name{font-size:13px;font-weight:600;color:var(--text)}
+.user-meta .user-points{font-size:11px;color:var(--amber);font-weight:500}
+.user-divider{width:1px;height:20px;background:var(--border);margin:0 4px}
+
+/* 用户中心下拉菜单 */
+.user-center-wrap{position:relative}
+.user-dropdown{position:absolute;top:calc(100% + 8px);right:0;min-width:200px;background:var(--bg-elevated);
+  border:1px solid var(--border-lt);border-radius:12px;box-shadow:var(--shadow-lg);padding:6px;z-index:1000;display:none}
+.user-dropdown.show{display:block;animation:dropIn .2s ease}
+@keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.user-dropdown-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;cursor:pointer;
+  font-size:13px;color:var(--text-secondary);transition:all .15s}
+.user-dropdown-item:hover{background:var(--bg-hover);color:var(--text)}
+.user-dropdown-divider{height:1px;background:var(--border);margin:4px 0}
+.user-dropdown-item.danger{color:var(--text-muted)}
+.user-dropdown-item.danger:hover{color:var(--danger);background:rgba(239,68,68,.08)}
+.dropdown-arrow{font-size:10px;color:var(--text-muted);margin-left:4px;transition:transform .2s}
+.user-center.expanded .dropdown-arrow{transform:rotate(180deg)}
+
+/* 未登录锁定样式 */
+.toolbar-card.locked{position:relative;opacity:.85}
+.toolbar-card.locked::after{content:'';position:absolute;inset:0;border-radius:14px;pointer-events:none}
+.lock-badge{position:absolute;top:8px;right:8px;font-size:10px;padding:3px 8px;border-radius:6px;
+  background:rgba(245,158,11,.15);color:#F59E0B;font-weight:600;display:flex;align-items:center;gap:3px;
+  border:1px solid rgba(245,158,11,.2);z-index:3}
+.toolbar-card:not(.locked) .lock-badge{display:none}
+
+/* 登录提示条 */
+.login-hint-bar{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;margin-bottom:16px;
+  background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(139,92,246,.06));border:1px solid rgba(99,102,241,.15);
+  border-radius:10px;font-size:13px;color:#A5B4FC;cursor:pointer;transition:all .2s}
+.login-hint-bar:hover{background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(139,92,246,.1));border-color:rgba(99,102,241,.25)}
+.login-hint-bar.logged-in{display:none}
+
+
+/* ===== 顶部导航条（Topbar 内嵌） ===== */
+.content-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar-nav{display:flex;align-items:center;gap:2px;flex:1;overflow-x:auto;height:100%}
+.topbar-nav::-webkit-scrollbar{height:2px}
+.topbar-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px}
+.nav-item{padding:8px 16px;border-radius:6px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:0;
+  color:#B8B8B8;transition:all .15s;white-space:nowrap;text-decoration:none;border-bottom:2px solid transparent}
+.nav-item:hover{background:var(--bg-hover);color:#D0D0D0}
+.nav-item.active{background:transparent;color:var(--accent);font-weight:600;border-bottom-color:var(--accent)}
+.nav-item .nav-badge{margin-left:4px;font-size:10px;background:var(--accent);color:#000;padding:2px 6px;border-radius:8px;font-weight:700}
+
+/* ===== Main Content ===== */
+.main-content{flex:1;overflow-y:auto;padding:0 28px 28px}
+.page{display:none;animation:fadeIn .25s ease;padding-top:0;margin-top:0}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== Section Header ===== */
+.section-header{margin:20px 0 16px}
+.section-header h2{font-size:22px;font-weight:700;margin-bottom:4px}
+.section-header p{font-size:13px;color:var(--text-secondary)}
+.section-header.gradient h2{background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* ===== Banner ===== */
+.banner-wrap{position:relative;margin:16px 0 20px;border-radius:var(--radius-lg);overflow:hidden;
+  height:220px;border:1px solid var(--border);}
+.banner-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:opacity .6s}
+.banner-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.45) 100%)}
+.banner-bg::before{content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle at 20% 80%,rgba(0,220,130,.06) 0%,transparent 50%),
+                   radial-gradient(circle at 85% 15%,rgba(77,124,254,.06) 0%,transparent 50%);
+  z-index:1;}
+.banner-grid-overlay{position:absolute;inset:0;z-index:2;opacity:.06;
+  background-image:url(data:image/jpeg;base64,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),
+                   linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:40px 40px;}
+.banner-content{position:relative;z-index:3;padding:36px 40px}
+.banner-badge{display:inline-block;padding:4px 12px;background:var(--accent);color:#000;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:12px}
+.banner-content h2{font-size:24px;font-weight:700;margin-bottom:6px;color:#fff}
+.banner-content p{font-size:13px;color:var(--text-secondary);max-width:440px;line-height:1.6}
+.banner-dots{position:absolute;bottom:16px;right:24px;display:flex;gap:6px;z-index:4}
+.banner-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.25);cursor:pointer;transition:all .2s}
+.banner-dot.active{background:var(--accent);width:20px;border-radius:3px}
+
+/* ===== Entry Cards ===== */
+.entry-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:28px}
+.entry-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px;cursor:pointer;transition:all .2s}
+.entry-card:hover{border-color:var(--accent);background:var(--bg-hover);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.4),0 0 20px rgba(0,220,130,.06);cursor:pointer}
+.ec-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.ec-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.ec-title{font-size:14px;font-weight:600;color:var(--text)}
+.ec-desc{font-size:12px;color:var(--text-muted);line-height:1.5}
+
+/* ===== Work Cards ===== */
+.section-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.section-title h3{font-size:16px;font-weight:700}
+.section-title a{font-size:12px;color:var(--accent)}
+.works-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin-bottom:28px}
+.work-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;
+  cursor:pointer;transition:all .2s}
+.work-card:hover{border-color:var(--accent)}
+.work-card-thumb{aspect-ratio:3/4;background-size:cover;background-position:center;position:relative}
+.wc-badge{position:absolute;top:5px;left:5px;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:700;
+  background:var(--accent);color:#000}
+.work-card-info{padding:6px 8px}
+.work-card-title{font-size:11px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.work-card-meta{font-size:9px;color:var(--text-muted);display:flex;justify-content:space-between}
+
+/* ===== Case Cards ===== */
+.case-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:28px}
+.case-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;
+  cursor:pointer;transition:all .2s}
+.case-card:hover{border-color:var(--accent)}
+.case-card-thumb{aspect-ratio:16/10;background-size:cover;background-position:center;position:relative;
+  display:flex;align-items:center;justify-content:center}
+.play-btn{width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.6);display:flex;align-items:center;
+  justify-content:center;font-size:11px;color:#fff;backdrop-filter:blur(4px)}
+.case-card-info{padding:6px 8px}
+.case-card-title{font-size:11px;font-weight:600;margin-bottom:1px}
+.case-card-meta{font-size:9px;color:var(--text-muted)}
+
+/* ===== 新版首页 - AI短剧创作引擎（轮播图） ===== */
+/* Hero轮播区 */
+.hero-carousel{position:relative;width:100%;height:420px;overflow:hidden;border-radius:0 0 16px 16px}
+.carousel-track{display:flex;height:100%;transition:transform .6s cubic-bezier(.4,0,.2,1)}
+.carousel-slide{flex:0 0 100%;height:100%;position:relative;overflow:hidden}
+.carousel-slide .slide-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:0;background:#000}
+.carousel-slide .slide-overlay{position:absolute;inset:0;z-index:1;
+  background:linear-gradient(180deg,rgba(0,0,0,.15) 0%,rgba(0,0,0,.35) 40%,rgba(0,0,0,.65) 100%)}
+.carousel-slide .slide-glow{position:absolute;border-radius:50%;filter:blur(100px);opacity:.2;z-index:1}
+.slide-glow-1{width:500px;height:500px;background:radial-gradient(circle,rgba(99,102,241,.5),transparent);top:-120px;right:-100px}
+.slide-glow-2{width:350px;height:350px;background:radial-gradient(circle,rgba(0,220,130,.3),transparent);bottom:-100px;left:-80px}
+.slide-glow-3{width:300px;height:300px;background:radial-gradient(circle,rgba(139,92,246,.35),transparent);top:40%;left:50%}
+.slide-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;padding:0 40px}
+.slide-title{font-size:40px;font-weight:800;letter-spacing:-.02em;line-height:1.2;margin-bottom:10px;
+  background:linear-gradient(135deg,#FFFFFF 0%,#E2D9FF 40%,#A5B4FC 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.slide-subtitle{font-size:15px;color:#8B8EA0;max-width:560px;line-height:1.6;margin-bottom:24px}
+.slide-cta{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:12px;border:none;
+  background:linear-gradient(135deg,#6366F1,#8B5CF6);color:#fff;font-size:15px;font-weight:700;cursor:pointer;
+  transition:all .2s;box-shadow:0 4px 20px rgba(99,102,241,.4)}
+.slide-cta:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(99,102,241,.55)}
+/* 轮播箭头 */
+.carousel-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:10;width:44px;height:44px;border-radius:50%;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#D0D0D0;font-size:20px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.carousel-arrow:hover{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.25);color:#fff}
+.carousel-arrow.prev{left:20px}
+.carousel-arrow.next{right:20px}
+/* 轮播指示器 */
+.carousel-dots{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:8px}
+.carousel-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);border:none;cursor:pointer;transition:all .3s;padding:0}
+.carousel-dot.active{background:#fff;width:24px;border-radius:4px;box-shadow:0 0 8px rgba(255,255,255,.3)}
+
+
+/* ===== AniShort风格首页改版 ===== */
+/* 工作流展示 */
+.workflow-section{margin-top:28px;padding:28px 40px;max-width:900px;margin-left:auto;margin-right:auto}
+.workflow-header{text-align:center;margin-bottom:24px}
+.workflow-header h3{font-size:22px;font-weight:800;color:#F0F0F0;margin-bottom:6px}
+.workflow-header p{font-size:13px;color:#6B7280}
+.workflow-steps{display:flex;align-items:flex-start;justify-content:center;position:relative;gap:20px;padding:0 10px}
+.workflow-steps::before{content:'';position:absolute;top:28px;left:20%;right:20%;height:2px;
+  background:linear-gradient(90deg,rgba(77,124,254,.2),rgba(99,102,241,.2),rgba(139,92,246,.2),rgba(0,220,130,.2));z-index:0}
+.ws-item{flex:0 1 140px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;z-index:1}
+.ws-num{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;
+  margin-bottom:12px;border:2px solid rgba(255,255,255,.1);background:var(--bg-elevated);transition:all .3s}
+.ws-item:hover .ws-num{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.ws-num.c1{background:linear-gradient(135deg,rgba(77,124,254,.2),rgba(99,102,241,.1));color:#4D7CFE;border-color:rgba(77,124,254,.3)}
+.ws-num.c2{background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(139,92,246,.1));color:#A78BFA;border-color:rgba(139,92,246,.3)}
+.ws-num.c3{background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(244,114,182,.1));color:#F472B6;border-color:rgba(244,114,182,.3)}
+.ws-num.c4{background:linear-gradient(135deg,rgba(0,220,130,.2),rgba(0,210,255,.1));color:#00DC82;border-color:rgba(0,220,130,.3)}
+.ws-num.c5{background:linear-gradient(135deg,rgba(245,158,11,.2),rgba(255,107,53,.1));color:#F59E0B;border-color:rgba(245,158,11,.3)}
+.ws-title{font-size:14px;font-weight:600;color:#EDEDED;margin-bottom:4px}
+.ws-desc{font-size:12px;color:#6B7280;line-height:1.4;max-width:120px}
+
+/* 特色功能区 */
+.features-section{margin-top:28px}
+.features-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.features-header h3{font-size:18px;font-weight:700;color:#F0F0F0}
+.features-header p{font-size:13px;color:#6B7280}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feature-card{padding:24px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;
+  cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+.feature-card:hover{border-color:rgba(99,102,241,.3);background:rgba(99,102,241,.05);transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .25s}
+.feature-card:hover::before{opacity:1}
+.fc-1::before{background:linear-gradient(90deg,#4D7CFE,#6366F1)}
+.fc-2::before{background:linear-gradient(90deg,#8B5CF6,#A78BFA)}
+.fc-3::before{background:linear-gradient(90deg,#00DC82,#00D2FF)}
+.fc-4::before{background:linear-gradient(90deg,#F59E0B,#FF6B35)}
+.fc-5::before{background:linear-gradient(90deg,#F472B6,#A78BFA)}
+.fc-6::before{background:linear-gradient(90deg,#00D2FF,#4D7CFE)}
+.fc-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px}
+.fc-title{font-size:15px;font-weight:700;color:#EDEDED;margin-bottom:6px}
+.fc-desc{font-size:12px;color:#9CA3AF;line-height:1.5}
+.fc-tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:4px;margin-top:10px;font-weight:600}
+
+/* 数据展示区 */
+.stats-bar{display:flex;gap:0;margin-top:28px;padding:20px 28px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+  border-radius:16px}
+.stat-item{flex:1;text-align:center;position:relative}
+.stat-item:not(:last-child)::after{content:'';position:absolute;right:0;top:15%;height:70%;width:1px;background:rgba(255,255,255,.08)}
+.stat-num{font-size:28px;font-weight:800;margin-bottom:2px;
+  background:linear-gradient(135deg,#FFFFFF,#A5B4FC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:12px;color:#6B7280}
+
+@media(max-width:1024px){
+  .features-grid{grid-template-columns:repeat(2,1fr)}
+  .workflow-steps{flex-wrap:wrap;gap:16px}
+  .workflow-steps::before{display:none}
+}
+@media(max-width:768px){
+  .features-grid{grid-template-columns:1fr}
+  .stats-bar{flex-direction:column;gap:16px}
+  .stat-item:not(:last-child)::after{display:none}
+}
+
+/* 新建项目入口 */
+.new-project-section{margin-bottom:24px}
+.new-project-banner{display:flex;align-items:center;gap:16px;padding:20px 24px;
+  background:linear-gradient(135deg,rgba(99,102,241,.1) 0%,rgba(139,92,246,.06) 50%,rgba(0,220,130,.04) 100%);
+  border:1px solid rgba(99,102,241,.2);border-radius:14px;cursor:pointer;transition:all .2s;margin-bottom:14px}
+.new-project-banner:hover{border-color:rgba(99,102,241,.4);background:linear-gradient(135deg,rgba(99,102,241,.14) 0%,rgba(139,92,246,.1) 50%,rgba(0,220,130,.06) 100%);transform:translateY(-1px)}
+.npb-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#6366F1,#8B5CF6);color:#fff;flex-shrink:0;box-shadow:0 4px 16px rgba(99,102,241,.3)}
+.npb-text{flex:1}
+.npb-title{font-size:16px;font-weight:700;color:#F0F0F0;margin-bottom:2px}
+.npb-desc{font-size:13px;color:#9CA3AF}
+.npb-arrow{font-size:20px;color:#6366F1;transition:transform .2s}
+.new-project-banner:hover .npb-arrow{transform:translateX(4px)}
+.np-quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.np-quick-card{padding:16px 18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;cursor:pointer;transition:all .2s}
+.np-quick-card:hover{border-color:rgba(99,102,241,.35);background:rgba(99,102,241,.06);transform:translateY(-2px)}
+.npqc-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.npqc-title{font-size:14px;font-weight:600;color:#EDEDED;margin-bottom:4px}
+.npqc-desc{font-size:12px;color:#6B7280;line-height:1.4}
+@media(max-width:768px){.np-quick-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* 工具栏 */
+.toolbar-section{margin-top:24px}
+.toolbar-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.toolbar-header h3{font-size:16px;font-weight:700;color:#F0F0F0}
+.toolbar-sub{font-size:12px;color:#888}
+.toolbar-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.toolbar-card{display:flex;align-items:center;gap:14px;padding:18px 20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;cursor:pointer;transition:all .2s}
+.toolbar-card:hover{border-color:rgba(99,102,241,.4);background:rgba(99,102,241,.08);transform:translateY(-2px);box-shadow:0 4px 20px rgba(99,102,241,.1)}
+.toolbar-card-main{border-color:rgba(0,220,130,.25);background:rgba(0,220,130,.06)}
+.toolbar-card-main:hover{border-color:rgba(0,220,130,.5);background:rgba(0,220,130,.1);box-shadow:0 4px 20px rgba(0,220,130,.1)}
+.tc-icon-wrap{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tc-icon{font-size:24px}
+.tc-body{flex:1;min-width:0}
+.tc-title{font-size:14px;font-weight:600;color:#F0F0F0;display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.tc-badge{font-size:10px;padding:2px 7px;border-radius:4px;background:rgba(0,220,130,.2);color:#00DC82;font-weight:700}
+.tc-desc{font-size:12px;color:#9CA3AF;line-height:1.4}
+.tc-arrow{font-size:16px;color:#555;transition:all .2s}
+.toolbar-card:hover .tc-arrow{color:#A5B4FC;transform:translateX(3px)}
+
+/* 项目卡片流 */
+.project-stream-wrap{margin-top:20px}
+.project-stream-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.project-stream-header h3{font-size:16px;font-weight:700}
+.project-stream-header a{font-size:12px;color:var(--accent)}
+.project-stream{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;scroll-behavior:smooth}
+.project-stream::-webkit-scrollbar{height:4px}
+.project-stream::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+.project-card-stream{flex:0 0 180px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .2s}
+.project-card-stream:hover{border-color:rgba(99,102,241,.3);transform:translateY(-2px)}
+.pcs-thumb{height:100px;display:flex;align-items:center;justify-content:center}
+.pcs-info{padding:10px 12px}
+.pcs-title{font-size:13px;font-weight:600;color:#EDEDED;margin-bottom:4px}
+.pcs-meta{font-size:11px;color:#666;display:flex;justify-content:space-between;align-items:center}
+.pcs-status{font-size:10px;padding:1px 6px;border-radius:4px;font-weight:600}
+.pcs-status.ongoing{background:rgba(77,124,254,.15);color:#4D7CFE}
+.pcs-status.hot{background:rgba(255,107,53,.15);color:#FF6B35}
+.pcs-status.done{background:rgba(0,220,130,.15);color:#00DC82}
+.pcs-status.new{background:rgba(167,139,250,.15);color:#A78BFA}
+
+@media(max-width:1024px){
+  .slide-title{font-size:30px}
+  .hero-carousel{height:340px}
+  .toolbar-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:768px){
+  .slide-title{font-size:24px}
+  .slide-subtitle{font-size:13px}
+  .hero-carousel{height:280px}
+  .carousel-arrow{width:32px;height:32px;font-size:14px}
+  .toolbar-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* ===== IP / Script / Comic pages ===== *//* ===== IP / Script / Comic pages ===== */
+.ip-header{margin:0 0 16px}
+.ip-header h2{font-size:22px;font-weight:700;margin-bottom:4px}
+.ip-header h2 span{background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ip-header p{font-size:13px;color:var(--text-secondary)}
+.ip-tabs{display:flex;gap:6px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:12px}
+.ip-tab{padding:7px 18px;border-radius:20px;font-size:13px;cursor:pointer;color:var(--text-secondary);
+  transition:all .2s;display:flex;align-items:center;gap:6px;border:1px solid transparent}
+.ip-tab:hover{color:var(--text);background:var(--bg-hover)}
+.ip-tab.active{background:var(--accent-bg);color:var(--accent);border-color:var(--accent);font-weight:600}
+.ip-subbar{display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.chip{padding:6px 14px;border:1px solid var(--border);border-radius:20px;font-size:12px;cursor:pointer;
+  color:var(--text-secondary);transition:all .2s}
+.chip:hover,.chip.active{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
+.ip-tab-panel{display:none}
+.ip-tab-panel.active{display:block}
+
+/* Novel Cards */
+.ip-novel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+.novel-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:14px;display:flex;gap:14px;cursor:pointer;transition:all .2s}
+.novel-card:hover{border-color:var(--accent)}
+.novel-cover{width:72px;height:96px;border-radius:6px;flex-shrink:0;background-size:cover;background-position:center}
+.novel-info{flex:1;min-width:0}
+.novel-title{font-size:15px;font-weight:600;margin-bottom:4px}
+.novel-author{font-size:12px;color:var(--text-muted);margin-bottom:6px}
+.novel-tags{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap}
+.tag{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+.tag.hot{background:rgba(245,158,11,.15);color:var(--amber)}
+.tag.done{background:rgba(0,220,130,.15);color:var(--accent)}
+.novel-stats{font-size:11px;color:var(--text-muted);margin-bottom:8px}
+.novel-btn{padding:6px 16px;background:var(--accent);color:#000;border:none;border-radius:6px;font-size:12px;
+  font-weight:600;cursor:pointer;transition:all .2s}
+.novel-btn:hover{box-shadow:0 0 16px rgba(0,220,130,.2)}
+.novel-btn.claimed{background:transparent;color:var(--text-muted);border:1px solid var(--border);cursor:default}
+
+/* ===== Form Components ===== */
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:6px}
+.form-control{width:100%;padding:10px 14px;background:var(--bg-hover);border:1px solid var(--border);
+  border-radius:8px;color:var(--text);font-size:13px;outline:none;transition:border-color .2s;
+  box-sizing:border-box}
+.form-control:focus{border-color:var(--accent)}
+textarea.form-control{resize:vertical;font-family:inherit;line-height:1.5}
+select.form-control{cursor:pointer}
+/* AI 创作面板布局 */
+.ai-create-panel{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:32px;margin-top:8px;
+}
+.ai-create-panel .ai-panel-header{
+  margin-bottom:24px;font-size:15px;font-weight:700;
+  display:flex;align-items:center;gap:8px;
+}
+.ai-create-form{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+.ai-create-form .form-full{grid-column:1/-1}
+.ai-create-form .ai-submit-row{
+  grid-column:1/-1;display:flex;align-items:center;gap:12px;
+  margin-top:8px;padding-top:16px;border-top:1px solid var(--border);
+}
+@media(max-width:640px){
+  .ai-create-form{grid-template-columns:1fr}
+  .ai-create-panel{padding:20px}
+}
+
+/* ===== AI Comic Create ===== */
+.comic-header{display:flex;align-items:center;gap:16px;margin:20px 0}
+.comic-header h2{font-size:22px;font-weight:700}
+.comic-header h2 span{background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.comic-start-btn{padding:8px 20px;background:var(--accent);color:#000;border:none;border-radius:8px;
+  font-size:13px;font-weight:600;cursor:pointer;margin-left:auto;transition:all .2s}
+.comic-start-btn:hover{box-shadow:0 0 20px rgba(0,220,130,.25)}
+/* Flow Steps */
+.flow-nav{display:flex;gap:0;margin-bottom:20px;overflow:hidden;border-radius:var(--radius);
+  border:1px solid var(--border);background:var(--bg-card)}
+.flow-step{flex:1;padding:12px 16px;text-align:center;font-size:13px;font-weight:600;cursor:pointer;
+  color:var(--text-muted);border-right:1px solid var(--border);transition:all .2s;position:relative}
+.flow-step:last-child{border-right:none}
+.flow-step:hover{color:var(--text);background:var(--bg-hover)}
+.flow-step.active{color:var(--accent);background:var(--accent-bg)}
+.flow-step .fs-num{display:inline-flex;width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.05);
+  align-items:center;justify-content:center;font-size:11px;margin-right:6px}
+.flow-step.active .fs-num{background:var(--accent);color:#000}
+.flow-panel{display:none}
+.flow-panel.active{display:block}
+/* Content Parsing Selection */
+.content-parse-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.cp-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:28px 24px;
+  cursor:pointer;transition:all .25s;display:flex;flex-direction:column;align-items:center;text-align:center}
+.cp-card:hover{border-color:var(--accent);background:var(--bg-hover);transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.cp-card .cp-icon{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;
+  font-size:26px;margin-bottom:16px}
+.cp-card .cp-title{font-size:16px;font-weight:700;margin-bottom:6px;color:var(--text)}
+.cp-card .cp-desc{font-size:12px;color:var(--text-muted);line-height:1.6;max-width:240px}
+.cp-card .cp-action{margin-top:14px;padding:8px 20px;border-radius:20px;font-size:12px;font-weight:600;
+  border:1px solid var(--border);color:var(--text-secondary);background:transparent;transition:all .2s}
+.cp-card:hover .cp-action{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
+.cp-card:first-child .cp-icon{background:rgba(77,124,254,.1);color:#4D7CFE}
+.cp-card:last-child .cp-icon{background:rgba(167,139,250,.1);color:#A78BFA}
+.cp-card:last-child{border-left:1.5px solid var(--border)}
+.cp-divider{display:flex;align-items:center;gap:8px;margin:20px 0;color:var(--text-muted);font-size:11px}
+.cp-divider::before,.cp-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.recent-chip:hover{background:var(--bg-hover)!important;border-color:var(--accent)!important;color:var(--accent)!important}
+
+/* Episode sidebar */
+.episode-layout{display:flex;gap:20px}
+.episode-sidebar{width:140px;flex-shrink:0}
+.ep-list{display:flex;flex-direction:column;gap:4px}
+.ep-item{padding:8px 12px;border-radius:8px;font-size:12px;cursor:pointer;color:var(--text-secondary);border:1px solid transparent;transition:all .2s}
+.ep-item:hover{color:var(--text)}
+.ep-item.active{background:var(--accent-bg);color:var(--accent);border-color:var(--accent);font-weight:600}
+.ep-main{flex:1;min-width:0}
+
+/* Script split */
+.unit-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.unit-item{padding:12px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
+  display:flex;align-items:center;gap:10px;transition:all .2s;cursor:pointer}
+.unit-item:hover{border-color:var(--accent)}
+.unit-num{width:28px;height:28px;border-radius:50%;background:var(--accent-bg);color:var(--accent);
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.unit-info{flex:1;min-width:0}
+.unit-title{font-size:13px;font-weight:600;margin-bottom:2px}
+.unit-desc{font-size:11px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.unit-tag{padding:2px 8px;border-radius:8px;font-size:10px;background:var(--accent-bg);color:var(--accent);flex-shrink:0}
+.script-panel{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-top:8px}
+.script-panel pre{font-size:12px;color:var(--text-secondary);white-space:pre-wrap;line-height:1.8;font-family:inherit}
+.script-panel .highlight{background:rgba(0,220,130,.15);color:var(--accent);border-radius:2px;padding:0 2px}
+
+/* Asset generation */
+.char-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.char-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all .2s}
+.char-card:hover{border-color:var(--accent)}
+.char-visual{height:160px;background-size:cover;background-position:center}
+.char-info{padding:10px 12px}
+.char-name{font-size:13px;font-weight:600;margin-bottom:2px}
+.char-views{font-size:11px;color:var(--text-muted)}
+.scene-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.scene-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all .2s}
+.scene-card:hover{border-color:var(--accent)}
+.scene-visual{height:120px;background-size:cover;background-position:center}
+.scene-info{padding:10px 12px}
+.scene-name{font-size:13px;font-weight:600;margin-bottom:2px}
+.scene-time{font-size:11px;color:var(--text-muted)}
+
+/* Video production */
+.video-layout{display:flex;gap:20px;align-items:flex-start}
+.video-preview{width:340px;flex-shrink:0;aspect-ratio:9/16;max-height:560px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;position:relative;
+  background-size:cover;background-position:center}
+.vp-overlay{position:absolute;bottom:0;left:0;right:0;padding:12px;background:linear-gradient(transparent,rgba(0,0,0,.8));
+  font-size:12px;color:#fff}
+.video-shots{flex:1;display:flex;flex-direction:column;gap:8px}
+.shot-item{padding:10px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);display:flex;gap:10px;cursor:pointer;transition:all .2s}
+.shot-item:hover,.shot-item.active{border-color:var(--accent);background:var(--accent-bg)}
+.shot-thumb{width:80px;height:60px;border-radius:4px;flex-shrink:0;background-size:cover;background-position:center}
+.shot-info{flex:1;min-width:0}
+.shot-title{font-size:13px;font-weight:600;margin-bottom:2px}
+.shot-desc{font-size:11px;color:var(--text-muted);margin-bottom:2px}
+.shot-meta{font-size:10px;color:var(--accent)}
+
+/* Final preview */
+.preview-layout{display:flex;gap:20px}
+.preview-player{width:340px;flex-shrink:0;aspect-ratio:9/16;max-height:560px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;position:relative;
+  background-size:cover;background-position:center}
+.pp-controls{position:absolute;bottom:0;left:0;right:0;padding:16px;background:linear-gradient(transparent,rgba(0,0,0,.9));
+  display:flex;align-items:center;gap:12px}
+.pp-btn{width:32px;height:32px;border-radius:50%;background:var(--accent);border:none;color:#000;display:flex;
+  align-items:center;justify-content:center;cursor:pointer;font-size:12px}
+.pp-progress{flex:1;height:4px;background:rgba(255,255,255,.2);border-radius:2px;overflow:hidden}
+.pp-progress-fill{height:100%;width:45%;background:var(--accent);border-radius:2px}
+.pp-time{font-size:11px;color:var(--text-muted)}
+.preview-info{flex:1;min-width:0}
+.preview-info h3{font-size:20px;font-weight:700;margin-bottom:4px}
+.ep-tag{display:inline-block;padding:3px 10px;background:var(--accent-bg);color:var(--accent);border-radius:12px;font-size:11px;margin-bottom:16px}
+.shot-sequence{display:flex;flex-direction:column;gap:6px;margin-top:16px}
+.shot-seq-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;font-size:12px;transition:all .2s;cursor:pointer}
+.shot-seq-item:hover,.shot-seq-item.active{border-color:var(--accent)}
+.shot-seq-num{width:22px;height:22px;border-radius:50%;background:var(--accent-bg);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.shot-seq-thumb{width:48px;height:36px;border-radius:4px;flex-shrink:0;background-size:cover;background-position:center}
+.export-actions{display:flex;gap:10px;margin-top:20px}
+.export-btn{padding:10px 20px;background:var(--accent);color:#000;border:none;border-radius:8px;font-size:13px;
+  font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
+.export-btn:hover{box-shadow:0 0 20px rgba(0,220,130,.25)}
+.export-btn.secondary{background:transparent;color:var(--text-secondary);border:1px solid var(--border)}
+.export-btn.secondary:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ===== Assets ===== */
+.asset-nav{display:flex;gap:0;margin-bottom:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;width:fit-content}
+.asset-nav-tab{padding:8px 20px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-muted);
+  border-right:1px solid var(--border);transition:all .2s}
+.asset-nav-tab:last-child{border-right:none}
+.asset-nav-tab:hover{color:var(--text)}
+.asset-nav-tab.active{background:var(--accent-bg);color:var(--accent)}
+.asset-search{display:flex;gap:10px;align-items:center;margin-bottom:16px}
+.asset-search input{width:260px;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius-sm);font-size:13px;color:var(--text);outline:none}
+.asset-search input:focus{border-color:var(--accent)}
+.asset-search select{padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius-sm);font-size:13px;color:var(--text);outline:none;cursor:pointer}
+
+/* ===== Tools ===== */
+.tools-grid{display:flex;flex-direction:row;gap:16px;overflow-x:auto;padding-bottom:8px;scroll-behavior:smooth}
+.tools-grid::-webkit-scrollbar{height:4px}
+.tools-grid::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px}
+.tool-card{flex:0 0 280px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px;transition:all .2s;cursor:pointer;display:flex;flex-direction:column}
+.tool-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.tool-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:14px;flex-shrink:0}
+.tool-card h4{font-size:15px;font-weight:600;margin-bottom:4px}
+.tool-card p{font-size:12px;color:var(--text-muted);margin-bottom:12px;line-height:1.5}
+.tool-actions{display:flex;gap:8px;margin-top:auto;padding-top:12px}
+.tool-btn{padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .2s}
+.tool-btn.primary{background:var(--accent);color:#000}
+.tool-btn.primary:hover{box-shadow:0 0 16px rgba(0,220,130,.2)}
+.tool-btn.secondary{background:transparent;color:var(--text-secondary);border:1px solid var(--border)}
+.tool-btn.secondary:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ===== Data View ===== */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.stat-card .stat-label{font-size:12px;color:var(--text-muted);margin-bottom:6px}
+.stat-card .stat-value{font-size:28px;font-weight:800;margin-bottom:4px}
+.stat-card .stat-change{font-size:12px;color:var(--accent)}
+.stat-card .stat-change.down{color:var(--danger)}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.chart-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.chart-card h4{font-size:14px;font-weight:600;margin-bottom:12px}
+.chart-placeholder{height:180px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:13px;
+  background:var(--bg-hover);border-radius:var(--radius-sm)}
+.data-header{display:flex;align-items:center;justify-content:space-between;margin:0 0 16px 0}
+.data-header h3{font-size:16px;font-weight:700}
+.data-filter{display:flex;gap:6px}
+.data-filter .chip{padding:5px 12px;font-size:11px}
+/* 项目制作进度 */
+.progress-list{display:flex;flex-direction:column;gap:12px}
+.progress-item{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border)}
+.progress-item:last-child{border-bottom:none}
+.progress-label{font-size:13px;font-weight:600;min-width:120px;white-space:nowrap}
+.progress-bar-wrap{flex:1;height:8px;background:var(--bg-hover);border-radius:4px;overflow:hidden}
+.progress-bar-fill{height:100%;border-radius:4px;transition:width .6s ease}
+.pb-green{background:linear-gradient(90deg,var(--accent),var(--accent-hover))}
+.pb-blue{background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.pb-purple{background:linear-gradient(90deg,#A78BFA,#C084FC)}
+.pb-orange{background:linear-gradient(90deg,var(--orange),var(--amber))}
+.pb-pink{background:linear-gradient(90deg,var(--pink),#F9A8D4)}
+.progress-info{font-size:11px;color:var(--text-muted);min-width:90px;text-align:right}
+.progress-info strong{color:var(--text);font-size:13px}
+/* 成本/消耗卡片 */
+.cost-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.cost-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.cost-card .cost-label{font-size:12px;color:var(--text-muted);margin-bottom:4px}
+.cost-card .cost-value{font-size:24px;font-weight:800;margin-bottom:4px}
+.cost-card .cost-meta{font-size:11px;color:var(--text-muted)}
+.cost-card .cost-bar-wrap{height:4px;background:var(--bg-hover);border-radius:2px;margin-top:8px;overflow:hidden}
+.cost-card .cost-bar{height:100%;border-radius:2px}
+/* 分成表格增强 */
+.split-table{width:100%;border-collapse:collapse}
+.split-table th,.split-table td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);font-size:12px}
+.split-table th{font-size:11px;text-transform:uppercase;color:var(--text-muted);font-weight:600;letter-spacing:.04em}
+.split-table tr:hover td{background:var(--bg-hover)}
+.split-tag{padding:2px 8px;border-radius:6px;font-size:10px;font-weight:600}
+.split-tag.ip{background:rgba(77,124,254,.12);color:var(--blue)}
+.split-tag.script{background:rgba(167,139,250,.12);color:var(--purple)}
+.split-tag.platform{background:rgba(0,220,130,.1);color:var(--accent)}
+/* 数据区块分隔 */
+.data-section{margin-bottom:24px}
+.data-section-title{font-size:16px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.data-section-title .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+/* 迷你KPI行 */
+.kpi-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.kpi-mini{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.kpi-mini .kpi-label{font-size:11px;color:var(--text-muted);margin-bottom:2px}
+.kpi-mini .kpi-value{font-size:20px;font-weight:700;margin-bottom:2px}
+.kpi-mini .kpi-sub{font-size:10px;color:var(--accent)}
+
+/* ===== Team Management ===== */
+.team-header-actions{display:flex;gap:10px;margin-bottom:16px}
+.team-table{width:100%;border-collapse:collapse}
+.team-table th,.team-table td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--border);font-size:13px}
+.team-table th{font-size:11px;text-transform:uppercase;color:var(--text-muted);font-weight:600;letter-spacing:.04em}
+.team-table td{color:var(--text)}
+.team-table tr:hover td{background:var(--bg-hover)}
+.role-badge{padding:3px 10px;border-radius:10px;font-size:11px;font-weight:600}
+.role-badge.admin{background:rgba(239,68,68,.12);color:var(--danger)}
+.role-badge.editor{background:rgba(77,124,254,.12);color:var(--blue)}
+.role-badge.viewer{background:rgba(0,220,130,.1);color:var(--accent)}
+.team-actions{display:flex;gap:8px}
+.team-btn{padding:5px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--border);
+  background:transparent;color:var(--text-secondary);transition:all .2s}
+.team-btn:hover{border-color:var(--accent);color:var(--accent)}
+.team-btn.danger:hover{border-color:var(--danger);color:var(--danger)}
+
+/* ===== Modal ===== */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.7);
+  align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.modal-overlay.visible{display:flex}
+.modal{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;
+  width:440px;max-width:90vw;box-shadow:0 24px 64px rgba(0,0,0,.8)}
+.modal h3{font-size:18px;font-weight:700;margin-bottom:20px}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:24px}
+.modal-btn{padding:9px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.modal-btn.primary{background:var(--accent);color:#000;border:none}
+.modal-btn.primary:hover{box-shadow:0 0 16px rgba(0,220,130,.2)}
+.modal-btn.cancel{background:transparent;color:var(--text-secondary);border:1px solid var(--border)}
+.modal-btn.cancel:hover{border-color:var(--text-secondary);color:var(--text)}
+
+/* ===== Toast ===== */
+.toast-stack{position:fixed;bottom:24px;right:24px;display:flex;flex-direction:column;gap:8px;z-index:2000}
+.toast{background:var(--bg-card);color:#fff;padding:12px 18px;border-radius:10px;font-size:13px;
+  box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:8px;animation:slideIn .25s ease;
+  max-width:340px;font-weight:500;border:1px solid var(--border-lt)}
+.toast.success{border-color:var(--accent);color:var(--accent)}
+.toast.error{border-color:var(--danger);color:var(--danger)}
+@keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ========== 新增：小说IP库页面样式 ========== */
+.ip-page-header{margin-bottom:16px}.ip-page-header h2{font-size:22px;font-weight:700;background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px}.ip-page-desc{font-size:13px;color:var(--text-secondary)}
+.ip-tab-panel{display:none;padding-top:8px}.ip-tab-panel.active{display:block}
+
+/* 试稿书单 */
+.trial-filter-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;font-size:13px}
+.filter-label{color:var(--text-secondary)}
+.filter-tags{display:flex;gap:6px}
+.filter-tag{padding:4px 14px;border-radius:16px;border:1px solid var(--border);cursor:pointer;font-size:12px;color:var(--text-secondary);transition:all .2s}
+.filter-tag.active,.filter-tag:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+.novel-card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.novel-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;gap:14px;transition:transform .2s,border-color .2s;cursor:pointer}
+.novel-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.novel-cover{width:90px;height:120px;flex-shrink:0;border-radius:8px;overflow:hidden}
+.novel-cover img{width:100%;height:100%;object-fit:cover}
+.novel-info{flex:1;min-width:0;display:flex;flex-direction:column}
+.novel-info h4{font-size:15px;font-weight:600;margin-bottom:2px}
+.novel-meta{font-size:12px;color:var(--text-muted);margin-bottom:6px}
+.novel-tags{display:flex;gap:6px;margin-bottom:6px}
+.tag-people{padding:2px 8px;border-radius:10px;background:rgba(255,180,0,.15);color:#f59e0b;font-size:11px}
+.tag-orange{padding:2px 8px;border-radius:10px;background:rgba(249,115,22,.15);color:#f97316;font-size:11px}
+.tag-red{padding:2px 8px;border-radius:10px;background:rgba(239,68,68,.15);color:#ef4444;font-size:11px}
+.tag-status{padding:2px 8px;border-radius:10px;font-size:11px}
+.tag-status.green{background:rgba(34,197,94,.15);color:#22c55e}
+.novel-stats{display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);margin-bottom:10px}
+.btn-cooperate,.btn-disabled{padding:6px 20px;border-radius:6px;font-size:13px;border:none;cursor:pointer;width:fit-content;transition:.2s}
+.btn-cooperate{background:var(--accent);color:#fff}
+.btn-cooperate:hover{opacity:.85}
+.btn-disabled{background:var(--bg-dark);color:var(--text-muted);cursor:not-allowed}
+
+/* AI创作面板 */
+.ai-create-panel{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:28px;max-width:720px}
+.form-grid-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:13px;color:var(--text-secondary);margin-bottom:6px;font-weight:500}
+.form-select{width:100%;padding:10px 14px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);font-size:14px;outline:none;cursor:pointer}
+.form-textarea{width:100%;padding:10px 14px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);font-size:14px;resize:vertical;outline:none;font-family:inherit;line-height:1.6}
+.form-textarea::placeholder{color:var(--text-muted)}
+.btn-generate-primary{display:inline-flex;align-items:center;padding:12px 28px;background:linear-gradient(135deg,#00DC82,#00B377);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;transition:all .3s;margin-top:4px}
+.btn-generate-primary:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,220,130,.35)}
+
+/* 上传区域 */
+.upload-zone-large{background:var(--card-bg);border:2px dashed var(--border);border-radius:12px;padding:60px;text-align:center;transition:border-color .3s;cursor:pointer}
+.upload-zone-large:hover{border-color:var(--accent)}
+.upload-icon-lg{font-size:48px;opacity:.6}
+
+/* ========== 新增：剧本库页面样式 ========== */
+.script-card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+.script-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:18px;display:flex;gap:14px;transition:transform .2s,border-color .2s}
+.script-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.script-cover{width:100px;height:130px;flex-shrink:0;border-radius:8px;overflow:hidden}
+.script-cover img{width:100%;height:100%;object-fit:cover}
+.script-info{flex:1;display:flex;flex-direction:column}
+.script-info h4{font-size:15px;font-weight:600;margin-bottom:2px}
+.script-meta{font-size:12px;color:var(--text-muted);margin-bottom:6px}
+.script-tags{margin-bottom:6px}
+.script-detail{font-size:12px;color:var(--text-secondary);margin-bottom:10px}
+.btn-start-drama{padding:6px 18px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;width:fit-content;transition:.2s}
+.btn-start-drama:hover{opacity:.85}
+
+/* ========== 新增：AI短剧创作页面样式 ========== */
+.comic-header-bar{display:flex;justify-content:space-between;align-items:center;margin:0 0 16px 0}
+.btn-new-project{padding:8px 20px;background:linear-gradient(135deg,#00DC82,#00B377);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}
+.flow-content-area{display:flex;gap:0;margin-top:16px;min-height:520px}
+.flow-panel{display:none;width:100%}.flow-panel.active{display:flex;gap:0}
+
+.episode-sidebar{width:160px;flex-shrink:0;padding:12px 0;border-right:1px solid var(--border)}
+.ep-label{font-size:12px;color:var(--text-muted);margin-bottom:10px;padding-left:12px}
+.ep-item{padding:8px 12px;font-size:13px;color:var(--text-secondary);cursor:pointer;border-radius:6px;margin-bottom:2px;transition:all .2s}
+.ep-item:hover{background:var(--bg-dark)}
+.ep-item.active{background:var(--accent);color:#fff;font-weight:500}
+.ep-main-content{flex:1;padding:20px 24px;overflow-y:auto}
+
+.section-title{font-size:15px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:6px}
+
+.source-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.source-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:28px 24px;text-align:center;transition:all .2s;cursor:pointer}
+.source-card.highlighted{border-color:var(--accent);background:rgba(0,220,130,.03)}
+.source-icon{font-size:36px;margin-bottom:12px}
+.source-card h4{font-size:16px;font-weight:600;margin-bottom:8px}
+.source-card p{font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:16px}
+.btn-outline-sm{padding:7px 18px;border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:6px;font-size:13px;cursor:pointer;transition:.2s}
+.btn-outline-sm:hover{background:var(--accent);color:#fff}
+.btn-outline-dark-sm{padding:7px 18px;border:1px solid var(--border);color:var(--text-secondary);background:transparent;border-radius:6px;font-size:13px;cursor:pointer;transition:.2s}
+.or-divider{text-align:center;color:var(--text-muted);font-size:13px;margin:16px 0 12px;position:relative}
+.project-chips{display:flex;gap:10px;flex-wrap:wrap}
+.proj-chip{padding:6px 14px;background:var(--bg-dark);border:1px solid var(--border);border-radius:20px;font-size:12px;color:var(--text-secondary)}
+
+/* 故事单元列表 */
+.story-unit-list{margin-bottom:20px}
+.story-unit{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;transition:all .2s}
+.story-unit.active{border-color:var(--accent);background:rgba(0,220,130,.03)}
+.su-num{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
+.su-body{flex:1}
+.su-body h4{font-size:14px;font-weight:600;margin-bottom:2px}
+.su-desc{font-size:12px;color:var(--text-muted)}
+.su-badge{padding:3px 10px;border-radius:12px;font-size:11px}
+.su-badge.current{background:rgba(0,220,130,.15);color:#00DC82}
+.su-badge.pending{background:rgba(107,114,128,.15);color:#6b7280}
+
+/* 剧本预览 */
+.script-preview-box{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.sp-header{padding:10px 16px;font-size:13px;font-weight:600;border-bottom:1px solid var(--border);background:var(--bg-dark)}
+.sp-body{padding:14px 16px;font-size:13px;line-height:1.9;color:var(--text-secondary)}
+.sp-body p{margin-bottom:6px}
+.hl-green{color:#00DC82;font-weight:500}
+.hl-blue{color:#4D7CFE;font-weight:500}
+
+/* 角色资产网格 */
+.asset-char-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:8px}
+.char-card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:transform .2s;cursor:pointer}
+.char-card:hover{transform:translateY(-3px);border-color:var(--accent)}
+.char-img{height:160px;overflow:hidden}
+.char-img img{width:100%;height:100%;object-fit:cover}
+.char-card h5{font-size:13px;font-weight:600;padding:8px 10px 2px}
+.char-angle{font-size:11px;color:var(--text-muted);padding:0 10px 10px}
+
+.asset-scene-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.scene-card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:transform .2s;cursor:pointer}
+.scene-card:hover{transform:translateY(-3px);border-color:var(--accent)}
+.scene-img{height:140px;overflow:hidden}
+.scene-img img{width:100%;height:100%;object-fit:cover}
+.scene-card h5{font-size:13px;font-weight:600;padding:8px 10px 2px}
+.scene-time{font-size:11px;color:var(--text-muted);padding:0 10px 10px}
+
+/* 视频制作布局 */
+.video-production-layout{display:flex;gap:20px;width:100%}
+.vp-preview{width:420px;flex-shrink:0;position:relative}
+.vp-playbar{margin-top:10px;display:flex;align-items:center;gap:10px}
+.play-btn{width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;flex-shrink:0}
+.progress-bar-bg{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.progress-bar-fill{height:100%;background:var(--accent);border-radius:2px}
+.time-text{font-size:12px;color:var(--text-muted);flex-shrink:0}
+.vp-shotlist{flex:1;display:flex;flex-direction:column;gap:8px}
+.shot-item{display:flex;gap:12px;padding:10px 14px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;transition:all .2s;cursor:pointer}
+.shot-item:hover{border-color:var(--accent)}
+.shot-item.active{border-color:var(--accent);background:rgba(0,220,130,.03)}
+.shot-thumb{width:80px;height:50px;flex-shrink:0;border-radius:6px;overflow:hidden}
+.shot-thumb img{width:100%;height:100%;object-fit:cover}
+.shot-info{flex:1;min-width:0}
+.shot-info strong{font-size:13px;display:block;margin-bottom:2px}
+.shot-info p{font-size:11px;color:var(--text-muted)}
+.shot-info small{font-size:11px;color:var(--text-accent)}
+
+/* 成片预览 */
+.preview-main{display:flex;gap:24px;width:100%}
+.preview-player{flex-shrink:0}
+.preview-right{flex:1;min-width:0}
+.timeline-list{display:flex;flex-direction:column;gap:6px;margin-bottom:20px}
+.tl-item{display:flex;align-items:center;gap:12px;padding:8px 12px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px}
+.tl-num{width:26px;height:26px;border-radius:6px;background:var(--card-bg);color:var(--text-secondary);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
+.tl-name{flex:1;font-size:13px}
+.tl-time{font-size:12px;color:var(--text-muted)}
+.action-buttons-row{display:flex;gap:10px;flex-wrap:wrap}
+.btn-action-pri{padding:9px 20px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
+.btn-action-pri:hover{opacity:.85}
+.btn-action-sec{padding:9px 20px;background:transparent;color:var(--text-secondary);border:1px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer;transition:.2s}
+.btn-action-sec:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ========== 新增：资产库页面样式 ========== */
+.assets-layout{display:flex;min-height:calc(100vh - 160px);align-items:flex-start}
+.assets-sidebar{width:180px;flex-shrink:0;background:var(--card-bg);border:1px solid var(--border);border-right:none;border-radius:12px 0 0 12px;padding:20px 0}
+.as-title{font-size:14px;font-weight:700;color:var(--text-muted);padding:0 20px;margin-bottom:16px}
+.as-nav-item{padding:10px 20px;font-size:14px;color:var(--text-secondary);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px}
+.as-nav-item.active{color:var(--accent);background:rgba(0,220,130,.06);border-right:3px solid var(--accent)}.as-nav-item:hover{background:var(--bg-dark)}
+.assets-main{flex:1;padding:20px 28px;overflow-y:auto}
+.am-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.am-header h2{font-size:20px;font-weight:700}
+.am-tabs{display:flex;gap:4px;background:var(--bg-dark);border-radius:8px;padding:3px}
+.am-tab{padding:6px 18px;border-radius:6px;font-size:13px;cursor:pointer;color:var(--text-secondary);transition:all .2s}
+.am-tab.active{background:#fff;color:var(--text-primary);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.am-subnav{display:flex;gap:6px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:12px}
+.ams-tab{padding:6px 16px;font-size:13px;color:var(--text-secondary);cursor:pointer;border-radius:6px 6px 0 0;transition:all .2s;position:relative}
+.ams-tab.active{color:var(--accent);font-weight:600}
+.ams-count{display:inline-block;margin-left:4px;font-size:11px;color:var(--text-muted);background:var(--bg-dark);padding:1px 7px;border-radius:10px}
+.am-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px;padding:12px 16px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px}
+.am-filter-sel{padding:6px 10px;background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;color:var(--text-primary);font-size:12px;outline:none;cursor:pointer}
+.am-check{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text-secondary);cursor:pointer}
+.am-check input{accent-color:var(--accent)}
+.am-search-input{padding:6px 12px;background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;color:var(--text-primary);font-size:12px;outline:none;width:150px}
+.am-search-btn,.am-reset-btn,.am-del-btn{padding:6px 14px;border-radius:6px;font-size:12px;border:none;cursor:pointer}
+.am-search-btn{background:var(--accent);color:#fff}
+.am-reset-btn{background:var(--bg-dark);color:var(--text-secondary);border:1px solid var(--border)}
+.am-del-btn{background:rgba(239,68,68,.08);color:#ef4444;border:1px solid rgba(239,68,68,.2)}
+.am-sort{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text-secondary);margin-left:auto}
+.am-sort-sel{padding:4px 8px;background:var(--bg-dark);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-size:11px;outline:none;cursor:pointer}
+.am-upload-hint{text-align:center;padding:40px;color:var(--text-muted);font-size:14px;border:2px dashed var(--border);border-radius:10px;margin-bottom:20px;cursor:pointer}
+.up-arrow{font-size:24px;margin-bottom:8px}
+.am-card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
+.am-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;transition:all .2s;cursor:pointer}
+.am-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08);transform:translateY(-2px)}
+.am-card-img{height:200px;overflow:hidden;background:#f3f4f6}
+.am-card-img img{width:100%;height:100%;object-fit:cover}
+.am-card-info{padding:10px 12px}
+.am-card-info h5{font-size:13px;font-weight:600;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.am-source{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;margin-right:6px}
+.am-source.ai{background:rgba(59,130,246,.08);color:#3b82f6}
+.am-views{font-size:11px;color:#9ca3af}
+.no-more{text-align:center;color:var(--text-muted);font-size:13px;padding:24px}
+
+
+/* ===== Novel IP Library (from reference) ===== */
+
+
+/* ===== IP / Script / Comic pages ===== */
+.ip-header{margin:0 0 16px}
+
+.ip-header h2{font-size:22px;font-weight:700;margin-bottom:4px}
+
+.ip-header h2 span{background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+.ip-header p{font-size:13px;color:var(--text-secondary)}
+
+.ip-tabs{display:flex;gap:6px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:12px}
+
+.ip-tab{padding:7px 18px;border-radius:20px;font-size:13px;cursor:pointer;color:var(--text-secondary);
+  transition:all .2s;display:flex;align-items:center;gap:6px;border:1px solid transparent}
+
+.ip-tab:hover{color:var(--text);background:var(--bg-hover)}
+
+.ip-tab.active{background:var(--accent-bg);color:var(--accent);border-color:var(--accent);font-weight:600}
+
+.ip-subbar{display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+
+.chip{padding:6px 14px;border:1px solid var(--border);border-radius:20px;font-size:12px;cursor:pointer;
+  color:var(--text-secondary);transition:all .2s}
+
+.chip:hover,.chip.active{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
+
+.ip-tab-panel{display:none}
+
+.ip-tab-panel.active{display:block}
+
+
+/* Novel Cards */
+.ip-novel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+
+.novel-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:14px;display:flex;gap:14px;cursor:pointer;transition:all .2s}
+
+.novel-card:hover{border-color:var(--accent)}
+
+.novel-cover{width:72px;height:96px;border-radius:6px;flex-shrink:0;background-size:cover;background-position:center}
+
+.novel-info{flex:1;min-width:0}
+
+.novel-title{font-size:15px;font-weight:600;margin-bottom:4px}
+
+.novel-author{font-size:12px;color:var(--text-muted);margin-bottom:6px}
+
+.novel-tags{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap}
+
+.novel-stats{font-size:11px;color:var(--text-muted);margin-bottom:8px}
+
+.novel-btn{padding:6px 16px;background:var(--accent);color:#000;border:none;border-radius:6px;font-size:12px;
+  font-weight:600;cursor:pointer;transition:all .2s}
+
+.novel-btn:hover{box-shadow:0 0 16px rgba(0,220,130,.2)}
+
+.novel-btn.claimed{background:transparent;color:var(--text-muted);border:1px solid var(--border);cursor:default}
+
+
+/* ===== Form Components ===== */
+.form-group{margin-bottom:16px}
+
+.form-label{display:block;font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:6px}
+
+.form-control{width:100%;padding:10px 14px;background:var(--bg-hover);border:1px solid var(--border);
+  border-radius:8px;color:var(--text);font-size:13px;outline:none;transition:border-color .2s;
+  box-sizing:border-box}
+
+.form-control:focus{border-color:var(--accent)}
+
+textarea.form-control{resize:vertical;font-family:inherit;line-height:1.5}
+
+select.form-control{cursor:pointer}
+
+/* AI 创作面板布局 */
+.ai-create-panel{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:32px;margin-top:8px;
+}
+
+.ai-create-panel .ai-panel-header{
+  margin-bottom:24px;font-size:15px;font-weight:700;
+  display:flex;align-items:center;gap:8px;
+}
+
+.ai-create-form{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+
+.ai-create-form .form-full{grid-column:1/-1}
+
+.ai-create-form .ai-submit-row{
+  grid-column:1/-1;display:flex;align-items:center;gap:12px;
+  margin-top:8px;padding-top:16px;border-top:1px solid var(--border);
+}
+
+@media(max-width:640px){
+  .ai-create-form{grid-template-columns:1fr}
+
+  .ai-create-panel{padding:20px}
+
+.data-filter .chip{padding:5px 12px;font-size:11px}
+</style>
+<script src="https://beacon.cdn.qq.com/sdk/4.5.9/beacon_web.min.js"></script>
+<script>
+(function(){
+  try{
+    var beacon=new BeaconAction({
+      appkey:'0WEB06U85YBSLJNL',
+      versionCode:'1.0.0',
+      channelID:'share',
+      delay:1000,
+      sessionDuration:30*60*1000,
+      isOversea:false,
+      needReportRqdEvent:false
+    });
+    beacon.onDirectUserAction('preview_page_view',{
+      'url':location.href,
+      'referrer':document.referrer,
+      'title':document.title,
+      'sandbox_id':'ea7be14c4d3142e3bf201a5b02374c44'
+    });
+  }catch(e){}
+})();
+</script><script src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js"></script>
+</head>
+<body>
+
+<!-- ============ LOGIN PAGE (v52 — 左右分栏 · 视频左 + 表单右) ============ -->
+<div id="login-page" class="login-overlay" style="display:none">
+  <!-- 左侧：视频展示区 -->
+  <div class="login-video-section">
+    <!-- Seko AI 视频背景 + Ken Burns 海报降级 -->
+    <video class="login-video-bg" autoplay="" loop="" muted="" playsinline="">
+      <source src="login_bg_custom.mp4" type="video/mp4">
+    </video>
+    <div class="login-poster-fallback"></div>
+    <div class="login-video-overlay"></div>
+    <div class="login-brand-overlay">
+      <div class="lb-logo">
+        <img src="容量logo.png" alt="容量AI" onerror="this.parentNode.style.background='linear-gradient(135deg,#6366F1,#8B5CF6)';this.parentNode.innerHTML='&lt;span style=font-size:20px;font-weight:900;color:#fff&gt;R&lt;/span&gt;'">
+      </div>
+      <div class="lb-name"><span>容量AI</span>漫剧平台</div>
+    </div>
+  </div>
+
+  <!-- 右侧：表单区 -->
+  <div class="login-form-section">
+    <button class="login-close-btn" onclick="document.getElementById('login-page').style.display='none'" title="关闭">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M4.646 4.646a.5.5 0 01.708 0L8 7.293l2.646-2.647a.5.5 0 01.708.708L8.707 8l2.647 2.646a.5.5 0 01-.708.708L8 8.707l-2.646 2.647a.5.5 0 01-.708-.708L7.293 8 4.646 5.354a.5.5 0 010-.708z"></path></svg>
+    </button>
+    <div class="login-form-inner">
+      <div class="login-title">欢迎回来</div>
+      <div class="login-subtitle">登录或注册账户，开启AI漫剧创作之旅</div>
+      <div class="login-tabs">
+        <button class="login-tab active" onclick="switchLoginTab('phone',this)">手机验证</button>
+        <button class="login-tab" onclick="switchLoginTab('email',this)">账号密码</button>
+      </div>
+      <div class="login-tab-panel active" id="login-panel-phone">
+        <div class="login-field-wrap login-phone-wrap">
+          <div class="login-phone-prefix">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width:12px;height:12px"><path d="m12 15-4-4h8z"></path></svg>
+            +86
+          </div>
+          <input class="login-input" type="tel" placeholder="输入手机号">
+        </div>
+        <div class="login-field-wrap login-sms-wrap">
+          <input class="login-input" type="text" placeholder="请输入验证码">
+          <span class="login-sms-send" onclick="event.preventDefault()">获取验证码</span>
+        </div>
+        <button class="login-submit" onclick="doLogin()">登录 / 注册</button>
+        <div class="login-terms">
+          <input type="checkbox" id="terms-phone" checked="">
+          <label for="terms-phone">我已阅读并同意 <a href="#" onclick="event.preventDefault()">用户条款</a> &amp; <a href="#" onclick="event.preventDefault()">隐私政策</a></label>
+        </div>
+      </div>
+      <div class="login-tab-panel" id="login-panel-email">
+        <div class="login-field-wrap">
+          <input class="login-input" type="email" placeholder="输入邮箱">
+        </div>
+        <div class="login-field-wrap">
+          <input class="login-input" type="password" placeholder="输入密码">
+        </div>
+        <button class="login-submit" onclick="doLogin()">使用邮箱登录</button>
+        <div class="login-terms">
+          <input type="checkbox" id="terms-email" checked="">
+          <label for="terms-email">我已阅读并同意 <a href="#" onclick="event.preventDefault()">用户条款</a> &amp; <a href="#" onclick="event.preventDefault()">隐私政策</a></label>
+        </div>
+      </div>
+      <div class="login-modal-footer">
+        <div class="ft-brand">
+          <img src="容量logo.png" alt="容量AI">
+          <span class="ft-name">容量AI漫剧平台</span>
+        </div>
+        <div class="ft-copy">© 2026 容量AI</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ============ MAIN LAYOUT ============ -->
+<div class="main-layout visible" id="main-layout">
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-logo"><img src="容量logo.png" alt="容量AI" onerror="this.style.background='linear-gradient(135deg,#6366F1,#F59E0B)';this.style.color='#fff';this.style.textAlign='center';this.style.lineHeight='32px';this.style.fontWeight='800';this.style.display='flex';this.style.alignItems='center';this.style.justifyContent='center';this.innerText='R'">容量AI</div>
+    <!-- 导航 -->
+    <div class="topbar-nav">
+      <a class="nav-item active" data-page="home" onclick="navTo(this,'home')">首页</a>
+      <a class="nav-item" data-page="my-works" onclick="navTo(this,'my-works')">工作台</a>
+      <a class="nav-item" data-page="novel-ip" onclick="navTo(this,'novel-ip')">小说IP库</a>
+      <a class="nav-item" data-page="script" onclick="navTo(this,'script')">剧本库</a>
+      
+      <a class="nav-item" data-page="assets" onclick="navTo(this,'assets')">资产库</a>
+      <a class="nav-item" data-page="tools" onclick="navTo(this,'tools')">Agent工具</a>
+      <a class="nav-item" data-page="data-view" onclick="navTo(this,'data-view')">数据分析</a>
+      <a class="nav-item" data-page="team" onclick="navTo(this,'team')" style="display:none">团队管理</a>
+    </div>
+    <div class="topbar-actions">
+      <span class="topbar-badge">🟢 创作中</span>
+      <div class="user-divider"></div>
+      <div class="user-center-wrap" id="userCenterWrap">
+        <!-- 未登录状态 -->
+        <div class="user-center" id="userCenterOut" onclick="showLoginModal()">
+          <div class="avatar" style="background:rgba(255,255,255,.1);color:#999">?</div>
+          <div class="user-meta">
+            <div class="user-name" style="color:#999">未登录</div>
+            <div class="user-points">点击登录</div>
+          </div>
+        </div>
+        <!-- 已登录状态 -->
+        <div class="user-center" id="userCenterIn" onclick="toggleUserDropdown()" style="display:none">
+          <div class="avatar">李</div>
+          <div class="user-meta">
+            <div class="user-name">李明远</div>
+            <div class="user-points">💰 12,800 积分</div>
+          </div>
+          <span class="dropdown-arrow">▾</span>
+        </div>
+        <!-- 下拉菜单 -->
+        <div class="user-dropdown" id="userDropdown">
+          <div class="user-dropdown-item" onclick="navToPage('team')">👥 团队管理</div>
+          <div class="user-dropdown-item" onclick="showToast('个人设置功能开发中')">⚙️ 个人设置</div>
+          <div class="user-dropdown-divider"></div>
+          <div class="user-dropdown-item danger" onclick="doLogout()">🚪 退出登录</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-wrap">
+    <!-- Main Content -->
+    <div class="main-content">
+
+      <!-- 首页 - AI短剧创作引擎（AniShort风格改版） -->
+      <div class="page active" id="page-home">
+        <!-- 顶部Hero区 -->
+        <!-- Hero轮播区 -->
+        <div class="hero-carousel" id="heroCarousel">
+          <div class="carousel-track" id="carouselTrack">
+            <!-- Slide 1: AI短剧创作 -->
+            <div class="carousel-slide">
+              <img class="slide-bg" src="carousel_1.png" alt="">
+              <div class="slide-overlay"></div>
+              <div class="slide-glow slide-glow-1"></div>
+              <div class="slide-glow slide-glow-2"></div>
+              <div class="slide-content">
+              </div>
+            </div>
+            <!-- Slide 2: 小说IP库 -->
+            <div class="carousel-slide">
+              <img class="slide-bg" src="carousel_2.png" alt="">
+              <div class="slide-overlay"></div>
+              <div class="slide-glow slide-glow-1" style="background:radial-gradient(circle,rgba(77,124,254,.4),transparent)"></div>
+              <div class="slide-glow slide-glow-2" style="background:radial-gradient(circle,rgba(167,139,250,.3),transparent)"></div>
+              <div class="slide-content">
+
+              </div>
+            </div>
+            <!-- Slide 3: AI短剧创作工具 -->
+            <div class="carousel-slide">
+              <img class="slide-bg" src="carousel_3.jpg" alt="">
+              <div class="slide-overlay"></div>
+              <div class="slide-glow slide-glow-1" style="background:radial-gradient(circle,rgba(0,220,130,.35),transparent)"></div>
+              <div class="slide-glow slide-glow-2" style="background:radial-gradient(circle,rgba(245,158,11,.25),transparent)"></div>
+              <div class="slide-content">
+
+              </div>
+            </div>
+            <!-- Slide 4: 剧本库 -->
+            <div class="carousel-slide">
+              <img class="slide-bg" src="carousel_4.png" alt="">
+              <div class="slide-overlay"></div>
+              <div class="slide-glow slide-glow-1" style="background:radial-gradient(circle,rgba(139,92,246,.4),transparent)"></div>
+              <div class="slide-glow slide-glow-2" style="background:radial-gradient(circle,rgba(244,114,182,.25),transparent)"></div>
+              <div class="slide-content">
+
+              </div>
+            </div>
+          </div>
+          <!-- 左右箭头 -->
+          <button class="carousel-arrow prev" onclick="carouselPrev()">◂</button>
+          <button class="carousel-arrow next" onclick="carouselNext()">▸</button>
+          <!-- 指示器 -->
+          <div class="carousel-dots" id="carouselDots">
+            <button class="carousel-dot active" onclick="carouselGo(0)"></button>
+            <button class="carousel-dot" onclick="carouselGo(1)"></button>
+            <button class="carousel-dot" onclick="carouselGo(2)"></button>
+            <button class="carousel-dot" onclick="carouselGo(3)"></button>
+          </div>
+        </div>
+        
+                <!-- 工作流展示 -->
+        <div class="workflow-section">
+          <div class="workflow-header">
+            <h3>全流程一体化创作</h3>
+            <p>从剧本到成片，一个平台完成AI短剧创作全链路</p>
+          </div>
+          <div class="workflow-steps">
+            <div class="ws-item">
+              <div class="ws-num c1">01</div>
+              <div class="ws-title">剧本创作</div>
+              <div class="ws-desc">AI拆解剧情结构，自动提取角色场景</div>
+            </div>
+            <div class="ws-item">
+              <div class="ws-num c2">02</div>
+              <div class="ws-title">分镜生成</div>
+              <div class="ws-desc">智能拆分镜头序列，批量生成分镜图</div>
+            </div>
+            <div class="ws-item">
+              <div class="ws-num c3">03</div>
+              <div class="ws-title">视频生成</div>
+              <div class="ws-desc">调用顶级模型，一键生成高清视频</div>
+            </div>
+            <div class="ws-item">
+              <div class="ws-num c4">04</div>
+              <div class="ws-title">智能剪辑</div>
+              <div class="ws-desc">拼接片段、加字幕、配BGM一体化</div>
+            </div>
+            <div class="ws-item">
+              <div class="ws-num c5">05</div>
+              <div class="ws-title">成片审阅</div>
+              <div class="ws-desc">帧级标注审片，多格式导出交付</div>
+            </div>
+          </div>
+        </div>
+
+                <!-- 特色功能 -->
+        <div class="features-section">
+          <div class="features-header">
+            <h3>核心能力</h3>
+            <p>为专业AI短剧创作而生的全栈工具链</p>
+          </div>
+          <div class="features-grid">
+            <div class="feature-card fc-1" onclick="showLoginModal()">
+              <div class="fc-icon" style="background:rgba(77,124,254,.12);color:#4D7CFE">📝</div>
+              <div class="fc-title">智能剧本创作</div>
+              <div class="fc-desc">上传剧本或输入灵感，AI自动拆解剧情结构、润色台词、调节奏，10万字小说一键拆成多集大纲</div>
+              <span class="fc-tag" style="background:rgba(77,124,254,.12);color:#4D7CFE">AI驱动</span>
+            </div>
+            <div class="feature-card fc-2" onclick="showLoginModal()">
+              <div class="fc-icon" style="background:rgba(139,92,246,.12);color:#A78BFA">🎬</div>
+              <div class="fc-title">无限画布</div>
+              <div class="fc-desc">无限画布可视化节点图，拖拽连线搭建创作流程，支持版本回溯与资产复用</div>
+              <span class="fc-tag" style="background:rgba(139,92,246,.12);color:#A78BFA">节点化</span>
+            </div>
+            <div class="feature-card fc-3" onclick="showLoginModal()">
+              <div class="fc-icon" style="background:rgba(0,220,130,.12);color:#00DC82">🎭</div>
+              <div class="fc-title">AI短剧创作</div>
+              <div class="fc-desc">全流程AI制作，角色场景智能生成，分镜视频一键合成，一站式短剧生产</div>
+              <span class="fc-tag" style="background:rgba(0,220,130,.12);color:#00DC82">全流程</span>
+            </div>
+            <div class="feature-card fc-4" onclick="showLoginModal()">
+              <div class="fc-icon" style="background:rgba(245,158,11,.12);color:#F59E0B">🔀</div>
+              <div class="fc-title">Agent工具</div>
+              <div class="fc-desc">AI驱动的创作工具箱，覆盖从拆书到成片的每个环节，智能体自动规划任务</div>
+              <span class="fc-tag" style="background:rgba(245,158,11,.12);color:#F59E0B">AI驱动</span>
+            </div>
+            <div class="feature-card fc-5" onclick="showLoginModal()">
+              <div class="fc-icon" style="background:rgba(244,114,182,.12);color:#F472B6">🎙️</div>
+              <div class="fc-title">音色库</div>
+              <div class="fc-desc">海量AI音色，情感配音与多语言支持，为角色匹配专属声线，音画精准同步</div>
+              <span class="fc-tag" style="background:rgba(244,114,182,.12);color:#F472B6">海量音色</span>
+            </div>
+            <div class="feature-card fc-6" onclick="showLoginModal()">
+              <div class="fc-icon" style="background:rgba(0,210,255,.12);color:#00D2FF">✂️</div>
+              <div class="fc-title">在线快剪与审片</div>
+              <div class="fc-desc">内置剪辑工具，帧级标注审片，版本对比和快照回溯，云端加密交付</div>
+              <span class="fc-tag" style="background:rgba(0,210,255,.12);color:#00D2FF">专业剪辑</span>
+            </div>
+          </div>
+        </div>
+
+                <!-- 爆款作品 -->
+        <div class="section-title" style="margin-top:24px"><h3>🔥 爆款作品</h3><a href="#" onclick="navTo(document.querySelector('[data-page=my-works]'),'my-works')">查看更多 →</a></div>
+        <div class="works-grid">
+          <div class="work-card">
+            <div class="work-card-thumb" style="background-image:url(img_cover_1.png);background-size:cover;background-position:center&lt;/div&gt;
+            &lt;div class=" wc-badge"="">热播</div>
+            <div class="work-card-info"><div class="work-card-title">大秦风云录</div><div class="work-card-meta"><span>📺 128万</span><span>⭐ 9.2</span></div></div>
+          </div>
+          <div class="work-card">
+            <div class="work-card-thumb" style="background-image:url(img_cover_2.png);background-size:cover;background-position:center&lt;/div&gt;
+            &lt;div class=" wc-badge"="">新番</div>
+            <div class="work-card-info"><div class="work-card-title">逆天邪神·重生</div><div class="work-card-meta"><span>📺 96万</span><span>⭐ 9.5</span></div></div>
+          </div>
+          <div class="work-card">
+            <div class="work-card-thumb" style="background-image:url(img_cover_3.png);background-size:cover;background-position:center&lt;/div&gt;
+            &lt;div class=" wc-badge"="">热门</div>
+            <div class="work-card-info"><div class="work-card-title">都市最强修仙</div><div class="work-card-meta"><span>📺 85万</span><span>⭐ 8.9</span></div></div>
+          </div>
+          <div class="work-card">
+            <div class="work-card-thumb" style="background-image:url(img_cover_4.png);background-size:cover;background-position:center&lt;/div&gt;
+            &lt;div class=" wc-badge"="">推荐</div>
+            <div class="work-card-info"><div class="work-card-title">星穹纪元</div><div class="work-card-meta"><span>📺 62万</span><span>⭐ 8.7</span></div></div>
+          </div>
+          <div class="work-card">
+            <div class="work-card-thumb" style="background-image:url(img_cover_5.png);background-size:cover;background-position:center&lt;/div&gt;
+            &lt;div class=" work-card-info"=""><div class="work-card-title">万界之主·起源</div><div class="work-card-meta"><span>📺 48万</span><span>⭐ 9.3</span></div></div>
+          </div>
+          <div class="work-card">
+            <div class="work-card-thumb" style="background-image:url(img_cover_1.png);background-size:cover;background-position:center&lt;/div&gt;
+            &lt;div class=" wc-badge"="">新作</div>
+            <div class="work-card-info"><div class="work-card-title">九幽剑帝</div><div class="work-card-meta"><span>📺 35万</span><span>⭐ 8.8</span></div></div>
+          </div>
+          <div class="work-card">
+            <div class="work-card-thumb" style="background-image:url(img_cover_2.png);background-size:cover;background-position:center&lt;/div&gt;
+            &lt;div class=" work-card-info"=""><div class="work-card-title">混沌神域</div><div class="work-card-meta"><span>📺 28万</span><span>⭐ 9.1</span></div></div>
+          </div>
+          <div class="work-card">
+            <div class="work-card-thumb" style="background-image:url(img_cover_3.png);background-size:cover;background-position:center&lt;/div&gt;
+            &lt;div class=" wc-badge"="">热播</div>
+            <div class="work-card-info"><div class="work-card-title">天道图书馆</div><div class="work-card-meta"><span>📺 22万</span><span>⭐ 8.5</span></div></div>
+          </div>
+          <div class="work-card">
+            <div class="work-card-thumb" style="background-image:url(img_cover_4.png);background-size:cover;background-position:center&lt;/div&gt;
+            &lt;div class=" wc-badge"="">新作</div>
+            <div class="work-card-info"><div class="work-card-title">仙路至尊</div><div class="work-card-meta"><span>📺 19万</span><span>⭐ 8.6</span></div></div>
+          </div>
+          <div class="work-card">
+            <div class="work-card-thumb" style="background-image:url(img_cover_5.png);background-size:cover;background-position:center&lt;/div&gt;
+            &lt;div class=" wc-badge"="">推荐</div>
+            <div class="work-card-info"><div class="work-card-title">龙族觉醒</div><div class="work-card-meta"><span>📺 16万</span><span>⭐ 9.0</span></div></div>
+          </div>
+          <div class="work-card">
+            <div class="work-card-thumb" style="background-image:url(img_cover_1.png);background-size:cover;background-position:center&lt;/div&gt;
+            &lt;div class=" wc-badge"="">热门</div>
+            <div class="work-card-info"><div class="work-card-title">末日堡垒</div><div class="work-card-meta"><span>📺 14万</span><span>⭐ 8.3</span></div></div>
+          </div>
+          <div class="work-card">
+            <div class="work-card-thumb" style="background-image:url(img_cover_2.png);background-size:cover;background-position:center&lt;/div&gt;
+            &lt;div class=" wc-badge"="">热播</div>
+            <div class="work-card-info"><div class="work-card-title">青云直上</div><div class="work-card-meta"><span>📺 11万</span><span>⭐ 8.7</span></div></div>
+          </div>
+          <div class="work-card">
+            <div class="work-card-thumb" style="background-image:url(img_cover_3.png);background-size:cover;background-position:center&lt;/div&gt;
+            &lt;div class=" wc-badge"="">新番</div>
+            <div class="work-card-info"><div class="work-card-title">灵域传说</div><div class="work-card-meta"><span>📺 9万</span><span>⭐ 8.9</span></div></div>
+          </div>
+          <div class="work-card">
+            <div class="work-card-thumb" style="background-image:url(img_cover_4.png);background-size:cover;background-position:center&lt;/div&gt;
+            &lt;div class=" work-card-info"=""><div class="work-card-title">剑破苍穹</div><div class="work-card-meta"><span>📺 7万</span><span>⭐ 8.4</span></div></div>
+          </div>
+          <div class="work-card">
+            <div class="work-card-thumb" style="background-image:url(img_cover_5.png);background-size:cover;background-position:center&lt;/div&gt;
+            &lt;div class=" wc-badge"="">推荐</div>
+            <div class="work-card-info"><div class="work-card-title">绝世武神</div><div class="work-card-meta"><span>📺 5万</span><span>⭐ 8.8</span></div></div>
+          </div>
+        </div>
+
+              </div>
+      <!-- 工作台 -->
+      <div class="page" id="page-my-works">
+        <div class="section-header"><h2>工作台</h2><p>管理您的漫剧创作项目和进度</p></div>
+        <!-- 新建项目入口 -->
+        <div class="new-project-section">
+          <div class="new-project-banner" onclick="showLoginModal()">
+            <div class="npb-icon">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 5.5V22.5M5.5 14H22.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path></svg>
+            </div>
+            <div class="npb-text">
+              <div class="npb-title">新建项目</div>
+              <div class="npb-desc">从零开始创建你的AI短剧项目</div>
+            </div>
+            <div class="npb-arrow">→</div>
+          </div>
+                    </div>
+        </div>
+
+      </div>
+
+            <div class="page" id="page-novel-ip">
+        <div class="ip-header"><h2><span>小说IP库</span></h2><p>浏览精选小说IP，选择心仪作品开始漫剧创作之旅</p></div>
+        <div class="ip-tabs">
+          <div class="ip-tab active" onclick="switchIPTab(this,'ip-tab-trial')">📖 试稿书单</div>
+          <div class="ip-tab" onclick="switchIPTab(this,'ip-tab-ai')">🤖 AI小说创作</div>
+          <div class="ip-tab" onclick="switchIPTab(this,'ip-tab-upload')">📤 上传小说</div>
+        </div>
+        <div class="ip-tab-panel active" id="ip-tab-trial">
+          <div class="ip-subbar">
+            <span style="font-size:12px;color:var(--text-muted);margin-right:4px">分类</span>
+            <span class="chip active">全部</span><span class="chip">男频</span><span class="chip">女频</span>
+            <span style="font-size:12px;color:var(--text-muted);margin:0 4px">状态</span>
+            <span class="chip active">全部</span><span class="chip">连载</span><span class="chip">已完结</span>
+          </div>
+          <div class="ip-novel-grid">
+            <div class="novel-card">
+              <div class="novel-cover" style="background-image:url(img_cover_1.png)"></div>
+              <div class="novel-info">
+                <div class="novel-title">大秦风云录</div><div class="novel-author">萧鼎 · 历史军事</div>
+                <div class="novel-tags"><span class="tag hot">人气</span><span class="tag done">已完结</span></div>
+                <div class="novel-stats">1280章 · 380万人气 · ⭐9.2</div>
+                <button class="novel-btn" onclick="showToast('试稿申请已发送','success')">合作试稿</button>
+              </div>
+            </div>
+            <div class="novel-card">
+              <div class="novel-cover" style="background-image:url(img_cover_2.png)"></div>
+              <div class="novel-info">
+                <div class="novel-title">都市最强修仙</div><div class="novel-author">流浪的蛤蟆 · 都市</div>
+                <div class="novel-tags"><span class="tag hot">爆款</span><span class="tag done">已完结</span></div>
+                <div class="novel-stats">2056章 · 620万人气 · ⭐8.9</div>
+                <button class="novel-btn claimed">已申请</button>
+              </div>
+            </div>
+            <div class="novel-card">
+              <div class="novel-cover" style="background-image:url(img_cover_3.png)"></div>
+              <div class="novel-info">
+                <div class="novel-title">逆天邪神传</div><div class="novel-author">火星引力 · 仙侠</div>
+                <div class="novel-tags"><span class="tag hot">TOP1</span></div>
+                <div class="novel-stats">3400章 · 1200万人气 · ⭐9.5</div>
+                <button class="novel-btn" onclick="showToast('试稿申请已发送','success')">合作试稿</button>
+              </div>
+            </div>
+            <div class="novel-card">
+              <div class="novel-cover" style="background-image:url(img_cover_4.png)"></div>
+              <div class="novel-info">
+                <div class="novel-title">星海征途</div><div class="novel-author">天蚕土豆 · 科幻</div>
+                <div class="novel-tags"><span class="tag done">已完结</span></div>
+                <div class="novel-stats">1890章 · 450万人气 · ⭐8.7</div>
+                <button class="novel-btn" onclick="showToast('试稿申请已发送','success')">合作试稿</button>
+              </div>
+            </div>
+            <div class="novel-card">
+              <div class="novel-cover" style="background-image:url(img_cover_5.png)"></div>
+              <div class="novel-info">
+                <div class="novel-title">万界之主</div><div class="novel-author">辰东 · 玄幻</div>
+                <div class="novel-tags"><span class="tag hot">人气</span></div>
+                <div class="novel-stats">5120章 · 2100万人气 · ⭐9.3</div>
+                <button class="novel-btn" onclick="showToast('试稿申请已发送','success')">合作试稿</button>
+              </div>
+            </div>
+            <div class="novel-card">
+              <div class="novel-cover" style="background-image:url(img_cover_1.png)"></div>
+              <div class="novel-info">
+                <div class="novel-title">宠爱无度</div><div class="novel-author">顾漫 · 言情</div>
+                <div class="novel-tags"><span class="tag done">已完结</span></div>
+                <div class="novel-stats">865章 · 280万人气 · ⭐8.8</div>
+                <button class="novel-btn" onclick="showToast('试稿申请已发送','success')">合作试稿</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ip-tab-panel" id="ip-tab-ai">
+          <div class="ai-create-panel">
+            <div class="ai-panel-header">🤖 AI智能创作小说</div>
+            <div class="ai-create-form">
+              <div class="form-group">
+                <label class="form-label">创作方式</label>
+                <select class="form-control"><option>续写模式</option><option>从零生成</option><option>风格仿写</option></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">AI模型</label>
+                <select class="form-control"><option>GPT-4o（推荐）</option><option>Claude 3.5 Sonnet</option><option>DeepSeek-V3</option><option>文心一言 4.0</option><option>通义千问 2.5</option></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">题材</label>
+                <select class="form-control"><option>仙侠玄幻</option><option>都市言情</option><option>科幻未来</option></select>
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">核心提示词</label>
+                <textarea class="form-control" rows="3" placeholder="描述你的小说创意，AI将基于此进行智能创作..."></textarea>
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">参考风格</label>
+                <select class="form-control"><option>玄幻史诗风</option><option>轻松爽文风</option><option>悬疑推理风</option></select>
+              </div>
+              <div class="ai-submit-row">
+                <button class="novel-btn" style="padding:10px 24px;font-size:14px" onclick="showToast('AI开始创作...','success')">🚀 一键生成</button>
+                <span style="font-size:12px;color:var(--text-muted)">AI创作约需15-30秒</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ip-tab-panel" id="ip-tab-upload">
+          <div style="background:var(--bg-card);border:1px dashed var(--border);border-radius:var(--radius);padding:48px;text-align:center;color:var(--text-muted);margin-top:8px;cursor:pointer">
+            <div style="font-size:36px;margin-bottom:12px">📤</div>
+            <div style="font-weight:600;color:var(--text);margin-bottom:4px">拖拽上传小说文件</div>
+            <div style="font-size:12px">支持 .txt / .docx / .pdf 格式，最大 50MB</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="page" id="page-script">
+        <div class="ip-header"><h2><span>剧本库</span></h2><p>平台剧本库 + AI智能改编引擎</p></div>
+        <div class="ip-tabs">
+          <div class="ip-tab active" onclick="switchIPTab(this,'scr-tab-platform')">📚 平台剧本</div>
+          <div class="ip-tab" onclick="switchIPTab(this,'scr-tab-ai')">🤖 AI创作</div>
+          <div class="ip-tab" onclick="switchIPTab(this,'scr-tab-upload')">📤 上传剧本</div>
+        </div>
+
+        <!-- 平台剧本 tab -->
+        <div id="scr-tab-platform" class="ip-tab-panel active">
+          <div class="script-card-grid">
+            <div class="script-card"><div class="script-cover"><img src="img_cover_1.png" alt="cover"></div><div class="script-info"><h4>大秦风云录·S1剧本</h4><p class="script-meta">来源IP: 大秦风云录</p><div class="script-tags"><span class="tag-status green">已完成</span></div><p class="script-detail">12集 · 分镜已标注</p><button class="btn-start-drama">开始漫剧 →</button></div></div>
+            <div class="script-card"><div class="script-cover"><img src="img_cover_2.png" alt="cover"></div><div class="script-info"><h4>逆天邪神·改编剧本</h4><p class="script-meta">来源IP: 逆天邪神传</p><div class="script-tags"><span class="tag-orange">AI改编</span></div><p class="script-detail">20集 · 待重核</p><button class="btn-start-drama">开始漫剧 →</button></div></div>
+            <div class="script-card"><div class="script-cover"><img src="img_cover_3.png" alt="cover"></div><div class="script-info"><h4>宠爱无度·S2剧本</h4><p class="script-meta">来源IP: 宠爱无度</p><div class="script-tags"><span class="tag-status green">已完成</span></div><p class="script-detail">8集 · 分镜已标注</p><button class="btn-start-drama">开始漫剧 →</button></div></div>
+          </div>
+        </div>
+
+        <!-- AI创作 tab -->
+        <div id="scr-tab-ai" class="ip-tab-panel">
+          <div class="ai-create-panel">
+            <h3 style="font-size:16px;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:8px">🤖 AI智能改编剧本</h3>
+            <div class="form-grid-2col"><div class="form-group"><label>选择源小说IP</label><select class="form-select"><option>大秦风云录</option><option>逆天邪神传</option><option>星海征途</option><option>万界之主</option></select></div><div class="form-group"><label>AI模型</label><select class="form-select"><option>GPT-4o（推荐）</option><option>Claude 3.5</option></select></div></div>
+            <div class="form-grid-2col"><div class="form-group"><label>集数</label><select class="form-select"><option>12集（短剧）</option><option>24集（中篇）</option><option>36集（长篇）</option></select></div><div class="form-group"><label>风格倾向</label><select class="form-select"><option>尊重原著</option><option>快节奏改编</option><option>情感强化</option></select></div></div>
+            <div class="form-group"><label>目标时长</label><select class="form-select"><option>每集约1分钟</option><option>每集约2分钟</option><option>每集约3分钟</option></select></div>
+            <button class="btn-generate-primary" onclick="showToast('AI改编启动，预计30-60秒...','success')">🚀 开始AI改编 <span style="opacity:0.6;font-size:12px;margin-left:8px">AI改编约需30-60秒</span></button>
+          </div>
+        </div>
+
+        <!-- 上传剧本 tab -->
+        <div id="scr-tab-upload" class="ip-tab-panel">
+          <div class="upload-zone-large"><div class="upload-icon-lg">📄</div><p style="margin-top:16px;font-size:15px;font-weight:500">上传自有剧本</p><p style="color:var(--text-muted);font-size:13px;margin-top:8px">支持 .docx / .pdf / .fountain 格式</p></div>
+        </div>
+      </div>
+
+<div class="page" id="page-comic-create">
+        <div class="comic-header-bar">
+          <div><h2 style="display:inline;font-size:20px;font-weight:700;background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">AI短剧创作</h2><p style="display:inline;color:var(--text-muted);font-size:13px;margin-left:10px">大秦风云录 · 第一季 · 第1集</p></div>
+          <button class="btn-new-project" onclick="showToast('新建项目','info')">+ 新建项目</button>
+        </div>
+        <div class="flow-nav">
+          <div class="flow-step active" onclick="switchFlow(this,0)"><span class="fs-num">1</span>内容解析</div>
+          <div class="flow-step" onclick="switchFlow(this,1)"><span class="fs-num">2</span>剧本拆分</div>
+          <div class="flow-step" onclick="switchFlow(this,2)"><span class="fs-num">3</span>资产生成</div>
+          <div class="flow-step" onclick="switchFlow(this,3)"><span class="fs-num">4</span>视频制作</div>
+          <div class="flow-step" onclick="switchFlow(this,4)"><span class="fs-num">5</span>成片预览</div>
+        </div>
+        <div class="flow-content-area">
+
+          <!-- 步骤1：内容解析 -->
+          <div id="flow-panel-0" class="flow-panel active">
+            <div class="episode-sidebar"><div class="ep-label">集数列表</div><div class="ep-item active">第1集 · 朝堂变法</div><div class="ep-item">第2集 · 暗流涌动</div><div class="ep-item">第3集 · 初显锋芒</div><div class="ep-item">第4集 · 风云际会</div><div class="ep-item">第5集 · 群雄逐鹿</div></div>
+            <div class="ep-main-content">
+              <div class="section-title">📥 选择内容来源，开始漫剧创作</div>
+              <div class="source-cards">
+                <div class="source-card highlighted"><div class="source-icon">📘</div><h4>从小说开始</h4><p>从书单选择或上传小说，AI自动解析章节结构、人物关系、场景地点，智能改编为漫剧脚本</p><button class="btn-outline-sm">选择小说 →</button></div>
+                <div class="source-card"><div class="source-icon">📝</div><h4>从剧本开始</h4><p>上传已有剧本文件，AI自动识别景别、拆分叙事单元，快速进入资产生成与视频制作流程</p><button class="btn-outline-dark-sm">上传剧本 →</button></div>
+              </div>
+              <div class="recent-projects"><p class="or-divider">或者从最近项目继续</p><div class="project-chips"><span class="proj-chip">⭕ 大秦风云录 · 第1集 · 剧本拆分</span><span class="proj-chip">⭕ 逆天邪神 · 第5集 · 资产生成</span></div></div>
+            </div>
+          </div>
+
+          <!-- 步骤2：剧本拆分 -->
+          <div id="flow-panel-1" class="flow-panel">
+            <div class="episode-sidebar"><div class="ep-label">集数列表</div><div class="ep-item active">第1集 · 朝堂变法</div><div class="ep-item">第2集 · 暗流涌动</div><div class="ep-item">第3集 · 初显锋芒</div><div class="ep-item">第4集 · 风云际会</div><div class="ep-item">第5集 · 群雄逐鹿</div></div>
+            <div class="ep-main-content">
+              <div class="section-title">📋 故事单元列表（共 5 个单元）</div>
+              <div class="story-unit-list">
+                <div class="story-unit active"><div class="su-num">1</div><div class="su-body"><h4>咸阳大殿·李斯谏言变法</h4><p class="su-desc">全景/中景/特写 · 角色:秦始皇、李斯、扶苏</p></div><span class="su-badge current">当前</span></div>
+                <div class="story-unit"><div class="su-num">2</div><div class="su-body"><h4>密室密谋·反对派筹划</h4><p class="su-desc">暗景/近景 · 角色:反对派大臣</p></div><span class="su-badge pending">待处理</span></div>
+                <div class="story-unit"><div class="su-num">3</div><div class="su-body"><h4>摄宫夜话·扶苏思察</h4><p class="su-desc">暗调/中式 · 角色:扶苏</p></div><span class="su-badge pending">待处理</span></div>
+                <div class="story-unit"><div class="su-num">4</div><div class="su-body"><h4>集市风波·变法微澜</h4><p class="su-desc">外景/全景 · 角色:群臣、民众</p></div><span class="su-badge pending">待处理</span></div>
+              </div>
+              <div class="script-preview-box"><div class="sp-header">📄 剧本原文（AI影别标注）</div><div class="sp-body"><p>咸阳宫内，晨曦初透。<span class="hl-green">【景别:全景】</span></p><p>李斯长身而起，手捧竹简，大步上前。<span class="hl-green">【景别:中景·移镜】</span></p><p>"陛下，臣有一策，可令大秦永固。"<span class="hl-blue">【景别:近景·对焦】</span></p><p>始皇帝端坐御案之后，目光深邃。群臣窃窃私语，面色各异。<span class="hl-green">【景别:中景·摇镜】</span></p></div></div>
+            </div>
+          </div>
+
+          <!-- 步骤3：资产生成 -->
+          <div id="flow-panel-2" class="flow-panel">
+            <div class="episode-sidebar"><div class="ep-label">集数列表</div><div class="ep-item active">第1集 · 朝堂变法</div><div class="ep-item">第2集 · 暗流涌动</div><div class="ep-item">第3集 · 初显锋芒</div><div class="ep-item">第4集 · 风云际会</div><div class="ep-item">第5集 · 群雄逐鹿</div></div>
+            <div class="ep-main-content">
+              <div class="section-title">👤 角色资产（可切换多视图）</div>
+              <div class="asset-char-grid">
+                <div class="char-card"><div class="char-img"><img src="img_cover_1.png"></div><h5>秦始皇·嬴政</h5><p class="char-angle">正面·侧面·45°</p></div>
+                <div class="char-card"><div class="char-img"><img src="img_cover_2.png"></div><h5>李斯·丞相</h5><p class="char-angle">正面·半身·全身</p></div>
+                <div class="char-card"><div class="char-img"><img src="img_cover_3.png"></div><h5>扶苏·公子</h5><p class="char-angle">正面·侧面·45°</p></div>
+                <div class="char-card"><div class="char-img"><img src="img_cover_4.png"></div><h5>蒙恬·将军</h5><p class="char-angle">正面·半身·45°</p></div>
+              </div>
+              <div class="section-title" style="margin-top:24px">🏛 场景资产（含时段变体）</div>
+              <div class="asset-scene-grid">
+                <div class="scene-card"><div class="scene-img"><img src="img_cover_2.png"></div><h5>咸阳宫大殿</h5><p class="scene-time">白天·傍晚</p></div>
+                <div class="scene-card"><div class="scene-img"><img src="img_cover_3.png"></div><h5>朝堂侧殿</h5><p class="scene-time">暮色·烛光</p></div>
+                <div class="scene-card"><div class="scene-img"><img src="img_cover_4.png"></div><h5>咸阳街道</h5><p class="scene-time">白天·晴</p></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 步骤4：视频制作 -->
+          <div id="flow-panel-3" class="flow-panel">
+            <div class="episode-sidebar"><div class="ep-label">集数列表</div><div class="ep-item active">第1集 · 朝堂变法</div><div class="ep-item">第2集 · 暗流涌动</div><div class="ep-item">第3集 · 初显锋芒</div><div class="ep-item">第4集 · 风云际会</div><div class="ep-item">第5集 · 群雄逐鹿</div></div>
+            <div class="video-production-layout">
+              <div class="vp-preview"><img src="img_cover_1.png" style="width:100%;border-radius:8px;aspect-ratio:16/9;object-fit:cover"><div class="vp-playbar"><div class="play-btn">▶</div><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:30%"></div></div><span class="time-text">00:03 / 00:10</span></div></div>
+              <div class="vp-shotlist">
+                <div class="shot-item active"><div class="shot-thumb"><img src="img_cover_1.png"></div><div class="shot-info"><strong>镜头 #01 · 全景</strong><p>咸阳宫大殿晨曦进入</p><small>时长 3s · 状态 ✅</small></div></div>
+                <div class="shot-item"><div class="shot-thumb"><img src="img_cover_2.png"></div><div class="shot-info"><strong>镜头 #02 · 中景</strong><p>李斯出列进言谏法令</p><small>时长 4s · 状态 ✅</small></div></div>
+                <div class="shot-item"><div class="shot-thumb"><img src="img_cover_3.png"></div><div class="shot-info"><strong>镜头 #03 · 特写</strong><p>竹简展开文字特写</p><small>时长 2s · 状态 ⏳</small></div></div>
+                <div class="shot-item"><div class="shot-thumb"><img src="img_cover_4.png"></div><div class="shot-info"><strong>镜头 #04 · 中景</strong><p>群臣窃窃私语反应</p><small>时长 3s · 状态 ⏳</small></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 步骤5：成片预览 -->
+          <div id="flow-panel-4" class="flow-panel">
+            <div class="episode-sidebar"><div class="ep-label">集数列表</div><div class="ep-item active">第1集 · 朝堂变法</div><div class="ep-item">第2集 · 暗流涌动</div><div class="ep-item">第3集 · 初显锋芒</div><div class="ep-item">第4集 · 风云际会</div><div class="ep-item">第5集 · 群雄逐鹿</div></div>
+            <div class="preview-main">
+              <div class="preview-player"><img src="img_cover_2.png" style="width:100%;border-radius:8px;aspect-ratio:16/9;object-fit:cover;max-width:480px"></div>
+              <div class="preview-right">
+                <h3 style="font-size:18px;font-weight:700;margin-bottom:8px">大秦风云录 · 第1集</h3>
+                <span class="tag-status green" style="display:inline-block;margin-bottom:14px">精读版 · 12集系列</span>
+                <p style="font-size:13px;line-height:1.7;color:var(--text-secondary);margin-bottom:18px">咸阳宫内，晨曦初透。李斯长身而起，手捧竹简，大步上前。"陛下，臣有一策，可令大秦永固。"始皇帝端坐御案之后，目光深邃。群臣窃窃私语，面色各异......</p>
+                <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px">分镜序列</p>
+                <div class="timeline-list">
+                  <div class="tl-item"><span class="tl-num">01</span><span class="tl-name">咸阳宫全景</span><span class="tl-time">3s</span></div>
+                  <div class="tl-item"><span class="tl-num">02</span><span class="tl-name">李斯出列</span><span class="tl-time">4s</span></div>
+                  <div class="tl-item"><span class="tl-num">03</span><span class="tl-name">竹简特写</span><span class="tl-time">2s</span></div>
+                  <div class="tl-item"><span class="tl-num">04</span><span class="tl-name">群臣反应</span><span class="tl-time">3s</span></div>
+                </div>
+                <div class="action-buttons-row">
+                  <button class="btn-action-pri" onclick="showToast('导出视频...','success')">🎬 导出视频</button>
+                  <button class="btn-action-sec" onclick="showToast('生成字幕...','info')">📄 生成字幕</button>
+                  <button class="btn-action-sec" onclick="showToast('发布作品...','info')">🚀 发布作品</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <div class="page" id="page-assets">
+        <div class="assets-layout">
+          <div class="assets-sidebar">
+            <div class="as-title">资产管理</div>
+            <div class="as-nav-item active">📂 创作资产</div>
+            <div class="as-nav-item">🗑 回收站</div>
+          </div>
+          <div class="assets-main">
+            <div class="am-header"><h2>创作资产</h2><div class="am-tabs"><span class="am-tab active">个人资产</span><span class="am-tab">公共资产</span></div></div>
+            <div class="am-subnav"><span class="ams-tab active">角色库<span class="ams-count">3</span></span><span class="ams-tab">场景库<span class="ams-count">2</span></span><span class="ams-tab">道具库<span class="ams-count">1</span></span><span class="ams-tab">通用素材库<span class="ams-count">1</span></span></div>
+            <div class="am-toolbar">
+              <select class="am-filter-sel"><option>全部项目</option></select>
+              <select class="am-filter-sel"><option>全部来源</option></select>
+              <label class="am-check"><input type="checkbox"> 我收藏的</label>
+              <input type="text" class="am-search-input" placeholder="搜索关键词">
+              <button class="am-search-btn">搜索</button>
+              <button class="am-reset-btn">重置</button>
+              <button class="am-del-btn">批量删除</button>
+              <div class="am-sort">排序：<select class="am-sort-sel"><option>按创建时间↓</option><option>按使用次数↓</option></select></div>
+            </div>
+            <div class="am-upload-hint"><div class="up-arrow">↑</div>拖拽或点击上传角色图</div>
+            <div class="am-card-grid">
+              <div class="am-card"><div class="am-card-img"><img src="img_cover_1.png"></div><div class="am-card-info"><h5>武魂密殿及门前青石阶....</h5><span class="am-source">本地上传</span><span class="am-views">👁 0次</span></div></div>
+              <div class="am-card"><div class="am-card-img"><img src="img_cover_2.png"></div><div class="am-card-info"><h5>警察/主形象/三视图1</h5><span class="am-source ai">AI生成</span><span class="am-views">测试·李飞</span><span class="am-views">👁 0次</span></div></div>
+              <div class="am-card"><div class="am-card-img"><img src="img_cover_3.png"></div><div class="am-card-info"><h5>警察/主形象/主视图1</h5><span class="am-source ai">AI生成</span><span class="am-views">测试·李飞</span><span class="am-views">👁 3次</span></div></div>
+              <div class="am-card"><div class="am-card-img"><img src="img_cover_4.png"></div><div class="am-card-info"><h5>陈岁陈岁（素色修士长袍...</h5><span class="am-source ai">AI生成</span><span class="am-views">排查问题</span><span class="am-views">👁 0次</span></div></div>
+              <div class="am-card"><div class="am-card-img"><img src="img_cover_5.png"></div><div class="am-card-info"><h5>老者/老者（光阴囚禁）/主...</h5><span class="am-source ai">AI生成</span><span class="am-views">排查问题</span><span class="am-views">👁 0次</span></div></div>
+              <div class="am-card"><div class="am-card-img"><img src="img_cover_1.png"></div><div class="am-card-info"><h5>陈岁/陈岁（岁月反噬）/主...</h5><span class="am-source ai">AI生成</span><span class="am-views">排查问题</span><span class="am-views">👁 0次</span></div></div>
+              <div class="am-card"><div class="am-card-img"><img src="img_cover_2.png"></div><div class="am-card-info"><h5>老者/老者（风化消散）/主...</h5><span class="am-source ai">AI生成</span><span class="am-views">排查问题</span><span class="am-views">👁 0次</span></div></div>
+            </div>
+            <div class="no-more">没有更多了</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="page" id="page-tools">
+        <div class="ip-header"><h2><span>Agent工具</span></h2><p>AI驱动的创作工具箱，覆盖从拆书到成片的每个环节</p></div>
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;display:flex;align-items:center;gap:8px"><span style="color:var(--accent)">→</span> 左右滑动浏览全部工具</div>
+        <div class="tools-grid">
+          <div class="tool-card">
+            <div class="tool-icon" style="background:rgba(77,124,254,.1);color:#4D7CFE">🎙️</div>
+            <h4>配音创作</h4><p>AI智能配音合成，支持多角色音色分配、情感语调控制</p>
+            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('配音创作已启动','success')">启动</button><button class="tool-btn secondary">文档</button></div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:rgba(167,139,250,.1);color:#A78BFA">✨</div>
+            <h4>图片创作</h4><p>AIGC图像生成引擎，支持角色/场景/道具多类型创作</p>
+            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('图片创作已启动','success')">启动</button><button class="tool-btn secondary">文档</button></div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:rgba(0,220,130,.1);color:#00DC82">🎬</div>
+            <h4>视频创作</h4><p>AI视频合成与剪辑，支持镜头编排、转场特效一键生成</p>
+            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('视频创作已启动','success')">启动</button><button class="tool-btn secondary">文档</button></div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:rgba(255,165,0,.1);color:#FFA500">🔍</div>
+            <h4>视频超分</h4><p>低分辨率视频超分辨率增强，提升画质至4K级别清晰度</p>
+            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('视频超分已启动','success')">启动</button><button class="tool-btn secondary">文档</button></div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:rgba(236,72,153,.1);color:#EC4899">🔊</div>
+            <h4>音色库</h4><p>海量AI音色资源管理，支持自定义音色训练与克隆</p>
+            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('音色库已打开','success')">启动</button><button class="tool-btn secondary">文档</button></div>
+          </div>
+        </div>
+      </div>
+<div class="page" id="page-data-view">
+        
+
+        <div class="data-header" style="justify-content:flex-end">
+          <div class="data-filter">
+            <span class="chip active">近7天</span><span class="chip">近30天</span><span class="chip">近90天</span>
+          </div>
+        </div>
+        <!-- 总览KPI -->
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-label">总产出集数</div><div class="stat-value" style="color:var(--accent)">1,286</div><div class="stat-change">↑ 12%</div></div>
+          <div class="stat-card"><div class="stat-label">总播放量</div><div class="stat-value">892.6万</div><div class="stat-change">↑ 28%</div></div>
+          <div class="stat-card"><div class="stat-label">平均制作周期</div><div class="stat-value">3.2天</div><div class="stat-change down">↑ 0.3天</div></div>
+          <div class="stat-card"><div class="stat-label">审核通过率</div><div class="stat-value" style="color:var(--accent)">94.8%</div><div class="stat-change">↑ 2.1%</div></div>
+        </div>
+
+        <!-- 项目成本总览 -->
+        <div class="data-section">
+          <div class="data-section-title"><span class="dot"></span>项目成本总览</div>
+          <div class="cost-grid">
+            <div class="cost-card">
+              <div class="cost-label">本月总消耗</div>
+              <div class="cost-value" style="color:var(--orange)">¥186,420</div>
+              <div class="cost-meta">较上月 +8.5%</div>
+              <div class="cost-bar-wrap"><div class="cost-bar" style="width:68%;background:var(--orange)"></div></div>
+            </div>
+            <div class="cost-card">
+              <div class="cost-label">AI算力成本</div>
+              <div class="cost-value" style="color:var(--blue)">¥94,800</div>
+              <div class="cost-meta">占比 50.8% · 同比 +12%</div>
+              <div class="cost-bar-wrap"><div class="cost-bar" style="width:51%;background:var(--blue)"></div></div>
+            </div>
+            <div class="cost-card">
+              <div class="cost-label">存储与带宽</div>
+              <div class="cost-value" style="color:var(--purple)">¥38,200</div>
+              <div class="cost-meta">占比 20.5% · 同比 +3%</div>
+              <div class="cost-bar-wrap"><div class="cost-bar" style="width:21%;background:var(--purple)"></div></div>
+            </div>
+            <div class="cost-card">
+              <div class="cost-label">人工审核成本</div>
+              <div class="cost-value" style="color:var(--pink)">¥53,420</div>
+              <div class="cost-meta">占比 28.7% · 同比 +6%</div>
+              <div class="cost-bar-wrap"><div class="cost-bar" style="width:29%;background:var(--pink)"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 项目制作进度 -->
+        <div class="data-section">
+          <div class="data-section-title"><span class="dot" style="background:var(--blue)"></span>项目制作进度</div>
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px">
+            <div class="progress-list">
+              <div class="progress-item">
+                <div class="progress-label">逆天邪神传</div>
+                <div class="progress-bar-wrap"><div class="progress-bar-fill pb-green" style="width:85%"></div></div>
+                <div class="progress-info"><strong>17</strong>/20 集</div>
+              </div>
+              <div class="progress-item">
+                <div class="progress-label">大秦风云录</div>
+                <div class="progress-bar-wrap"><div class="progress-bar-fill pb-blue" style="width:60%"></div></div>
+                <div class="progress-info"><strong>12</strong>/20 集</div>
+              </div>
+              <div class="progress-item">
+                <div class="progress-label">万界之主</div>
+                <div class="progress-bar-wrap"><div class="progress-bar-fill pb-purple" style="width:42%"></div></div>
+                <div class="progress-info"><strong>10</strong>/24 集</div>
+              </div>
+              <div class="progress-item">
+                <div class="progress-label">都市最强修仙</div>
+                <div class="progress-bar-wrap"><div class="progress-bar-fill pb-orange" style="width:30%"></div></div>
+                <div class="progress-info"><strong>6</strong>/20 集</div>
+              </div>
+              <div class="progress-item">
+                <div class="progress-label">星海征途</div>
+                <div class="progress-bar-wrap"><div class="progress-bar-fill pb-pink" style="width:15%"></div></div>
+                <div class="progress-info"><strong>3</strong>/20 集</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 项目消耗明细 -->
+        <div class="data-section">
+          <div class="data-section-title"><span class="dot" style="background:var(--orange)"></span>项目消耗明细</div>
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+            <table class="team-table" style="margin:0">
+              <thead><tr><th>项目名称</th><th>AI生成次数</th><th>素材消耗(gpu·h)</th><th>存储(GB)</th><th>带宽(G)</th><th>本月费用</th></tr></thead>
+              <tbody>
+                <tr><td>逆天邪神传</td><td>2,847</td><td>486</td><td>124.6</td><td>892</td><td style="color:var(--orange)">¥42,800</td></tr>
+                <tr><td>大秦风云录</td><td>1,920</td><td>342</td><td>89.2</td><td>654</td><td style="color:var(--orange)">¥31,200</td></tr>
+                <tr><td>万界之主</td><td>1,563</td><td>278</td><td>76.8</td><td>521</td><td style="color:var(--orange)">¥25,600</td></tr>
+                <tr><td>都市最强修仙</td><td>1,024</td><td>195</td><td>52.4</td><td>338</td><td style="color:var(--orange)">¥18,900</td></tr>
+                <tr><td>星海征途</td><td>486</td><td>92</td><td>28.1</td><td>156</td><td style="color:var(--orange)">¥8,200</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 小说IP / 剧本分成 -->
+        <div class="data-section">
+          <div class="data-section-title"><span class="dot" style="background:var(--accent)"></span>IP &amp; 剧本分成收益</div>
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+            <table class="split-table" style="margin:0">
+              <thead><tr><th>IP/剧本名称</th><th>类型</th><th>版权方</th><th>累计收入</th><th>分成比例</th><th>已结算分成</th><th>待结算</th><th>结算周期</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td>逆天邪神传</td><td><span class="split-tag ip">小说IP</span></td><td>阅文集团</td><td style="color:var(--accent)">¥1,286,000</td><td>30%</td><td>¥385,800</td><td>¥42,000</td><td>季度</td>
+                </tr>
+                <tr>
+                  <td>大秦风云录</td><td><span class="split-tag ip">小说IP</span></td><td>掌阅科技</td><td style="color:var(--accent)">¥872,000</td><td>25%</td><td>¥218,000</td><td>¥16,500</td><td>季度</td>
+                </tr>
+                <tr>
+                  <td>万界之主</td><td><span class="split-tag ip">小说IP</span></td><td>纵横中文</td><td style="color:var(--accent)">¥654,000</td><td>28%</td><td>¥183,120</td><td>¥22,800</td><td>季度</td>
+                </tr>
+                <tr>
+                  <td>都市最强修仙</td><td><span class="split-tag ip">小说IP</span></td><td>17K小说网</td><td style="color:var(--accent)">¥421,000</td><td>25%</td><td>¥105,250</td><td>¥12,400</td><td>季度</td>
+                </tr>
+                <tr>
+                  <td>星海征途</td><td><span class="split-tag script">剧本</span></td><td>独立编剧 · 陈思远</td><td style="color:var(--accent)">¥218,000</td><td>15%</td><td>¥32,700</td><td>¥8,500</td><td>月度</td>
+                </tr>
+                <tr>
+                  <td>宠爱无度 · 改编</td><td><span class="split-tag script">剧本</span></td><td>AI创作 + 平台</td><td style="color:var(--accent)">¥162,000</td><td>10%</td><td>¥16,200</td><td>¥0</td><td>月度</td>
+                </tr>
+                <tr style="background:var(--bg-hover)">
+                  <td colspan="3"><strong>分成汇总</strong></td>
+                  <td style="color:var(--accent);font-weight:700">¥3,613,000</td>
+                  <td>--</td>
+                  <td style="font-weight:700">¥941,070</td>
+                  <td style="color:var(--amber);font-weight:700">¥102,200</td>
+                  <td>--</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 趋势图表 -->
+        <div class="data-section" style="margin-top:0">
+          <div class="data-section-title"><span class="dot" style="background:var(--purple)"></span>数据分析图表</div>
+          <div class="charts-grid" style="margin-bottom:0">
+            <div class="chart-card"><h4>集数产出趋势</h4><div class="chart-placeholder">📊 折线图 · 产出趋势（替换为 ECharts）</div></div>
+            <div class="chart-card"><h4>IP类型分布</h4><div class="chart-placeholder">📊 饼图 · 分类占比（替换为 ECharts）</div></div>
+          </div>
+          <div class="kpi-row">
+            <div class="kpi-mini"><div class="kpi-label">项目平均利润率</div><div class="kpi-value" style="color:var(--accent)">62.4%</div><div class="kpi-sub">↑ 5.8% vs 上季</div></div>
+            <div class="kpi-mini"><div class="kpi-label">单集平均成本</div><div class="kpi-value" style="color:var(--blue)">¥1,248</div><div class="kpi-sub">↓ 3.2% vs 上季</div></div>
+          </div>
+        </div>
+
+        <!-- 热点排行 -->
+        <div class="section-title" style="margin-top:8px"><h3>🔥 作品热度排行</h3></div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+          <table class="team-table" style="margin:0">
+            <thead><tr><th>#</th><th>IP名称</th><th>集数</th><th>播放量</th><th>评分</th><th>分成收入</th></tr></thead>
+            <tbody>
+              <tr><td>🥇</td><td>逆天邪神传</td><td>20</td><td>212万</td><td style="color:var(--accent)">9.5</td><td style="color:var(--accent)">¥1,286,000</td></tr>
+              <tr><td>🥈</td><td>大秦风云录</td><td>12</td><td>128万</td><td style="color:var(--accent)">9.2</td><td style="color:var(--accent)">¥872,000</td></tr>
+              <tr><td>🥉</td><td>万界之主</td><td>24</td><td>116万</td><td style="color:var(--accent)">9.3</td><td style="color:var(--accent)">¥654,000</td></tr>
+              <tr><td>4</td><td>都市最强修仙</td><td>8</td><td>85万</td><td>8.9</td><td>¥421,000</td></tr>
+              <tr><td>5</td><td>星海征途</td><td>4</td><td>62万</td><td>8.7</td><td>¥218,000</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 团队管理 -->
+      <div class="page" id="page-team">
+        <div class="ip-header"><h2><span>团队管理</span></h2><p>管理团队账号、项目权限与积分分配</p></div>
+        <div class="team-header-actions">
+          <button class="novel-btn" onclick="showToast('已发送邀请','success')">+ 添加成员</button>
+          <button class="novel-btn claimed">📊 积分明细</button>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+          <table class="team-table" style="margin:0">
+            <thead><tr><th>成员</th><th>角色</th><th>项目权限</th><th>积分余额</th><th>最近活跃</th><th>操作</th></tr></thead>
+            <tbody>
+              <tr><td><strong>李明远</strong><br><span style="font-size:11px;color:var(--text-muted)">lmy@rongliang.ai</span></td><td><span class="role-badge admin">管理员</span></td><td>全部项目</td><td>12,800</td><td>刚刚</td><td><div class="team-actions"><button class="team-btn" onclick="openPerm()">权限</button><button class="team-btn" onclick="openPoints()">分配</button></div></td></tr>
+              <tr><td><strong>张婉清</strong><br><span style="font-size:11px;color:var(--text-muted)">zwq@rongliang.ai</span></td><td><span class="role-badge editor">编辑</span></td><td>大秦风云录</td><td>8,400</td><td>5分钟前</td><td><div class="team-actions"><button class="team-btn" onclick="openPerm()">权限</button><button class="team-btn" onclick="openPoints()">分配</button></div></td></tr>
+              <tr><td><strong>陈思远</strong><br><span style="font-size:11px;color:var(--text-muted)">csy@rongliang.ai</span></td><td><span class="role-badge editor">编辑</span></td><td>逆天邪神传 · 万界之主</td><td>6,200</td><td>1小时前</td><td><div class="team-actions"><button class="team-btn" onclick="openPerm()">权限</button><button class="team-btn" onclick="openPoints()">分配</button></div></td></tr>
+              <tr><td><strong>王晓宇</strong><br><span style="font-size:11px;color:var(--text-muted)">wxy@rongliang.ai</span></td><td><span class="role-badge viewer">查看者</span></td><td>只读</td><td>2,100</td><td>3天前</td><td><div class="team-actions"><button class="team-btn" onclick="openPerm()">权限</button><button class="team-btn" onclick="openPoints()">分配</button></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /main-content -->
+  </div><!-- /content-wrap -->
+<!-- /main-layout -->
+
+<!-- ============ MODALS ============ -->
+<div class="modal-overlay" id="modal-perm">
+  <div class="modal">
+    <h3>🔐 项目权限设置</h3>
+    <div class="form-group"><label class="form-label">角色</label><select class="form-control"><option>管理员</option><option>编辑</option><option>查看者</option></select></div>
+    <div class="form-group"><label class="form-label">可访问项目</label><select class="form-control" multiple="" style="height:100px"><option>大秦风云录</option><option>逆天邪神传</option><option>万界之主</option><option>全部项目</option></select></div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="closeModal('modal-perm')">取消</button>
+      <button class="modal-btn primary" onclick="closeModal('modal-perm');showToast('权限已更新','success')">确认保存</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-points">
+  <div class="modal">
+    <h3>💰 积分分配</h3>
+    <div class="form-group"><label class="form-label">分配成员</label><select class="form-control"><option>张婉清</option><option>陈思远</option><option>王晓宇</option></select></div>
+    <div class="form-group"><label class="form-label">积分数额</label><input class="form-control" type="number" placeholder="请输入积分数额"></div>
+    <div class="form-group"><label class="form-label">用途说明</label><input class="form-control" placeholder="如：项目奖励"></div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="closeModal('modal-points')">取消</button>
+      <button class="modal-btn primary" onclick="closeModal('modal-points');showToast('积分已分配','success')">确认分配</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast-stack" id="toastStack"></div>
+
+<script>
+  // ===== Particle Canvas (CodeBuddy green theme) =====
+  (function(){
+    var canvas=document.getElementById('particleCanvas');
+    if(!canvas)return;
+    var ctx=canvas.getContext('2d'),w,h;
+    var particles=[],panels=[],time=0;
+
+    function resize(){
+      w=canvas.width=canvas.parentElement.offsetWidth;
+      h=canvas.height=canvas.parentElement.offsetHeight;
+      initParticles();
+    }
+
+    var colors=[
+      {r:0,g:220,b:130},
+      {r:77,g:124,b:254},
+      {r:0,g:210,b:255},
+      {r:167,g:139,b:250},
+      {r:255,g:107,b:53},
+    ];
+
+    function rand(min,max){return Math.random()*(max-min)+min}
+    function pick(arr){return arr[Math.floor(Math.random()*arr.length)]}
+
+    function createParticle(){
+      var c=pick(colors);
+      return {x:rand(0,w),y:rand(0,h),vx:(Math.random()-.5)*0.6,vy:(Math.random()-.5)*0.6-0.3,
+        r:rand(1.5,4),o:rand(0.15,0.6),color:c,age:0,maxAge:rand(200,600),
+        pulse:rand(0,Math.PI*2),pulseSpeed:rand(0.01,0.04)};
+    }
+
+    function createPanel(){
+      return {x:rand(-100,w+100),y:rand(-100,h+100),vx:rand(-0.15,0.15),vy:rand(-0.25,0.1),
+        pw:rand(40,100),ph:rand(50,130),o:0,age:0,maxAge:rand(300,700),
+        fadeIn:rand(40,120),fadeOut:300,cornerR:rand(4,8),color:pick(colors)};
+    }
+
+    function initParticles(){
+      particles=[];panels=[];
+      for(var i=0;i<35;i++) particles.push(createParticle());
+      for(var i=0;i<5;i++) panels.push(createPanel());
+    }
+
+    resize();window.addEventListener('resize',resize);
+
+    function updateAndDraw(){
+      time++;
+      ctx.clearRect(0,0,w,h);
+
+      if(time%400===0&&panels.length<8) panels.push(createPanel());
+      while(particles.length<35) particles.push(createParticle());
+
+      for(var i=panels.length-1;i>=0;i--){
+        var pan=panels[i];
+        pan.x+=pan.vx;pan.y+=pan.vy;pan.age++;
+        if(pan.age<pan.fadeIn) pan.o=pan.age/pan.fadeIn*0.25;
+        else if(pan.age>pan.maxAge-pan.fadeOut) pan.o=Math.max(0,(pan.maxAge-pan.age)/pan.fadeOut*0.25);
+        else pan.o=0.25;
+        if(pan.o>0.01){
+          ctx.save();ctx.globalAlpha=pan.o;
+          ctx.shadowColor='rgba('+pan.color.r+','+pan.color.g+','+pan.color.b+',0.3)';
+          ctx.shadowBlur=12;
+          ctx.strokeStyle='rgba('+pan.color.r+','+pan.color.g+','+pan.color.b+','+pan.o+')';
+          ctx.lineWidth=1.2;
+          ctx.beginPath();ctx.roundRect(pan.x,pan.y,pan.pw,pan.ph,pan.cornerR);ctx.stroke();
+          ctx.restore();
+        }
+        if(pan.age>pan.maxAge){panels.splice(i,1);if(Math.random()<0.5) panels.push(createPanel());}
+      }
+
+      for(var i=particles.length-1;i>=0;i--){
+        var p=particles[i];
+        p.x+=p.vx;p.y+=p.vy;p.age++;
+        if(p.x<-20)p.x=w+20;if(p.x>w+20)p.x=-20;
+        if(p.y<-20)p.y=h+20;if(p.y>h+20)p.y=-20;
+        p.pulse+=p.pulseSpeed;
+        var pulseR=p.r*(1+Math.sin(p.pulse)*0.3);
+        var alpha=p.o;
+        if(p.age>p.maxAge*0.7) alpha=p.o*((p.maxAge-p.age)/(p.maxAge*0.3));
+        if(alpha<0.02){particles.splice(i,1);continue;}
+
+        var c=p.color;
+        var glow=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,pulseR*3);
+        glow.addColorStop(0,'rgba('+c.r+','+c.g+','+c.b+','+(alpha*0.8)+')');
+        glow.addColorStop(0.4,'rgba('+c.r+','+c.g+','+c.b+','+(alpha*0.3)+')');
+        glow.addColorStop(1,'rgba('+c.r+','+c.g+','+c.b+',0)');
+        ctx.beginPath();ctx.arc(p.x,p.y,pulseR*3,0,Math.PI*2);
+        ctx.fillStyle=glow;ctx.fill();
+        ctx.beginPath();ctx.arc(p.x,p.y,pulseR,0,Math.PI*2);
+        ctx.fillStyle='rgba(255,255,255,'+(alpha*0.9)+')';ctx.fill();
+
+        for(var j=i+1;j<particles.length;j++){
+          var p2=particles[j],dx=p.x-p2.x,dy=p.y-p2.y,dist=Math.sqrt(dx*dx+dy*dy);
+          if(dist<120){
+            ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p2.x,p2.y);
+            ctx.strokeStyle='rgba('+c.r+','+c.g+','+c.b+','+(0.06*(1-dist/120))+')';
+            ctx.lineWidth=0.6;ctx.stroke();
+          }
+        }
+      }
+
+      var cx=w*0.45,cy=h*0.5;
+      var coreGlow=ctx.createRadialGradient(cx,cy,0,cx,cy,180);
+      coreGlow.addColorStop(0,'rgba(0,220,130,0.06)');
+      coreGlow.addColorStop(0.5,'rgba(77,124,254,0.03)');
+      coreGlow.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath();ctx.arc(cx,cy,180,0,Math.PI*2);
+      ctx.fillStyle=coreGlow;ctx.fill();
+
+      requestAnimationFrame(updateAndDraw);
+    }
+    updateAndDraw();
+  })();
+
+  // ===== 首页交互 =====
+  function fillPrompt(text){
+    var ta = document.getElementById('hyPrompt');
+    if(ta){ ta.value = text; ta.focus(); }
+  }
+  
+  function simulateYunqueGenerate(){
+    var btn = document.querySelector('.slide-cta');
+    if(!btn) return;
+    var origHTML = btn.innerHTML;
+    btn.innerHTML = '<span>⏳</span> 生成中...';
+    btn.style.opacity = '.7';
+    btn.style.pointerEvents = 'none';
+    setTimeout(function(){
+      btn.innerHTML = '<span>✅</span> 生成完成';
+      btn.style.background = 'linear-gradient(135deg,#00DC82,#00D2FF)';
+      btn.style.opacity = '1';
+      btn.style.pointerEvents = 'auto';
+      setTimeout(function(){
+        btn.innerHTML = origHTML;
+        btn.style.background = '';
+      }, 2000);
+    }, 1500);
+  }
+
+  
+  // ===== HLS 视频初始化 =====
+  var m3u8Urls = [
+    'https://bsyvideo.hzrlhy.com/video/transcoding/36cb078fca2e4494b5e72dff6c459d02-12590572920197960_transcode_1522464.m3u8?auth_key=1782961409-0-0-1192c983fa62995682a49acb922985e4',
+    'https://bsyvideo.hzrlhy.com/video/transcoding/b1bd727a6edb44bfa7feb6a9efacd63b-12590738137729076_transcode_1522464.m3u8?auth_key=1782961409-0-0-b8f73145b0126c2e0872ea8b9e1d816a'
+  ];
+  function initCarouselVideos(){
+    var videoIds = ['carouselVideo1','carouselVideo2','carouselVideo3','carouselVideo4'];
+    videoIds.forEach(function(vid, idx){
+      var video = document.getElementById(vid);
+      if(!video) return;
+      var url = m3u8Urls[idx % m3u8Urls.length];
+      if(video.canPlayType('application/vnd.apple.mpegurl')){
+        // Safari 原生支持
+        video.src = url;
+      } else if(window.Hls && Hls.isSupported()){
+        // Chrome/Firefox 用 hls.js
+        var hls = new Hls({maxBufferLength:30, maxMaxBufferLength:60});
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function(){ video.play().catch(function(){}); });
+      }
+    });
+  }
+  // 延迟初始化确保 hls.js 已加载
+  if(window.Hls){
+    initCarouselVideos();
+  } else {
+    window.addEventListener('load', initCarouselVideos);
+  }
+
+// ===== 轮播图 =====
+  var carouselIndex = 0;
+  var carouselTotal = 4;
+  var carouselTimer = null;
+  var CAROUSEL_INTERVAL = 5000; // 5秒自动切换
+
+  function carouselGo(idx){
+    carouselIndex = ((idx % carouselTotal) + carouselTotal) % carouselTotal;
+    var track = document.getElementById('carouselTrack');
+    if(track){ track.style.transform = 'translateX(-' + (carouselIndex * 100) + '%)'; }
+    // 更新指示器
+    var dots = document.querySelectorAll('.carousel-dot');
+    dots.forEach(function(d, i){ d.classList.toggle('active', i === carouselIndex); });
+    // 重置自动播放
+    resetCarouselTimer();
+  }
+
+  function carouselNext(){
+    carouselGo(carouselIndex + 1);
+  }
+
+  function carouselPrev(){
+    carouselGo(carouselIndex - 1);
+  }
+
+  function resetCarouselTimer(){
+    if(carouselTimer) clearInterval(carouselTimer);
+    carouselTimer = setInterval(carouselNext, CAROUSEL_INTERVAL);
+  }
+
+  // 启动自动播放
+  resetCarouselTimer();
+
+  // 触摸滑动支持
+  (function(){
+    var carousel = document.getElementById('heroCarousel');
+    if(!carousel) return;
+    var startX = 0, moved = false;
+    carousel.addEventListener('touchstart', function(e){
+      startX = e.touches[0].clientX; moved = false;
+    });
+    carousel.addEventListener('touchmove', function(e){
+      moved = true;
+    });
+    carousel.addEventListener('touchend', function(e){
+      if(!moved) return;
+      var diff = startX - e.changedTouches[0].clientX;
+      if(Math.abs(diff) > 50){
+        if(diff > 0) carouselNext();
+        else carouselPrev();
+      }
+    });
+  })();
+
+  // ===== Navigation =====  // ===== Navigation =====
+  var pageTitles={home:'首页','my-works':'工作台','novel-ip':'小说IP库',script:'剧本库',assets:'资产库',tools:'Agent工具','data-view':'数据分析',team:'团队管理'};
+  var isLoggedIn = false;
+
+  function navTo(el,pageId){
+    // 首页免登录
+    if(pageId==='home'){
+      document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active')});
+      if(el) el.classList.add('active');
+      document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
+      var target=document.getElementById('page-'+pageId);
+      if(target)target.classList.add('active');
+      document.getElementById('breadcrumb-path').innerHTML='<span class="current">'+pageTitles[pageId]+'</span>';
+      return;
+    }
+    // 其他页面需要登录
+    if(!isLoggedIn){
+      showLoginModal();
+      return;
+    }
+    document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active')});
+    if(el) el.classList.add('active');
+    document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
+    var target=document.getElementById('page-'+pageId);
+    if(target)target.classList.add('active');
+    document.getElementById('breadcrumb-path').innerHTML='<span class="current">'+pageTitles[pageId]+'</span>';
+  }
+
+  // 通过页面ID导航（用于下拉菜单等无nav元素的场景）
+  function navToPage(pageId){
+    if(!isLoggedIn && pageId!=='home'){
+      showLoginModal();
+      return;
+    }
+    document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active')});
+    var navEl=document.querySelector('[data-page="'+pageId+'"]');
+    if(navEl) navEl.classList.add('active');
+    document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
+    var target=document.getElementById('page-'+pageId);
+    if(target)target.classList.add('active');
+    document.getElementById('breadcrumb-path').innerHTML='<span class="current">'+(pageTitles[pageId]||pageId)+'</span>';
+    // 关闭下拉菜单
+    closeUserDropdown();
+  }
+
+  function switchIPTab(el,panelId){
+    var container=el.parentElement;
+    container.querySelectorAll('.ip-tab').forEach(function(t){t.classList.remove('active')});
+    el.classList.add('active');
+    var panelContainer=container.parentElement;
+    panelContainer.querySelectorAll('.ip-tab-panel').forEach(function(p){p.classList.remove('active')});
+    var target=panelContainer.querySelector('#'+panelId);
+    if(target)target.classList.add('active');
+  }
+
+  function switchFlow(el,idx){
+    var container=el.parentElement;
+    container.querySelectorAll('.flow-step').forEach(function(s){s.classList.remove('active')});
+    el.classList.add('active');
+    document.querySelectorAll('.flow-panel').forEach(function(p){p.classList.remove('active')});
+    document.getElementById('flow-panel-'+idx).classList.add('active');
+    var sidebar=document.getElementById('episode-sidebar');
+    if(sidebar) sidebar.style.display=idx===0?'none':'';
+  }
+
+  function autoAdvanceFlow(el,nextIdx){
+    showToast('内容来源已选择，正在解析...','success');
+    setTimeout(function(){
+      var container=document.querySelector('.flow-nav');
+      var stepEl=container.querySelectorAll('.flow-step')[nextIdx];
+      switchFlow(stepEl,nextIdx);
+    },600);
+  }
+
+  function selectEp(el,ep){
+    var container=el.parentElement;
+    container.querySelectorAll('.ep-item').forEach(function(e){e.classList.remove('active')});
+    el.classList.add('active');
+  }
+
+  function switchAssetNav(el,type){
+    var container=el.parentElement;
+    container.querySelectorAll('.asset-nav-tab').forEach(function(t){
+      t.classList.remove('active');t.style.background='transparent';t.style.color='var(--text-muted)';
+    });
+    el.classList.add('active');el.style.background='var(--accent-bg)';el.style.color='var(--accent)';
+    showToast(type==='personal'?'已切换到个人资产':'已切换到公共资产库','');
+  }
+
+  // ===== 登录页视频背景 + Ken Burns 海报降级 =====
+  (function(){
+    var video = document.querySelector('.login-video-bg');
+    var poster = document.querySelector('.login-poster-fallback');
+    if(!video) return;
+    video.addEventListener('playing', function(){
+      if(poster) poster.classList.add('hidden');
+    });
+    // 3 秒后仍未播放则保留海报兜底
+    setTimeout(function(){
+      if(video.paused && poster) poster.classList.remove('hidden');
+    }, 3000);
+  })();
+
+  // ===== Login =====
+  function doLogin(){
+    document.getElementById('login-page').style.display='none';
+    isLoggedIn = true;
+    // 切换用户中心显示状态
+    document.getElementById('userCenterOut').style.display='none';
+    document.getElementById('userCenterIn').style.display='flex';
+    // 移除工具栏锁定状态
+    document.querySelectorAll('.toolbar-card').forEach(function(c){ c.classList.remove('locked'); });
+    // 隐藏登录提示条
+    var hint = document.getElementById('loginHintBar');
+    if(hint) hint.classList.add('logged-in');
+    showToast('登录成功，欢迎回来！');
+  }
+
+  function doLogout(){
+    isLoggedIn = false;
+    closeUserDropdown();
+    document.getElementById('userCenterIn').style.display='none';
+    document.getElementById('userCenterOut').style.display='flex';
+    // 恢复工具栏锁定状态
+    document.querySelectorAll('.toolbar-card').forEach(function(c){ c.classList.add('locked'); });
+    // 显示登录提示条
+    var hint = document.getElementById('loginHintBar');
+    if(hint) hint.classList.remove('logged-in');
+    // 返回首页
+    navToPage('home');
+    showToast('已退出登录');
+  }
+
+  function toggleUserDropdown(){
+    var dd = document.getElementById('userDropdown');
+    var uc = document.getElementById('userCenterIn');
+    if(dd){
+      var isShow = dd.classList.toggle('show');
+      if(uc) uc.classList.toggle('expanded', isShow);
+    }
+  }
+
+  function closeUserDropdown(){
+    var dd = document.getElementById('userDropdown');
+    var uc = document.getElementById('userCenterIn');
+    if(dd) dd.classList.remove('show');
+    if(uc) uc.classList.remove('expanded');
+  }
+
+  // 点击外部关闭下拉菜单
+  document.addEventListener('click', function(e){
+    var wrap = document.getElementById('userCenterWrap');
+    if(wrap && !wrap.contains(e.target)){
+      closeUserDropdown();
+    }
+  });
+
+  function showLoginModal(){
+    document.getElementById('login-page').style.display='flex';
+  }
+  function switchLoginTab(tab,el){
+    // 更新tab样式
+    document.querySelectorAll('.login-tab').forEach(function(t){
+      t.classList.remove('active');
+    });
+    (el||document.querySelector('.login-tab[onclick*="'+tab+'"]')).classList.add('active');
+    // 切换面板
+    document.querySelectorAll('.login-tab-panel').forEach(function(p){
+      p.classList.remove('active');
+    });
+    document.getElementById('login-panel-'+tab).classList.add('active');
+  }
+
+  // ===== Modals =====
+  function openPerm(){document.getElementById('modal-perm').classList.add('visible')}
+  function openPoints(){document.getElementById('modal-points').classList.add('visible')}
+  function closeModal(id){document.getElementById(id).classList.remove('visible')}
+
+  // ===== Toast =====
+  function showToast(msg,type){
+    var stack=document.getElementById('toastStack');
+    var t=document.createElement('div');t.className='toast '+(type||'');
+    t.innerHTML='<span>'+(type==='success'?'✅':type==='error'?'❌':'ℹ️')+'</span> '+msg;
+    stack.appendChild(t);
+    setTimeout(function(){t.style.opacity='0';t.style.transform='translateY(-8px)';t.style.transition='all .25s';
+      setTimeout(function(){t.remove()},250)},2000);
+  }
+</script>
+
+
+</body></html>

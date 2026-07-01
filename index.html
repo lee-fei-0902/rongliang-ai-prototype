@@ -616,6 +616,28 @@ a{color:var(--accent);text-decoration:none}
 .ip-tab-panel{display:none}
 .ip-tab-panel.active{display:block}
 
+/* ===== 商务合作面板 ===== */
+.biz-coop-panel{margin-top:8px}
+.biz-header{margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.biz-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px}
+.biz-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:22px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column}
+.biz-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.biz-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:20px;margin-bottom:12px;flex-shrink:0}
+.biz-card h4{font-size:15px;font-weight:700;margin:0 0 8px;color:var(--text)}
+.biz-card p{font-size:12px;color:var(--text-muted);line-height:1.6;margin:0 0 12px;flex:1}
+.biz-card ul{list-style:none;padding:0;margin:0 0 16px;font-size:12px;color:var(--text-secondary)}
+.biz-card ul li{padding:3px 0;position:relative;padding-left:14px}
+.biz-card ul li::before{content:'✦';position:absolute;left:0;color:var(--accent);font-size:9px;top:5px}
+.biz-card .novel-btn.primary{align-self:flex-start;background:var(--accent);color:#000;border-color:var(--accent);
+  font-weight:600;padding:7px 18px;font-size:12px;border-radius:8px;cursor:pointer;transition:all .2s}
+.biz-card .novel-btn.primary:hover{opacity:.85;box-shadow:0 4px 14px rgba(0,220,130,.3)}
+.biz-contact-bar{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;
+  padding:18px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
+  font-size:13px;color:var(--text-secondary)}
+@media(max-width:800px){.biz-grid{grid-template-columns:1fr}}
+
 /* Novel Cards */
 .ip-novel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
 .novel-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
@@ -894,6 +916,41 @@ select.form-control{cursor:pointer}
   background:transparent;color:var(--text-secondary);transition:all .2s}
 .team-btn:hover{border-color:var(--accent);color:var(--accent)}
 .team-btn.danger:hover{border-color:var(--danger);color:var(--danger)}
+
+/* ===== Profile Sidebar (Personal Center) ===== */
+.profile-layout{display:flex;gap:24px;align-items:flex-start}
+.profile-sidebar{width:280px;flex-shrink:0;display:flex;flex-direction:column;gap:16px}
+.profile-main{flex:1;min-width:0}
+.sidebar-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+/* 积分余额卡片 */
+.points-card{padding:20px}
+.points-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.points-label{font-size:13px;font-weight:600;color:var(--text-secondary)}
+.points-amount{font-size:36px;font-weight:800;color:var(--accent);line-height:1.2;margin-bottom:4px}
+.points-unit{font-size:12px;color:var(--text-muted);margin-bottom:12px}
+.points-bar{height:6px;background:var(--bg-dark);border-radius:3px;overflow:hidden;margin-bottom:12px}
+.points-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),#00b8ff);border-radius:3px;transition:width .5s}
+.points-footer{display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)}
+/* 项目排行卡片 */
+.rank-card{padding:16px}
+.rank-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.rank-title{font-size:13px;font-weight:600}
+.rank-period{font-size:11px;color:var(--text-muted);background:var(--bg-dark);padding:2px 8px;border-radius:10px}
+.rank-list{display:flex;flex-direction:column;gap:0}
+.rank-item{display:flex;align-items:center;padding:8px 4px;border-radius:6px;transition:background .15s}
+.rank-item:hover{background:var(--bg-hover)}
+.rank-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text-muted);background:var(--bg-dark);flex-shrink:0;margin-right:10px}
+.rank-top1 .rank-num{background:linear-gradient(135deg,#ffd700,#ffaa00);color:#000}
+.rank-top2 .rank-num{background:linear-gradient(135deg:#c0c0c0,#a0a0a0);color:#000}
+.rank-top3 .rank-num{background:linear-gradient(135deg,#cd7f32,#a0622e);color:#000}
+.rank-name{flex:1;font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank-score{font-size:12px;font-weight:700;color:var(--accent);flex-shrink:0}
+
+@media(max-width:900px){
+  .profile-layout{flex-direction:column}
+  .profile-sidebar{width:100%;flex-direction:row;flex-wrap:wrap}
+  .sidebar-card{flex:1;min-width:240px}
+}
 
 /* ===== Modal ===== */
 .modal-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.7);
@@ -1688,105 +1745,105 @@ select.form-control{cursor:pointer}
           <div class="work-card">
             <div class="work-card-thumb" style="background-image:url(img_cover_1.png);background-size:cover;background-position:center</div>
             <div class="wc-badge" style="background:#ff4757">热播</div>
-            <div class="work-card-info"><div class="work-card-title">大秦风云录</div><div class="work-card-meta"><span>📺 128万</span><span>⭐ 9.2</span></div></div>
+            <div class="work-card-info"><div class="work-card-title">大秦风云录</div><div class="work-card-meta"><span>📺 128万</span></div></div>
           </div>
           <div class="work-card">
             <div class="work-card-thumb" style="background-image:url(img_cover_2.png);background-size:cover;background-position:center</div>
             <div class="wc-badge" style="background:#2ed573">新番</div>
-            <div class="work-card-info"><div class="work-card-title">逆天邪神·重生</div><div class="work-card-meta"><span>📺 96万</span><span>⭐ 9.5</span></div></div>
+            <div class="work-card-info"><div class="work-card-title">逆天邪神·重生</div><div class="work-card-meta"><span>📺 96万</span></div></div>
           </div>
           <div class="work-card">
             <div class="work-card-thumb" style="background-image:url(img_cover_3.png);background-size:cover;background-position:center</div>
             <div class="wc-badge" style="background:#ff6b81">热门</div>
-            <div class="work-card-info"><div class="work-card-title">都市最强修仙</div><div class="work-card-meta"><span>📺 85万</span><span>⭐ 8.9</span></div></div>
+            <div class="work-card-info"><div class="work-card-title">都市最强修仙</div><div class="work-card-meta"><span>📺 85万</span></div></div>
           </div>
           <div class="work-card">
             <div class="work-card-thumb" style="background-image:url(img_cover_4.png);background-size:cover;background-position:center</div>
             <div class="wc-badge" style="background:#5352ed">推荐</div>
-            <div class="work-card-info"><div class="work-card-title">星穹纪元</div><div class="work-card-meta"><span>📺 62万</span><span>⭐ 8.7</span></div></div>
+            <div class="work-card-info"><div class="work-card-title">星穹纪元</div><div class="work-card-meta"><span>📺 62万</span></div></div>
           </div>
           <div class="work-card">
             <div class="work-card-thumb" style="background-image:url(img_cover_5.png);background-size:cover;background-position:center</div>
-            <div class="work-card-info"><div class="work-card-title">万界之主·起源</div><div class="work-card-meta"><span>📺 48万</span><span>⭐ 9.3</span></div></div>
+            <div class="work-card-info"><div class="work-card-title">万界之主·起源</div><div class="work-card-meta"><span>📺 48万</span></div></div>
           </div>
           <div class="work-card">
             <div class="work-card-thumb" style="background-image:url(img_cover_1.png);background-size:cover;background-position:center</div>
             <div class="wc-badge" style="background:#2ed573">新作</div>
-            <div class="work-card-info"><div class="work-card-title">九幽剑帝</div><div class="work-card-meta"><span>📺 35万</span><span>⭐ 8.8</span></div></div>
+            <div class="work-card-info"><div class="work-card-title">九幽剑帝</div><div class="work-card-meta"><span>📺 35万</span></div></div>
           </div>
           <div class="work-card">
             <div class="work-card-thumb" style="background-image:url(img_cover_2.png);background-size:cover;background-position:center</div>
-            <div class="work-card-info"><div class="work-card-title">混沌神域</div><div class="work-card-meta"><span>📺 28万</span><span>⭐ 9.1</span></div></div>
+            <div class="work-card-info"><div class="work-card-title">混沌神域</div><div class="work-card-meta"><span>📺 28万</span></div></div>
           </div>
           <div class="work-card">
             <div class="work-card-thumb" style="background-image:url(img_cover_3.png);background-size:cover;background-position:center</div>
             <div class="wc-badge" style="background:#ff4757">热播</div>
-            <div class="work-card-info"><div class="work-card-title">天道图书馆</div><div class="work-card-meta"><span>📺 22万</span><span>⭐ 8.5</span></div></div>
+            <div class="work-card-info"><div class="work-card-title">天道图书馆</div><div class="work-card-meta"><span>📺 22万</span></div></div>
           </div>
           <div class="work-card">
             <div class="work-card-thumb" style="background-image:url(img_cover_4.png);background-size:cover;background-position:center</div>
             <div class="wc-badge" style="background:#2ed573">新作</div>
-            <div class="work-card-info"><div class="work-card-title">仙路至尊</div><div class="work-card-meta"><span>📺 19万</span><span>⭐ 8.6</span></div></div>
+            <div class="work-card-info"><div class="work-card-title">仙路至尊</div><div class="work-card-meta"><span>📺 19万</span></div></div>
           </div>
           <div class="work-card">
             <div class="work-card-thumb" style="background-image:url(img_cover_5.png);background-size:cover;background-position:center</div>
             <div class="wc-badge" style="background:#5352ed">推荐</div>
-            <div class="work-card-info"><div class="work-card-title">龙族觉醒</div><div class="work-card-meta"><span>📺 16万</span><span>⭐ 9.0</span></div></div>
+            <div class="work-card-info"><div class="work-card-title">龙族觉醒</div><div class="work-card-meta"><span>📺 16万</span></div></div>
           </div>
           <div class="work-card">
             <div class="work-card-thumb" style="background-image:url(img_cover_1.png);background-size:cover;background-position:center</div>
             <div class="wc-badge" style="background:#ff6b81">热门</div>
-            <div class="work-card-info"><div class="work-card-title">末日堡垒</div><div class="work-card-meta"><span>📺 14万</span><span>⭐ 8.3</span></div></div>
+            <div class="work-card-info"><div class="work-card-title">末日堡垒</div><div class="work-card-meta"><span>📺 14万</span></div></div>
           </div>
           <div class="work-card">
             <div class="work-card-thumb" style="background-image:url(img_cover_2.png);background-size:cover;background-position:center</div>
             <div class="wc-badge" style="background:#ff4757">热播</div>
-            <div class="work-card-info"><div class="work-card-title">青云直上</div><div class="work-card-meta"><span>📺 11万</span><span>⭐ 8.7</span></div></div>
+            <div class="work-card-info"><div class="work-card-title">青云直上</div><div class="work-card-meta"><span>📺 11万</span></div></div>
           </div>
           <div class="work-card">
             <div class="work-card-thumb" style="background-image:url(img_cover_3.png);background-size:cover;background-position:center</div>
             <div class="wc-badge" style="background:#2ed573">新番</div>
-            <div class="work-card-info"><div class="work-card-title">灵域传说</div><div class="work-card-meta"><span>📺 9万</span><span>⭐ 8.9</span></div></div>
+            <div class="work-card-info"><div class="work-card-title">灵域传说</div><div class="work-card-meta"><span>📺 9万</span></div></div>
           </div>
           <div class="work-card">
             <div class="work-card-thumb" style="background-image:url(img_cover_4.png);background-size:cover;background-position:center"></div>
             <div class="wc-badge" style="background:#ff4757">热播</div>
-            <div class="work-card-info"><div class="work-card-title">剑道独尊</div><div class="work-card-meta"><span>📺 7.5万</span><span>⭐ 9.2</span></div></div>
+            <div class="work-card-info"><div class="work-card-title">剑道独尊</div><div class="work-card-meta"><span>📺 7.5万</span></div></div>
           </div>
           <div class="work-card">
             <div class="work-card-thumb" style="background-image:url(img_cover_5.png);background-size:cover;background-position:center"></div>
             <div class="wc-badge" style="background:#5352ed">推荐</div>
-            <div class="work-card-info"><div class="work-card-title">武极天下</div><div class="work-card-meta"><span>📺 6.2万</span><span>⭐ 8.6</span></div></div>
+            <div class="work-card-info"><div class="work-card-title">武极天下</div><div class="work-card-meta"><span>📺 6.2万</span></div></div>
           </div>
           <div class="work-card">
             <div class="work-card-thumb" style="background-image:url(img_cover_1.png);background-size:cover;background-position:center"></div>
             <div class="wc-badge" style="background:#2ed573">新作</div>
-            <div class="work-card-info"><div class="work-card-title">星辰变·觉醒</div><div class="work-card-meta"><span>📺 5.1万</span><span>⭐ 9.0</span></div></div>
+            <div class="work-card-info"><div class="work-card-title">星辰变·觉醒</div><div class="work-card-meta"><span>📺 5.1万</span></div></div>
           </div>
           <div class="work-card">
             <div class="work-card-thumb" style="background-image:url(img_cover_2.png);background-size:cover;background-position:center"></div>
             <div class="wc-badge" style="background:#ff6b81">热门</div>
-            <div class="work-card-info"><div class="work-card-title">斗破苍穹前传</div><div class="work-card-meta"><span>📺 4.3万</span><span>⭐ 8.8</span></div></div>
+            <div class="work-card-info"><div class="work-card-title">斗破苍穹前传</div><div class="work-card-meta"><span>📺 4.3万</span></div></div>
           </div>
           <div class="work-card">
             <div class="work-card-thumb" style="background-image:url(img_cover_3.png);background-size:cover;background-position:center"></div>
             <div class="wc-badge" style="background:#ff4757">热播</div>
-            <div class="work-card-info"><div class="work-card-title">遮天·纪元</div><div class="work-card-meta"><span>📺 3.8万</span><span>⭐ 9.1</span></div></div>
+            <div class="work-card-info"><div class="work-card-title">遮天·纪元</div><div class="work-card-meta"><span>📺 3.8万</span></div></div>
           </div>
           <div class="work-card">
             <div class="work-card-thumb" style="background-image:url(img_cover_4.png);background-size:cover;background-position:center"></div>
             <div class="wc-badge" style="background:#2ed573">新番</div>
-            <div class="work-card-info"><div class="work-card-title">凡人修仙传</div><div class="work-card-meta"><span>📺 3.2万</span><span>⭐ 8.5</span></div></div>
+            <div class="work-card-info"><div class="work-card-title">凡人修仙传</div><div class="work-card-meta"><span>📺 3.2万</span></div></div>
           </div>
           <div class="work-card">
             <div class="work-card-thumb" style="background-image:url(img_cover_5.png);background-size:cover;background-position:center"></div>
             <div class="wc-badge" style="background:#5352ed">推荐</div>
-            <div class="work-card-info"><div class="work-card-title">吞噬星空</div><div class="work-card-meta"><span>📺 2.6万</span><span>⭐ 9.3</span></div></div>
+            <div class="work-card-info"><div class="work-card-title">吞噬星空</div><div class="work-card-meta"><span>📺 2.6万</span></div></div>
           </div>
           <div class="work-card">
             <div class="work-card-thumb" style="background-image:url(img_cover_1.png);background-size:cover;background-position:center"></div>
             <div class="wc-badge" style="background:#ff6b81">热门</div>
-            <div class="work-card-info"><div class="work-card-title">完美世界</div><div class="work-card-meta"><span>📺 2.1万</span><span>⭐ 8.7</span></div></div>
+            <div class="work-card-info"><div class="work-card-title">完美世界</div><div class="work-card-meta"><span>📺 2.1万</span></div></div>
           </div>
         </div>
 
@@ -1889,7 +1946,8 @@ select.form-control{cursor:pointer}
       <div class="page" id="page-novel-ip">
         <div class="ip-header"><h2><span>小说IP库</span></h2><p>浏览精选小说IP，选择心仪作品开始漫剧创作之旅</p></div>
         <div class="ip-tabs">
-          <div class="ip-tab active" onclick="switchIPTab(this,'ip-tab-trial')">📖 试稿书单</div>
+          <div class="ip-tab active" onclick="switchIPTab(this,'ip-tab-trial')">📖 书单广告</div>
+          <div class="ip-tab" onclick="switchIPTab(this,'ip-tab-biz')">🤝 商务合作</div>
           <div class="ip-tab" onclick="switchIPTab(this,'ip-tab-ai')">🤖 AI小说创作</div>
           <div class="ip-tab" onclick="switchIPTab(this,'ip-tab-upload')">📤 上传小说</div>
         </div>
@@ -1954,6 +2012,65 @@ select.form-control{cursor:pointer}
                 <div class="novel-stats">865章 · 280万人气 · ⭐8.8</div>
                 <button class="novel-btn" onclick="showToast('试稿申请已发送','success')">合作试稿</button>
               </div>
+            </div>
+          </div>
+        </div>
+        <div class="ip-tab-panel" id="ip-tab-biz">
+          <div class="biz-coop-panel">
+            <div class="biz-header">
+              <h3 style="font-size:16px;font-weight:700;margin:0 0 4px">🤝 商务合作</h3>
+              <p style="font-size:13px;color:var(--text-muted);margin:0">携手容量AI，共创漫剧商业价值新生态</p>
+            </div>
+            <div class="biz-grid">
+              <div class="biz-card" onclick="showToast('IP授权合作咨询已提交','success')">
+                <div class="biz-icon" style="background:rgba(239,68,68,.12)">📜</div>
+                <h4>IP授权合作</h4>
+                <p>优质小说/漫画 IP 授权，联合开发漫剧内容，共享收益分成</p>
+                <ul>
+                  <li>独家 / 非独家授权模式</li>
+                  <li>灵活的收益分成比例</li>
+                  <li>全链路版权保护支持</li>
+                </ul>
+                <button class="novel-btn primary">立即咨询</button>
+              </div>
+              <div class="biz-card" onclick="showToast('内容分发合作申请已提交','success')">
+                <div class="biz-icon" style="background:rgba(77,124,254,.12)">📡</div>
+                <h4>内容分发合作</h4>
+                <p>多渠道内容分发，覆盖主流短视频与漫画平台，最大化作品曝光</p>
+                <ul>
+                  <li>抖音 / 快手 / 小红书分发</li>
+                  <li>腾讯 / 爱奇艺等平台接入</li>
+                  <li>数据驱动的分发策略</li>
+                </ul>
+                <button class="novel-btn primary">立即咨询</button>
+              </div>
+              <div class="biz-card" onclick="showToast('定制化服务需求已记录','success')">
+                <div class="biz-icon" style="background:rgba(0,220,130,.12)">🏢</div>
+                <h4>企业定制服务</h4>
+                <p>为企业客户提供从创意到成片的端到端 AI 漫剧定制解决方案</p>
+                <ul>
+                  <li>品牌故事漫剧化</li>
+                  <li>企业培训/宣发内容</li>
+                  <li>私有化部署方案</li>
+                </ul>
+                <button class="novel-btn primary">立即咨询</button>
+              </div>
+              <div class="biz-card" onclick="showToast('技术对接需求已收到','success')">
+                <div class="biz-icon" style="background:rgba(250,173,20,.12)">🔗</div>
+                <h4>API / 技术对接</h4>
+                <p>开放平台能力接口，支持第三方系统集成与深度技术合作</p>
+                <ul>
+                  <li>AI创作引擎 API</li>
+                  <li>配音 / 视频超分接口</li>
+                  <li>SaaS 白标解决方案</li>
+                </ul>
+                <button class="novel-btn primary">立即咨询</button>
+              </div>
+            </div>
+            <div class="biz-contact-bar">
+              <span>📧 联系邮箱：biz@rongliang.ai</span>
+              <span>📞 商务热线：400-888-9999</span>
+              <span>💬 微信：RongLiang_Biz</span>
             </div>
           </div>
         </div>
@@ -2372,23 +2489,86 @@ select.form-control{cursor:pointer}
         </div>
       </div>
 
-      <!-- 团队管理 -->
+      <!-- 团队管理 / 个人中心 -->
       <div class="page" id="page-team">
-        <div class="ip-header"><h2><span>团队管理</span></h2><p>管理团队账号、项目权限与积分分配</p></div>
-        <div class="team-header-actions">
-          <button class="novel-btn" onclick="showToast('已发送邀请','success')">+ 添加成员</button>
-          <button class="novel-btn claimed">📊 积分明细</button>
-        </div>
-        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
-          <table class="team-table" style="margin:0">
-            <thead><tr><th>成员</th><th>角色</th><th>项目权限</th><th>积分余额</th><th>最近活跃</th><th>操作</th></tr></thead>
-            <tbody>
-              <tr><td><strong>李明远</strong><br><span style="font-size:11px;color:var(--text-muted)">lmy@rongliang.ai</span></td><td><span class="role-badge admin">管理员</span></td><td>全部项目</td><td>12,800</td><td>刚刚</td><td><div class="team-actions"><button class="team-btn" onclick="openPerm()">权限</button><button class="team-btn" onclick="openPoints()">分配</button></div></td></tr>
-              <tr><td><strong>张婉清</strong><br><span style="font-size:11px;color:var(--text-muted)">zwq@rongliang.ai</span></td><td><span class="role-badge editor">编辑</span></td><td>大秦风云录</td><td>8,400</td><td>5分钟前</td><td><div class="team-actions"><button class="team-btn" onclick="openPerm()">权限</button><button class="team-btn" onclick="openPoints()">分配</button></div></td></tr>
-              <tr><td><strong>陈思远</strong><br><span style="font-size:11px;color:var(--text-muted)">csy@rongliang.ai</span></td><td><span class="role-badge editor">编辑</span></td><td>逆天邪神传 · 万界之主</td><td>6,200</td><td>1小时前</td><td><div class="team-actions"><button class="team-btn" onclick="openPerm()">权限</button><button class="team-btn" onclick="openPoints()">分配</button></div></td></tr>
-              <tr><td><strong>王晓宇</strong><br><span style="font-size:11px;color:var(--text-muted)">wxy@rongliang.ai</span></td><td><span class="role-badge viewer">查看者</span></td><td>只读</td><td>2,100</td><td>3天前</td><td><div class="team-actions"><button class="team-btn" onclick="openPerm()">权限</button><button class="team-btn" onclick="openPoints()">分配</button></div></td></tr>
-            </tbody>
-          </table>
+        <div class="ip-header"><h2><span>个人中心</span></h2><p>管理团队账号、项目权限与积分分配</p></div>
+        <div class="profile-layout">
+          <!-- 左侧边栏：积分余额 + 项目排行 -->
+          <div class="profile-sidebar">
+            <!-- 积分余额卡片 -->
+            <div class="sidebar-card points-card">
+              <div class="points-card-header">
+                <span class="points-label">积分余额</span>
+                <button class="novel-btn" style="padding:4px 12px;font-size:11px" onclick="showToast('积分充值功能开发中','success')">💰 充值</button>
+              </div>
+              <div class="points-amount">12,800</div>
+              <div class="points-unit">可用积分</div>
+              <div class="points-bar">
+                <div class="points-bar-fill" style="width:64%"></div>
+              </div>
+              <div class="points-footer">
+                <span>本月消耗 <strong style="color:var(--accent)">-2,400</strong></span>
+                <span>累计获得 <strong>35,200</strong></span>
+              </div>
+            </div>
+            <!-- 项目排行卡片 -->
+            <div class="sidebar-card rank-card">
+              <div class="rank-card-header">
+                <span class="rank-title">🏆 项目排行</span>
+                <span class="rank-period">本月</span>
+              </div>
+              <div class="rank-list">
+                <div class="rank-item rank-top1">
+                  <span class="rank-num">1</span>
+                  <span class="rank-name">大秦风云录</span>
+                  <span class="rank-score">9,420</span>
+                </div>
+                <div class="rank-item rank-top2">
+                  <span class="rank-num">2</span>
+                  <span class="rank-name">逆天邪神·重生</span>
+                  <span class="rank-score">7,850</span>
+                </div>
+                <div class="rank-item rank-top3">
+                  <span class="rank-num">3</span>
+                  <span class="rank-name">都市最强修仙</span>
+                  <span class="rank-score">6,320</span>
+                </div>
+                <div class="rank-item">
+                  <span class="rank-num">4</span>
+                  <span class="rank-name">星穹纪元</span>
+                  <span class="rank-score">4,680</span>
+                </div>
+                <div class="rank-item">
+                  <span class="rank-num">5</span>
+                  <span class="rank-name">万界之主·起源</span>
+                  <span class="rank-score">3,540</span>
+                </div>
+                <div class="rank-item">
+                  <span class="rank-num">6</span>
+                  <span class="rank-name">九幽剑帝</span>
+                  <span class="rank-score">2,890</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 右侧主体：团队成员管理 -->
+          <div class="profile-main">
+            <div class="team-header-actions">
+              <button class="novel-btn" onclick="showToast('已发送邀请','success')">+ 添加成员</button>
+              <button class="novel-btn claimed">📊 积分明细</button>
+            </div>
+            <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+              <table class="team-table" style="margin:0">
+                <thead><tr><th>成员</th><th>角色</th><th>项目权限</th><th>积分余额</th><th>最近活跃</th><th>操作</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>李明远</strong><br><span style="font-size:11px;color:var(--text-muted)">lmy@rongliang.ai</span></td><td><span class="role-badge admin">管理员</span></td><td>全部项目</td><td>12,800</td><td>刚刚</td><td><div class="team-actions"><button class="team-btn" onclick="openPerm()">权限</button><button class="team-btn" onclick="openPoints()">分配</button></div></td></tr>
+                  <tr><td><strong>张婉清</strong><br><span style="font-size:11px;color:var(--text-muted)">zwq@rongliang.ai</span></td><td><span class="role-badge editor">编辑</span></td><td>大秦风云录</td><td>8,400</td><td>5分钟前</td><td><div class="team-actions"><button class="team-btn" onclick="openPerm()">权限</button><button class="team-btn" onclick="openPoints()">分配</button></div></td></tr>
+                  <tr><td><strong>陈思远</strong><br><span style="font-size:11px;color:var(--text-muted)">csy@rongliang.ai</span></td><td><span class="role-badge editor">编辑</span></td><td>逆天邪神传 · 万界之主</td><td>6,200</td><td>1小时前</td><td><div class="team-actions"><button class="team-btn" onclick="openPerm()">权限</button><button class="team-btn" onclick="openPoints()">分配</button></div></td></tr>
+                  <tr><td><strong>王晓宇</strong><br><span style="font-size:11px;color:var(--text-muted)">wxy@rongliang.ai</span></td><td><span class="role-badge viewer">查看者</span></td><td>只读</td><td>2,100</td><td>3天前</td><td><div class="team-actions"><button class="team-btn" onclick="openPerm()">权限</button><button class="team-btn" onclick="openPoints()">分配</button></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
 
