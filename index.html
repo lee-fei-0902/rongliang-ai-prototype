@@ -1218,10 +1218,174 @@ select.form-control{cursor:pointer}
 
 @media(max-width:640px){
   .ai-create-form{grid-template-columns:1fr}
-
   .ai-create-panel{padding:20px}
-
+}
 .data-filter .chip{padding:5px 12px;font-size:11px}
+
+/* ===== Workbench (Project Management) ===== */
+.filter-select {
+  height: 32px; padding: 0 10px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  font-size: 13px; background: var(--bg-card); color: var(--text); cursor: pointer; min-width: 100px;
+  outline: none; transition: border-color .2s;
+}
+.filter-select:focus { border-color: var(--accent); }
+.filter-select option { padding: 4px 8px; font-size: 13px; background: var(--bg-elevated); color: var(--text); }
+.filter-search {
+  display: flex; align-items: center; gap: 0; flex: 1; max-width: 260px;
+}
+.filter-search input {
+  height: 32px; padding: 0 10px; border: 1px solid var(--border); border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  font-size: 13px; outline: none; flex: 1; background: var(--bg-card); color: var(--text);
+}
+.filter-search input:focus { border-color: var(--accent); }
+.filter-search input::placeholder { color: var(--text-muted); }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; gap: 5px; padding: 6px 14px; border-radius: var(--radius-sm);
+       font-size: 13px; font-weight: 500; cursor: pointer; border: none; transition: all .15s; text-decoration: none; }
+.btn:hover { opacity: .88; }
+.btn-primary { background: var(--accent); color: #000; }
+.btn-primary:hover { box-shadow: 0 0 16px rgba(0,220,130,.2); }
+.btn-secondary { background: var(--bg-card); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { background: var(--bg-hover); border-color: var(--accent); }
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+
+/* Empty State */
+.empty-state { text-align: center; padding: 60px 20px; }
+.empty-title { font-size: 16px; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; }
+.empty-desc { font-size: 13px; color: var(--text-muted); opacity: .6; }
+
+/* Project Management */
+.proj-filter-bar {
+  display: flex; gap: 10px; align-items: center;
+  padding: 0 0 16px; flex-wrap: nowrap;
+}
+.proj-filter-bar .filter-select { flex-shrink: 0; }
+.proj-filter-bar .filter-search { flex-shrink: 0; flex: none; width: 220px; }
+.proj-filter-bar .filter-search input { width: 100%; }
+.proj-filter-bar .btn-secondary { flex-shrink: 0; }
+.proj-quick-start { margin-bottom: 28px; }
+.proj-quick-title { font-size: 14px; font-weight: 600; margin-bottom: 14px; color: var(--text); }
+.proj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+.proj-card {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--bg-card); overflow: hidden; transition: box-shadow .2s, border-color .2s;
+  cursor: pointer;
+}
+.proj-card:hover { box-shadow: var(--shadow); border-color: var(--accent); }
+.proj-card-cover {
+  width: 100%; height: 120px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  display: flex; align-items: center; justify-content: center; font-size: 14px;
+  color: var(--text-muted); position: relative; overflow: hidden;
+}
+.proj-card-cover .proj-type-tag {
+  position: absolute; top: 8px; right: 8px; font-size: 11px;
+  background: rgba(0,0,0,.55); color: #fff; padding: 2px 8px;
+  border-radius: 10px; backdrop-filter: blur(4px);
+}
+.proj-card-body { padding: 12px; position: relative; }
+.proj-card-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
+.proj-card-meta { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+.proj-card-meta .creator { color: var(--accent); font-weight: 500; }
+.proj-card-info-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 6px; font-size: 12px; color: var(--text-muted);
+}
+.proj-card-episodes { display: flex; align-items: center; gap: 4px; }
+
+/* Project card more-menu */
+.proj-card-more-wrap {
+  position: absolute; bottom: 10px; right: 10px;
+}
+.proj-card-more-btn {
+  width: 26px; height: 26px; border: none; border-radius: 6px;
+  background: transparent; color: var(--text-muted); font-size: 18px; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  line-height: 1; transition: all .15s; opacity: 0;
+}
+.proj-card:hover .proj-card-more-btn { opacity: 1; }
+.proj-card-more-btn:hover { background: var(--bg-hover); color: var(--text); border-radius: 6px; }
+.proj-more-menu {
+  display: none; position: absolute; bottom: 32px; right: 0;
+  background: var(--bg-elevated); border: 1px solid var(--border-lt);
+  border-radius: var(--radius); box-shadow: var(--shadow-lg);
+  min-width: 148px; z-index: 200; overflow: hidden;
+}
+.proj-more-menu.open { display: block; }
+.proj-more-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 14px; font-size: 13px; cursor: pointer; color: var(--text-secondary);
+  transition: background .12s; white-space: nowrap;
+}
+.proj-more-item:hover { background: var(--bg-hover); color: var(--accent); }
+.proj-more-item.danger:hover { background: rgba(239,68,68,.1); color: var(--danger); }
+.proj-more-item .mi-icon { font-size: 15px; width: 18px; text-align: center; }
+
+/* Create project card */
+.proj-create-card {
+  border: 2px dashed var(--accent); border-radius: var(--radius);
+  background: linear-gradient(135deg, rgba(0,220,130,.03) 0%, rgba(0,220,130,.08) 100%);
+  min-height: 196px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; cursor: pointer;
+  transition: all .25s ease; color: var(--text-muted);
+  position: relative; overflow: hidden;
+}
+.proj-create-card::before {
+  content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%;
+  background: radial-gradient(circle, rgba(0,220,130,.06) 0%, transparent 60%);
+  opacity:0; transition:opacity .3s;
+}
+.proj-create-card:hover::before { opacity:1; }
+.proj-create-card:hover {
+  border-color: var(--accent-hover); background: linear-gradient(135deg, rgba(0,220,130,.08) 0%, rgba(0,220,130,.14) 100%);
+  color: var(--accent); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,220,130,.12);
+}
+.proj-create-icon-wrap {
+  width:52px; height:52px; border-radius:50%; background:var(--accent-bg);
+  display:flex; align-items:center; justify-content:center; margin-bottom:10px;
+  transition:transform .25s; color:var(--accent); font-size:26px;
+}
+.proj-create-card:hover .proj-create-icon-wrap { transform: scale(1.08); }
+.proj-create-label { font-size: 14px; font-weight: 600; color: var(--accent); margin-bottom: 4px; }
+.proj-create-desc { font-size: 11px; color: var(--text-muted); max-width:140px; text-align:center; line-height:1.5; }
+
+.proj-scroll-sentinel { display: flex; justify-content: center; padding: 16px 0; }
+.proj-scroll-loading { font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+.proj-scroll-loading .spinner { width: 16px; height: 16px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .6s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.proj-scroll-end { font-size: 12px; color: var(--text-muted); text-align: center; padding: 12px 0; }
+
+/* Workbench Modal (dark theme) */
+.wb-modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7);
+  z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(8px);
+}
+.wb-modal-overlay.open { display: flex; }
+.wb-modal {
+  background: var(--bg-elevated); border: 1px solid var(--border-lt); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg); max-width: 560px; width: 90vw; max-height: 85vh;
+  overflow: auto; position: relative;
+}
+.wb-modal-header {
+  padding: 16px 20px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; background: var(--bg-elevated); z-index: 1;
+}
+.wb-modal-title { font-size: 15px; font-weight: 600; color: var(--text); }
+.wb-modal-close {
+  font-size: 20px; cursor: pointer; color: var(--text-muted); padding: 2px 6px;
+  border-radius: var(--radius-sm); border: none; background: transparent;
+}
+.wb-modal-close:hover { background: var(--bg-hover); color: var(--text); }
+.wb-modal-body { padding: 20px; }
+.wb-modal-footer { padding: 12px 20px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; }
+
+/* Detail info row (for modal form) */
+.detail-info-row { margin-bottom: 16px; }
+.detail-info-label { font-size: 13px; font-weight: 500; margin-bottom: 6px; color: var(--text-secondary); }
+.detail-info-label .required { color: #EF4444; margin-right: 2px; }
+.text-muted { color: var(--text-muted); }
+.text-sm { font-size: 12px; }
 </style>
 <script src="https://beacon.cdn.qq.com/sdk/4.5.9/beacon_web.min.js"></script>
 <script>
@@ -1595,23 +1759,60 @@ select.form-control{cursor:pointer}
         </div>
 
               </div>
-      <!-- 工作台 -->
+      <!-- 工作台 (项目管理) -->
       <div class="page" id="page-my-works">
-        <div class="section-header"><h2>工作台</h2><p>管理您的漫剧创作项目和进度</p></div>
-        <!-- 新建项目入口 -->
-        <div class="new-project-section">
-          <div class="new-project-banner" onclick="showLoginModal()">
-            <div class="npb-icon">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 5.5V22.5M5.5 14H22.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <div class="section-header"><h2>项目管理</h2><p>管理您的AI漫剧创作项目，从零开始或从IP快速启动</p></div>
+
+        <!-- Project Filter Bar -->
+        <div class="proj-filter-bar">
+          <select class="filter-select" id="proj-filter-team" onchange="filterProjects()" style="min-width:110px;">
+            <option value="">全部制作组</option>
+            <option value="team-a">制作一组</option>
+            <option value="team-b">制作二组</option>
+            <option value="team-c">制作三组</option>
+          </select>
+          <select class="filter-select" id="proj-filter-creator" onchange="filterProjects()" style="min-width:110px;">
+            <option value="">全部创建人</option>
+            <option value="张三">张三</option>
+            <option value="李四">李四</option>
+            <option value="王五">王五</option>
+            <option value="赵六">赵六</option>
+            <option value="当前用户">当前用户</option>
+          </select>
+          <select class="filter-select" id="proj-filter-status" onchange="filterProjects()" style="min-width:100px;">
+            <option value="">全部状态</option>
+            <option value="active">进行中</option>
+            <option value="done">已完结</option>
+          </select>
+          <div class="filter-search">
+            <input type="text" id="proj-search" placeholder="搜索项目名称..." oninput="filterProjects()">
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="resetProjFilters()">重置</button>
+        </div>
+
+        <!-- Quick Start -->
+        <div class="proj-quick-start">
+          <div class="proj-quick-title">快速开始</div>
+          <div class="proj-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));">
+            <div class="proj-create-card" onclick="openProjModal('create-project-modal')">
+              <div class="proj-create-icon-wrap">+</div>
+              <div class="proj-create-label">新建项目</div>
+              <div class="proj-create-desc">从零开始，创建你的AI漫剧项目</div>
             </div>
-            <div class="npb-text">
-              <div class="npb-title">新建项目</div>
-              <div class="npb-desc">从零开始创建你的AI短剧项目</div>
-            </div>
-            <div class="npb-arrow">→</div>
           </div>
         </div>
 
+        <!-- My Projects -->
+        <div>
+          <div class="proj-quick-title">我的项目</div>
+          <div class="proj-grid" id="proj-list-grid"></div>
+          <div class="empty-state" id="proj-empty" style="display:none;">
+            <div style="font-size:56px;margin-bottom:16px;">📂</div>
+            <div class="empty-title">暂无项目</div>
+            <div class="empty-desc">点击「新建项目」开始你的第一个项目</div>
+          </div>
+          <div class="proj-scroll-sentinel" id="proj-scroll-sentinel"></div>
+        </div>
       </div>
 
       <div class="page" id="page-novel-ip">
@@ -2118,6 +2319,85 @@ select.form-control{cursor:pointer}
   </div><!-- /content-wrap -->
 </div><!-- /main-layout -->
 
+<!-- ============ WORKBENCH MODALS ============ -->
+<!-- 创建项目 -->
+<div class="wb-modal-overlay" id="create-project-modal">
+  <div class="wb-modal">
+    <div class="wb-modal-header">
+      <span class="wb-modal-title">创建项目</span>
+      <button class="wb-modal-close" onclick="closeProjModal('create-project-modal')">×</button>
+    </div>
+    <div class="wb-modal-body">
+      <!-- 项目名称 -->
+      <div class="detail-info-row">
+        <div class="detail-info-label" style="display:flex;justify-content:space-between;">
+          <span><span class="required">*</span> 项目名称</span>
+          <span class="text-muted text-sm" id="proj-name-count">0/30</span>
+        </div>
+        <input id="proj-name-input" style="width:100%;border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;font-size:13px;margin-top:4px;outline:none;background:var(--bg-card);color:var(--text);" placeholder="请输入项目名称（如：总裁的秘密·第一季）" oninput="updateProjNameCount()" maxlength="30">
+      </div>
+      <!-- 类型 + 制作组 -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div>
+          <div class="detail-info-label"><span class="required">*</span> 项目类型</div>
+          <select style="width:100%;border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;font-size:13px;margin-top:4px;outline:none;background:var(--bg-card);color:var(--text);" id="proj-type-select">
+            <option value="">请选择类型</option>
+            <option>都市爱情</option>
+            <option>总裁豪门</option>
+            <option>悬疑推理</option>
+            <option>古装宫廷</option>
+            <option>玄幻修仙</option>
+            <option>穿越重生</option>
+            <option>家庭亲情</option>
+            <option>甜宠日常</option>
+            <option>其他</option>
+          </select>
+        </div>
+        <div>
+          <div class="detail-info-label"><span class="required">*</span> 制作组</div>
+          <select style="width:100%;border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;font-size:13px;margin-top:4px;outline:none;background:var(--bg-card);color:var(--text);" id="proj-team-select">
+            <option value="team-a">制作一组</option>
+            <option value="team-b">制作二组</option>
+            <option value="team-c">制作三组</option>
+          </select>
+        </div>
+      </div>
+      <!-- 集数 + 生成方式 -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div>
+          <div class="detail-info-label"><span class="required">*</span> 总集数</div>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:4px;">
+            <input id="proj-episode-input" type="number" min="1" max="999" style="width:100%;border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;font-size:13px;outline:none;background:var(--bg-card);color:var(--text);" placeholder="如：24" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+            <span style="font-size:13px;color:var(--text-muted);white-space:nowrap;">集</span>
+          </div>
+        </div>
+        <div>
+          <div class="detail-info-label"><span class="required">*</span> 生成方式</div>
+          <select style="width:100%;border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;font-size:13px;margin-top:4px;outline:none;background:var(--bg-card);color:var(--text);" id="proj-gen-select">
+            <option>手动创建</option>
+            <option>AI辅写</option>
+            <option>旁白解说</option>
+          </select>
+        </div>
+      </div>
+      <!-- 关联IP/剧本 -->
+      <div class="detail-info-row">
+        <div class="detail-info-label">关联IP / 剧本</div>
+        <input style="width:100%;border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;font-size:13px;margin-top:4px;outline:none;background:var(--bg-card);color:var(--text);" placeholder="请输入关联IP或原著剧本名称（选填）">
+      </div>
+      <!-- 项目说明 -->
+      <div class="detail-info-row" style="margin-bottom:0;">
+        <div class="detail-info-label">项目说明</div>
+        <textarea style="width:100%;border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px;font-size:13px;height:60px;resize:none;margin-top:4px;outline:none;font-family:inherit;background:var(--bg-card);color:var(--text);" placeholder="请输入项目说明（选填）"></textarea>
+      </div>
+    </div>
+    <div class="wb-modal-footer">
+      <button class="btn btn-secondary" onclick="closeProjModal('create-project-modal')">取消</button>
+      <button class="btn btn-primary" onclick="createProject()">确定创建</button>
+    </div>
+  </div>
+</div>
+
 <!-- ============ MODALS ============ -->
 <div class="modal-overlay" id="modal-perm">
   <div class="modal">
@@ -2576,6 +2856,293 @@ select.form-control{cursor:pointer}
     setTimeout(function(){t.style.opacity='0';t.style.transform='translateY(-8px)';t.style.transition='all .25s';
       setTimeout(function(){t.remove()},250)},2000);
   }
+
+  // ===== Project Management =====
+  var projects = [
+    { id: 1, name: '上元欢', team: 'team-a', type: '手动创建', status: 'active', creator: '张三', episodes: '20 集', createDate: '2026-05-10' },
+    { id: 2, name: '二塘1', team: 'team-b', type: 'AI辅写', status: 'active', creator: '李四', episodes: '30 集', createDate: '2026-05-12' },
+    { id: 3, name: '二塘', team: 'team-a', type: '手动创建', status: 'active', creator: '王五', episodes: '30 集', createDate: '2026-05-15' },
+    { id: 4, name: '完沫女王1', team: 'team-c', type: '旁白解说', status: 'done', creator: '赵六', episodes: '50 集', createDate: '2026-04-20' },
+    { id: 5, name: '武博测试', team: 'team-b', type: '手动创建', status: 'active', creator: '张三', episodes: '20 集', createDate: '2026-05-18' },
+    { id: 6, name: '图特 demo', team: 'team-a', type: 'AI辅写', status: 'done', creator: '李四', episodes: '50 集', createDate: '2026-04-25' },
+    { id: 7, name: '江城第一疯（旁白）', team: 'team-c', type: '旁白解说', status: 'active', creator: '王五', episodes: '120 集', createDate: '2026-05-20' },
+    { id: 8, name: 'demo lyo 6_8', team: 'team-b', type: '手动创建', status: 'active', creator: '赵六', episodes: '8 集', createDate: '2026-05-22' },
+    { id: 9, name: 'demo第一嘉yy', team: 'team-a', type: 'AI辅写', status: 'done', creator: '张三', episodes: '50 集', createDate: '2026-05-08' },
+    { id: 10, name: '6103期目', team: 'team-c', type: '手动创建', status: 'active', creator: '李四', episodes: '80 集', createDate: '2026-05-25' },
+    { id: 11, name: '春风不度', team: 'team-a', type: 'AI辅写', status: 'active', creator: '王五', episodes: '40 集', createDate: '2026-05-28' },
+    { id: 12, name: '长安夜', team: 'team-b', type: '手动创建', status: 'active', creator: '张三', episodes: '60 集', createDate: '2026-05-30' },
+    { id: 13, name: '烟雨楼', team: 'team-c', type: '旁白解说', status: 'done', creator: '赵六', episodes: '35 集', createDate: '2026-04-15' },
+    { id: 14, name: '墨染青衣', team: 'team-a', type: 'AI辅写', status: 'active', creator: '李四', episodes: '90 集', createDate: '2026-06-01' },
+    { id: 15, name: '浮生若梦', team: 'team-b', type: '手动创建', status: 'active', creator: '王五', episodes: '25 集', createDate: '2026-06-03' },
+    { id: 16, name: '破晓', team: 'team-c', type: '手动创建', status: 'done', creator: '张三', episodes: '45 集', createDate: '2026-04-10' },
+    { id: 17, name: '归去来兮', team: 'team-a', type: 'AI辅写', status: 'active', creator: '赵六', episodes: '70 集', createDate: '2026-06-05' },
+    { id: 18, name: '月满西楼', team: 'team-b', type: '旁白解说', status: 'active', creator: '李四', episodes: '55 集', createDate: '2026-06-08' },
+    { id: 19, name: '逆光飞行', team: 'team-c', type: '手动创建', status: 'active', creator: '王五', episodes: '30 集', createDate: '2026-06-10' },
+    { id: 20, name: '风起云涌', team: 'team-a', type: 'AI辅写', status: 'done', creator: '张三', episodes: '100 集', createDate: '2026-03-20' },
+  ];
+  var nextProjId = 21;
+  var PROJ_PAGE_SIZE = 8;
+  var projFilterTeam = '';
+  var projFilterCreator = '';
+  var projFilterStatus = '';
+  var projSearchText = '';
+  var projFilteredAll = [];
+  var projLoadedCount = 0;
+  var projScrollObserver = null;
+
+  function filterProjects() {
+    projFilterTeam = document.getElementById('proj-filter-team')?.value || '';
+    projFilterCreator = document.getElementById('proj-filter-creator')?.value || '';
+    projFilterStatus = document.getElementById('proj-filter-status')?.value || '';
+    projSearchText = document.getElementById('proj-search')?.value || '';
+    renderProjects();
+  }
+
+  function resetProjFilters() {
+    var teamEl = document.getElementById('proj-filter-team');
+    var creatorEl = document.getElementById('proj-filter-creator');
+    var statusEl = document.getElementById('proj-filter-status');
+    var searchEl = document.getElementById('proj-search');
+    if (teamEl) teamEl.value = '';
+    if (creatorEl) creatorEl.value = '';
+    if (statusEl) statusEl.value = '';
+    if (searchEl) searchEl.value = '';
+    projFilterTeam = '';
+    projFilterCreator = '';
+    projFilterStatus = '';
+    projSearchText = '';
+    renderProjects();
+  }
+
+  function renderProjects() {
+    var filtered = projects.slice();
+    if (projFilterTeam) filtered = filtered.filter(function(p) { return p.team === projFilterTeam; });
+    if (projFilterCreator) filtered = filtered.filter(function(p) { return p.creator === projFilterCreator; });
+    if (projFilterStatus) filtered = filtered.filter(function(p) { return p.status === projFilterStatus; });
+    if (projSearchText) filtered = filtered.filter(function(p) { return p.name.toLowerCase().indexOf(projSearchText.toLowerCase()) !== -1; });
+
+    projFilteredAll = filtered;
+    projLoadedCount = 0;
+
+    var grid = document.getElementById('proj-list-grid');
+    var empty = document.getElementById('proj-empty');
+    var sentinel = document.getElementById('proj-scroll-sentinel');
+
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    if (filtered.length === 0) {
+      if (empty) empty.style.display = 'block';
+      if (sentinel) sentinel.innerHTML = '';
+      return;
+    }
+
+    if (empty) empty.style.display = 'none';
+    appendProjectItems(PROJ_PAGE_SIZE);
+    setupProjScrollObserver();
+  }
+
+  function appendProjectItems(count) {
+    var grid = document.getElementById('proj-list-grid');
+    var sentinel = document.getElementById('proj-scroll-sentinel');
+    if (!grid) return;
+    var itemsToLoad = projFilteredAll.slice(projLoadedCount, projLoadedCount + count);
+
+    if (itemsToLoad.length === 0) {
+      if (sentinel) sentinel.innerHTML = '<div class="proj-scroll-end">— 已加载全部项目 —</div>';
+      return;
+    }
+
+    var statusBadge = {
+      active: '<span style="font-size:11px;background:rgba(0,220,130,.15);color:#00DC82;padding:1px 6px;border-radius:8px;">进行中</span>',
+      done: '<span style="font-size:11px;background:rgba(77,124,254,.15);color:#4D7CFE;padding:1px 6px;border-radius:8px;">已完结</span>'
+    };
+    var teamMap = { 'team-a': '制作一组', 'team-b': '制作二组', 'team-c': '制作三组' };
+
+    var coverStyles = [
+      'linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)',
+      'linear-gradient(135deg, #2d1b69 0%, #1b3a4b 50%, #312244 100%)',
+      'linear-gradient(135deg, #3e1f47 0%, #1a1a2e 50%, #4a1942 100%)',
+      'linear-gradient(135deg, #0d1b2a 0%, #1b2838 60%, #415a77 100%)',
+      'linear-gradient(135deg, #2c0735 0%, #1a0533 50%, #3d0c5e 100%)',
+      'linear-gradient(135deg, #0a1628 0%, #1e3a5f 50%, #2c5282 100%)',
+    ];
+
+    var html = itemsToLoad.map(function(p, idx) {
+      var bg = coverStyles[(projLoadedCount + idx) % coverStyles.length];
+      return '<div class="proj-card" onclick="enterProject(' + p.id + ')">'
+        + '<div class="proj-card-cover" style="background:' + bg + ';display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;position:relative;">'
+        + '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 70% 20%,rgba(255,255,255,.08) 0%,transparent 60%);pointer-events:none;"></div>'
+        + '<div style="font-size:28px;margin-bottom:4px;opacity:.7;">🎬</div>'
+        + '<div style="font-size:12px;font-weight:600;text-align:center;padding:0 12px;line-height:1.3;text-shadow:0 1px 4px rgba(0,0,0,.5);">' + p.name + '</div>'
+        + '<div style="font-size:10px;margin-top:4px;opacity:.5;">短剧 · ' + p.episodes + '</div>'
+        + '<div class="proj-type-tag">' + p.type + '</div>'
+        + '</div>'
+        + '<div class="proj-card-body">'
+        + '<div class="proj-card-name">' + p.name + ' ' + (statusBadge[p.status] || '') + '</div>'
+        + '<div class="proj-card-meta">'
+        + '<span>' + (teamMap[p.team] || p.team) + '</span>'
+        + '<span>·</span>'
+        + '<span class="creator">' + p.creator + '</span>'
+        + '</div>'
+        + '<div class="proj-card-info-row">'
+        + '<div class="proj-card-episodes">📁 ' + p.episodes + '</div>'
+        + '<div class="proj-card-more-wrap" onclick="event.stopPropagation()">'
+        + '<button class="proj-card-more-btn" onclick="toggleProjMenu(this,' + p.id + ',\'' + p.status + '\')">···</button>'
+        + '<div class="proj-more-menu" id="proj-menu-' + p.id + '">'
+        + '<div class="proj-more-item" onclick="event.stopPropagation();closeProjMenus();showToast(\'正在打开项目统计数据...\',\'info\')"><span class="mi-icon">📊</span> 项目数据</div>'
+        + '<div class="proj-more-item" onclick="event.stopPropagation();closeProjMenus();showToast(\'正在打开项目编辑...\',\'info\')"><span class="mi-icon">✏️</span> 编辑</div>'
+        + (p.status === 'active' ? '<div class="proj-more-item" onclick="event.stopPropagation();closeProjMenus();markProjectDone(' + p.id + ')"><span class="mi-icon">🏁</span> 项目完结确认</div>' : '')
+        + '<div class="proj-more-item danger" onclick="event.stopPropagation();closeProjMenus();deleteProject(' + p.id + ')"><span class="mi-icon">🗑️</span> 删除</div>'
+        + '</div>'
+        + '</div>'
+        + '</div>'
+        + '</div>'
+        + '</div>';
+    }).join('');
+
+    grid.insertAdjacentHTML('beforeend', html);
+    projLoadedCount += itemsToLoad.length;
+
+    if (projLoadedCount >= projFilteredAll.length) {
+      if (sentinel) sentinel.innerHTML = '<div class="proj-scroll-end">— 已加载全部项目 —</div>';
+    } else {
+      if (sentinel) sentinel.innerHTML = '';
+    }
+  }
+
+  function setupProjScrollObserver() {
+    if (projScrollObserver) {
+      projScrollObserver.disconnect();
+      projScrollObserver = null;
+    }
+    var sentinel = document.getElementById('proj-scroll-sentinel');
+    if (!sentinel) return;
+
+    projScrollObserver = new IntersectionObserver(function(entries) {
+      if (entries[0].isIntersecting && projLoadedCount < projFilteredAll.length) {
+        sentinel.innerHTML = '<div class="proj-scroll-loading"><div class="spinner"></div>加载中...</div>';
+        setTimeout(function() {
+          appendProjectItems(PROJ_PAGE_SIZE);
+        }, 300);
+      }
+    }, { rootMargin: '100px' });
+
+    projScrollObserver.observe(sentinel);
+  }
+
+  function openProjModal(id) {
+    if (!isLoggedIn) { showLoginModal(); return; }
+    document.getElementById(id).classList.add('open');
+  }
+
+  function closeProjModal(id) {
+    document.getElementById(id).classList.remove('open');
+  }
+
+  // Close wb-modal-overlay on backdrop click
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('wb-modal-overlay') && e.target.classList.contains('open')) {
+      e.target.classList.remove('open');
+    }
+  });
+
+  function createProject() {
+    var nameInput = document.getElementById('proj-name-input');
+    var name = nameInput?.value.trim();
+    if (!name) { showToast('请输入项目名称', 'warning'); return; }
+
+    var team = document.getElementById('proj-team-select')?.value || 'team-a';
+    var type = document.getElementById('proj-type-select')?.value || '手动创建';
+    var gen = document.getElementById('proj-gen-select')?.value || '手动创建';
+    var epInput = document.getElementById('proj-episode-input');
+    var episodes = (epInput?.value.trim() ? epInput.value.trim() + ' 集' : '未设置');
+
+    projects.unshift({
+      id: nextProjId++, name: name, team: team, type: gen || type, status: 'active',
+      creator: '当前用户', episodes: episodes, createDate: new Date().toISOString().slice(0,10)
+    });
+
+    closeProjModal('create-project-modal');
+    if (nameInput) nameInput.value = '';
+    if (epInput) epInput.value = '';
+    showToast('项目创建成功！', 'success');
+    renderProjects();
+  }
+
+  function updateProjNameCount() {
+    var input = document.getElementById('proj-name-input');
+    var counter = document.getElementById('proj-name-count');
+    if (counter && input) counter.textContent = (input.value.length || 0) + '/30';
+  }
+
+  function enterProject(projId) {
+    var p = projects.find(function(x) { return x.id === projId; });
+    if (!p) return;
+    showToast('正在进入项目：' + p.name + '...', 'info');
+    // In a real app, this would navigate to the project editor
+  }
+
+  function toggleProjMenu(btn, projId, status) {
+    closeProjMenus();
+    var menu = document.getElementById('proj-menu-' + projId);
+    if (menu) menu.classList.add('open');
+    setTimeout(function() {
+      document.addEventListener('click', closeProjMenus, { once: true });
+    }, 0);
+  }
+
+  function closeProjMenus() {
+    document.querySelectorAll('.proj-more-menu.open').forEach(function(m) { m.classList.remove('open'); });
+  }
+
+  function markProjectDone(projId) {
+    var p = projects.find(function(x) { return x.id === projId; });
+    if (p) {
+      p.status = 'done';
+      showToast('项目「' + p.name + '」已完结', 'success');
+      renderProjects();
+    }
+  }
+
+  function deleteProject(projId) {
+    var p = projects.find(function(x) { return x.id === projId; });
+    if (p && confirm('确定删除项目「' + p.name + '」吗？此操作不可恢复。')) {
+      projects = projects.filter(function(x) { return x.id !== projId; });
+      showToast('项目已删除', 'success');
+      renderProjects();
+    }
+  }
+
+  // Initial render when page loads
+  (function() {
+    // Render projects when the workbench page becomes active
+    var origNavTo = navTo;
+    navTo = function(el, pageId) {
+      origNavTo(el, pageId);
+      if (pageId === 'my-works' && isLoggedIn) {
+        setTimeout(renderProjects, 50);
+      }
+    };
+    var origNavToPage = navToPage;
+    navToPage = function(pageId) {
+      origNavToPage(pageId);
+      if (pageId === 'my-works' && isLoggedIn) {
+        setTimeout(renderProjects, 50);
+      }
+    };
+    // Also render on login
+    var origDoLogin = doLogin;
+    doLogin = function() {
+      origDoLogin();
+      setTimeout(function() {
+        var activePage = document.querySelector('.page.active');
+        if (activePage && activePage.id === 'page-my-works') {
+          renderProjects();
+        }
+      }, 100);
+    };
+  })();
 </script>
 </body>
 </html>
