@@ -373,7 +373,7 @@ a{color:var(--accent);text-decoration:none}
 .section-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .section-title h3{font-size:16px;font-weight:700}
 .section-title a{font-size:12px;color:var(--accent)}
-.works-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:28px;max-width:1100px;margin-left:auto;margin-right:auto}
+.works-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-bottom:28px;width:80%;margin-left:auto;margin-right:auto}
 .work-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;
   cursor:pointer;transition:all .2s}
 .work-card:hover{border-color:var(--accent)}
@@ -497,7 +497,7 @@ a{color:var(--accent);text-decoration:none}
 .section-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .section-header-row h3{font-size:16px;font-weight:700;color:#F0F0F0}
 .section-header-row a{font-size:12px;color:var(--accent)}
-.material-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;max-width:900px;margin-left:auto;margin-right:auto}
+.material-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;width:80%;margin-left:auto;margin-right:auto}
 .material-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;
   cursor:pointer;transition:all .2s}
 .material-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
@@ -802,9 +802,15 @@ select.form-control{cursor:pointer}
 .tools-grid{display:flex;flex-direction:row;gap:16px;overflow-x:auto;padding-bottom:8px;scroll-behavior:smooth}
 .tools-grid::-webkit-scrollbar{height:4px}
 .tools-grid::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px}
-.tool-card{flex:0 0 280px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px;transition:all .2s;cursor:pointer;display:flex;flex-direction:column}
+.tool-card{flex:0 0 280px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px;transition:all .2s;cursor:pointer;display:flex;flex-direction:column;position:relative;overflow:hidden}
 .tool-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
-.tool-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:14px;flex-shrink:0}
+.tool-card-bg{position:absolute;top:0;left:0;right:0;height:50%;opacity:.12;border-radius:var(--radius) var(--radius) 0 0;pointer-events:none;z-index:0}
+.tool-card-dubbing .tool-card-bg{background:url('carousel_1.png') center/cover no-repeat}
+.tool-card-image .tool-card-bg{background:url('img_cover_1.png') center/cover no-repeat}
+.tool-card-video .tool-card-bg{background:url('carousel_3.jpg') center/cover no-repeat}
+.tool-card-superres .tool-card-bg{background:url('img_cover_4.png') center/cover no-repeat}
+.tool-card-voice .tool-card-bg{background:url('carousel_2.png') center/cover no-repeat}
+.tool-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:14px;flex-shrink:0;position:relative;z-index:1}
 .tool-card h4{font-size:15px;font-weight:600;margin-bottom:4px}
 .tool-card p{font-size:12px;color:var(--text-muted);margin-bottom:12px;line-height:1.5}
 .tool-actions{display:flex;gap:8px;margin-top:auto;padding-top:12px}
@@ -1089,7 +1095,8 @@ select.form-control{cursor:pointer}
 .am-header h2{font-size:20px;font-weight:700}
 .am-tabs{display:flex;gap:4px;background:var(--bg-dark);border-radius:8px;padding:3px}
 .am-tab{padding:6px 18px;border-radius:6px;font-size:13px;cursor:pointer;color:var(--text-secondary);transition:all .2s}
-.am-tab.active{background:#fff;color:var(--text-primary);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.am-tab:hover{color:var(--text)}
+.am-tab.active{background:var(--accent);color:#000;font-weight:600}
 .am-subnav{display:flex;gap:6px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:12px}
 .ams-tab{padding:6px 16px;font-size:13px;color:var(--text-secondary);cursor:pointer;border-radius:6px 6px 0 0;transition:all .2s;position:relative}
 .ams-tab.active{color:var(--accent);font-weight:600}
@@ -1274,22 +1281,22 @@ select.form-control{cursor:pointer}
 }
 .proj-card:hover { box-shadow: var(--shadow); border-color: var(--accent); }
 .proj-card-cover {
-  width: 100%; height: 120px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  display: flex; align-items: center; justify-content: center; font-size: 14px;
+  width: 100%; height: 110px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  display: flex; align-items: center; justify-content: center;
   color: var(--text-muted); position: relative; overflow: hidden;
 }
 .proj-card-cover .proj-type-tag {
-  position: absolute; top: 8px; right: 8px; font-size: 11px;
-  background: rgba(0,0,0,.55); color: #fff; padding: 2px 8px;
-  border-radius: 10px; backdrop-filter: blur(4px);
+  position: absolute; top: 6px; right: 6px; font-size: 10px;
+  background: rgba(255,255,255,.12); color: rgba(255,255,255,.85); padding: 1px 8px;
+  border-radius: 8px; backdrop-filter: blur(4px);
 }
-.proj-card-body { padding: 12px; position: relative; }
-.proj-card-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
-.proj-card-meta { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+.proj-card-body { padding: 10px 12px; }
+.proj-card-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; color: var(--text); display:flex; align-items:center; gap:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+.proj-card-meta { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
 .proj-card-meta .creator { color: var(--accent); font-weight: 500; }
 .proj-card-info-row {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-top: 6px; font-size: 12px; color: var(--text-muted);
+  display: flex; align-items: center;
+  margin-top: 4px; font-size: 11px; color: var(--text-muted);
 }
 .proj-card-episodes { display: flex; align-items: center; gap: 4px; }
 
@@ -2059,7 +2066,7 @@ select.form-control{cursor:pointer}
             <div class="as-nav-item">🗑 回收站</div>
           </div>
           <div class="assets-main">
-            <div class="am-header"><h2>创作资产</h2><div class="am-tabs"><span class="am-tab active">个人资产</span><span class="am-tab">公共资产</span></div></div>
+            <div class="am-header"><h2>创作资产</h2><div class="am-tabs"><span class="am-tab active" onclick="switchAssetTab(this,'personal')">个人资产</span><span class="am-tab" onclick="switchAssetTab(this,'public')">公共资产</span></div></div>
             <div class="am-subnav"><span class="ams-tab active">角色库<span class="ams-count">3</span></span><span class="ams-tab">场景库<span class="ams-count">2</span></span><span class="ams-tab">道具库<span class="ams-count">1</span></span><span class="ams-tab">通用素材库<span class="ams-count">1</span></span></div>
             <div class="am-toolbar">
               <select class="am-filter-sel"><option>全部项目</option></select>
@@ -2090,30 +2097,35 @@ select.form-control{cursor:pointer}
         <div class="ip-header"><h2><span>Agent工具</span></h2><p>AI驱动的创作工具箱，覆盖从拆书到成片的每个环节</p></div>
         <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;display:flex;align-items:center;gap:8px"><span style="color:var(--accent)">→</span> 左右滑动浏览全部工具</div>
         <div class="tools-grid">
-          <div class="tool-card">
-            <div class="tool-icon" style="background:rgba(77,124,254,.1);color:#4D7CFE">🎙️</div>
+          <div class="tool-card tool-card-dubbing">
+            <div class="tool-card-bg"></div>
+            <div class="tool-icon" style="background:rgba(77,124,254,.15);color:#4D7CFE">🎙️</div>
             <h4>配音创作</h4><p>AI智能配音合成，支持多角色音色分配、情感语调控制</p>
-            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('配音创作已启动','success')">启动</button><button class="tool-btn secondary">文档</button></div>
+            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('配音创作已启动','success')">创作</button></div>
           </div>
-          <div class="tool-card">
-            <div class="tool-icon" style="background:rgba(167,139,250,.1);color:#A78BFA">✨</div>
+          <div class="tool-card tool-card-image">
+            <div class="tool-card-bg"></div>
+            <div class="tool-icon" style="background:rgba(167,139,250,.15);color:#A78BFA">✨</div>
             <h4>图片创作</h4><p>AIGC图像生成引擎，支持角色/场景/道具多类型创作</p>
-            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('图片创作已启动','success')">启动</button><button class="tool-btn secondary">文档</button></div>
+            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('图片创作已启动','success')">创作</button></div>
           </div>
-          <div class="tool-card">
-            <div class="tool-icon" style="background:rgba(0,220,130,.1);color:#00DC82">🎬</div>
+          <div class="tool-card tool-card-video">
+            <div class="tool-card-bg"></div>
+            <div class="tool-icon" style="background:rgba(0,220,130,.15);color:#00DC82">🎬</div>
             <h4>视频创作</h4><p>AI视频合成与剪辑，支持镜头编排、转场特效一键生成</p>
-            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('视频创作已启动','success')">启动</button><button class="tool-btn secondary">文档</button></div>
+            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('视频创作已启动','success')">创作</button></div>
           </div>
-          <div class="tool-card">
-            <div class="tool-icon" style="background:rgba(255,165,0,.1);color:#FFA500">🔍</div>
+          <div class="tool-card tool-card-superres">
+            <div class="tool-card-bg"></div>
+            <div class="tool-icon" style="background:rgba(255,165,0,.15);color:#FFA500">🔍</div>
             <h4>视频超分</h4><p>低分辨率视频超分辨率增强，提升画质至4K级别清晰度</p>
-            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('视频超分已启动','success')">启动</button><button class="tool-btn secondary">文档</button></div>
+            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('视频超分已启动','success')">创作</button></div>
           </div>
-          <div class="tool-card">
-            <div class="tool-icon" style="background:rgba(236,72,153,.1);color:#EC4899">🔊</div>
+          <div class="tool-card tool-card-voice">
+            <div class="tool-card-bg"></div>
+            <div class="tool-icon" style="background:rgba(236,72,153,.15);color:#EC4899">🔊</div>
             <h4>音色库</h4><p>海量AI音色资源管理，支持自定义音色训练与克隆</p>
-            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('音色库已打开','success')">启动</button><button class="tool-btn secondary">文档</button></div>
+            <div class="tool-actions"><button class="tool-btn primary" onclick="showToast('音色库已打开','success')">创作</button></div>
           </div>
         </div>
       </div>
@@ -2743,6 +2755,15 @@ select.form-control{cursor:pointer}
     showToast(type==='personal'?'已切换到个人资产':'已切换到公共资产库','');
   }
 
+  function switchAssetTab(el,type){
+    var container=el.parentElement;
+    container.querySelectorAll('.am-tab').forEach(function(t){
+      t.classList.remove('active');
+    });
+    el.classList.add('active');
+    showToast(type==='personal'?'已切换到个人资产':'已切换到公共资产','');
+  }
+
   // ===== 登录页视频背景 + Ken Burns 海报降级 =====
   (function(){
     var video = document.querySelector('.login-video-bg');
@@ -2845,22 +2866,22 @@ select.form-control{cursor:pointer}
 
   // ===== Project Management =====
   var projects = [
-    { id: 1, name: '上元欢', team: 'team-a', type: '手动创建', status: 'active', creator: '张三', episodes: '20 集', createDate: '2026-05-10' },
-    { id: 2, name: '二塘1', team: 'team-b', type: 'AI辅写', status: 'active', creator: '李四', episodes: '30 集', createDate: '2026-05-12' },
-    { id: 3, name: '二塘', team: 'team-a', type: '手动创建', status: 'active', creator: '王五', episodes: '30 集', createDate: '2026-05-15' },
-    { id: 4, name: '完沫女王1', team: 'team-c', type: '旁白解说', status: 'done', creator: '赵六', episodes: '50 集', createDate: '2026-04-20' },
-    { id: 5, name: '武博测试', team: 'team-b', type: '手动创建', status: 'active', creator: '张三', episodes: '20 集', createDate: '2026-05-18' },
-    { id: 6, name: '图特 demo', team: 'team-a', type: 'AI辅写', status: 'done', creator: '李四', episodes: '50 集', createDate: '2026-04-25' },
-    { id: 7, name: '江城第一疯（旁白）', team: 'team-c', type: '旁白解说', status: 'active', creator: '王五', episodes: '120 集', createDate: '2026-05-20' },
-    { id: 8, name: 'demo lyo 6_8', team: 'team-b', type: '手动创建', status: 'active', creator: '赵六', episodes: '8 集', createDate: '2026-05-22' },
-    { id: 9, name: 'demo第一嘉yy', team: 'team-a', type: 'AI辅写', status: 'done', creator: '张三', episodes: '50 集', createDate: '2026-05-08' },
-    { id: 10, name: '6103期目', team: 'team-c', type: '手动创建', status: 'active', creator: '李四', episodes: '80 集', createDate: '2026-05-25' },
-    { id: 11, name: '春风不度', team: 'team-a', type: 'AI辅写', status: 'active', creator: '王五', episodes: '40 集', createDate: '2026-05-28' },
-    { id: 12, name: '长安夜', team: 'team-b', type: '手动创建', status: 'active', creator: '张三', episodes: '60 集', createDate: '2026-05-30' },
-    { id: 13, name: '烟雨楼', team: 'team-c', type: '旁白解说', status: 'done', creator: '赵六', episodes: '35 集', createDate: '2026-04-15' },
-    { id: 14, name: '墨染青衣', team: 'team-a', type: 'AI辅写', status: 'active', creator: '李四', episodes: '90 集', createDate: '2026-06-01' },
-    { id: 15, name: '浮生若梦', team: 'team-b', type: '手动创建', status: 'active', creator: '王五', episodes: '25 集', createDate: '2026-06-03' },
-    { id: 16, name: '破晓', team: 'team-c', type: '手动创建', status: 'done', creator: '张三', episodes: '45 集', createDate: '2026-04-10' },
+    { id: 1, name: '秒针死寂', team: 'team-a', type: '批量制作', status: 'active', creator: '邹孟汉', episodes: '2 集', createDate: '2026-05-10' },
+    { id: 2, name: '测试-李飞', team: 'team-b', type: '手动创建', status: 'active', creator: '李 飞', episodes: '1 集', createDate: '2026-05-12' },
+    { id: 3, name: 'GMH测试资产项目', team: 'team-a', type: '批量制作', status: 'done', creator: '邹孟汉', episodes: '7 集', createDate: '2026-05-15' },
+    { id: 4, name: '测试编辑', team: 'team-b', type: '手动创建', status: 'active', creator: 'TEST0', episodes: '1 集', createDate: '2026-05-18' },
+    { id: 5, name: '邻居举报我卖假药...', team: 'team-c', type: '批量制作', status: 'active', creator: '张 鹏', episodes: '18 集', createDate: '2026-05-20' },
+    { id: 6, name: '邻居举报我卖假药...', team: 'team-c', type: '手动创建', status: 'active', creator: '张 鹏', episodes: '18 集', createDate: '2026-05-22' },
+    { id: 7, name: '瞿靖松测试用', team: 'team-b', type: '手动创建', status: 'deleted', creator: '瞿靖松', episodes: '1 集', createDate: '2026-05-25' },
+    { id: 8, name: '1111', team: 'team-a', type: '批量制作', status: 'active', creator: '刘双0', episodes: '0 集', createDate: '2026-05-28' },
+    { id: 9, name: '魂', team: 'team-a', type: '批量制作', status: 'active', creator: '邹孟汉', episodes: '7 集', createDate: '2026-06-01' },
+    { id: 10, name: '邻居举报我卖假药...', team: 'team-c', type: '手动创建', status: 'active', creator: '张鹏', episodes: '30 集', createDate: '2026-06-03' },
+    { id: 11, name: '邻居举报我卖假药...', team: 'team-c', type: '批量制作', status: 'active', creator: '张鹏', episodes: '30 集', createDate: '2026-06-05' },
+    { id: 12, name: '测试111', team: 'team-b', type: '手动创建', status: 'done', creator: '刘双0', episodes: '0 集', createDate: '2026-06-08' },
+    { id: 13, name: '测试1221', team: 'team-a', type: '手动创建', status: 'done', creator: '瞿靖松', episodes: '3 集', createDate: '2026-04-15' },
+    { id: 14, name: '测试删除', team: 'team-b', type: '手动创建', status: 'done', creator: '瞿靖松', episodes: '1 集', createDate: '2026-06-08' },
+    { id: 15, name: 'ceshi111', team: 'team-c', type: '手动创建', status: 'done', creator: '瞿靖松', episodes: '1 集', createDate: '2026-06-10' },
+    { id: 16, name: '测试1123', team: 'team-b', type: '手动创建', status: 'done', creator: '瞿靖松', episodes: '1 集', createDate: '2026-04-10' },
     { id: 17, name: '归去来兮', team: 'team-a', type: 'AI辅写', status: 'active', creator: '赵六', episodes: '70 集', createDate: '2026-06-05' },
     { id: 18, name: '月满西楼', team: 'team-b', type: '旁白解说', status: 'active', creator: '李四', episodes: '55 集', createDate: '2026-06-08' },
     { id: 19, name: '逆光飞行', team: 'team-c', type: '手动创建', status: 'active', creator: '王五', episodes: '30 集', createDate: '2026-06-10' },
@@ -2941,7 +2962,8 @@ select.form-control{cursor:pointer}
 
     var statusBadge = {
       active: '<span style="font-size:11px;background:rgba(0,220,130,.15);color:#00DC82;padding:1px 6px;border-radius:8px;">进行中</span>',
-      done: '<span style="font-size:11px;background:rgba(77,124,254,.15);color:#4D7CFE;padding:1px 6px;border-radius:8px;">已完结</span>'
+      done: '<span style="font-size:11px;background:rgba(77,124,254,.15);color:#4D7CFE;padding:1px 6px;border-radius:8px;">已完结</span>',
+      deleted: '<span style="font-size:11px;background:rgba(255,255,255,.08);color:#888;padding:1px 6px;border-radius:8px;">已删除</span>'
     };
     var teamMap = { 'team-a': '制作一组', 'team-b': '制作二组', 'team-c': '制作三组' };
 
@@ -2957,31 +2979,17 @@ select.form-control{cursor:pointer}
     var html = itemsToLoad.map(function(p, idx) {
       var bg = coverStyles[(projLoadedCount + idx) % coverStyles.length];
       return '<div class="proj-card" onclick="enterProject(' + p.id + ')">'
-        + '<div class="proj-card-cover" style="background:' + bg + ';display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;position:relative;">'
-        + '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 70% 20%,rgba(255,255,255,.08) 0%,transparent 60%);pointer-events:none;"></div>'
-        + '<div style="font-size:28px;margin-bottom:4px;opacity:.7;">🎬</div>'
-        + '<div style="font-size:12px;font-weight:600;text-align:center;padding:0 12px;line-height:1.3;text-shadow:0 1px 4px rgba(0,0,0,.5);">' + p.name + '</div>'
-        + '<div style="font-size:10px;margin-top:4px;opacity:.5;">短剧 · ' + p.episodes + '</div>'
+        + '<div class="proj-card-cover" style="background:' + bg + ';display:flex;align-items:center;justify-content:center;color:#fff;position:relative;">'
+        + '<div style="font-size:28px;margin-bottom:4px;opacity:.7;">🖼️</div>'
         + '<div class="proj-type-tag">' + p.type + '</div>'
         + '</div>'
         + '<div class="proj-card-body">'
         + '<div class="proj-card-name">' + p.name + ' ' + (statusBadge[p.status] || '') + '</div>'
         + '<div class="proj-card-meta">'
-        + '<span>' + (teamMap[p.team] || p.team) + '</span>'
-        + '<span>·</span>'
-        + '<span class="creator">' + p.creator + '</span>'
+        + '技术部 · <span class="creator">' + p.creator + '</span>'
         + '</div>'
         + '<div class="proj-card-info-row">'
         + '<div class="proj-card-episodes">📁 ' + p.episodes + '</div>'
-        + '<div class="proj-card-more-wrap" onclick="event.stopPropagation()">'
-        + '<button class="proj-card-more-btn" onclick="toggleProjMenu(this,' + p.id + ',\'' + p.status + '\')">···</button>'
-        + '<div class="proj-more-menu" id="proj-menu-' + p.id + '">'
-        + '<div class="proj-more-item" onclick="event.stopPropagation();closeProjMenus();showToast(\'正在打开项目统计数据...\',\'info\')"><span class="mi-icon">📊</span> 项目数据</div>'
-        + '<div class="proj-more-item" onclick="event.stopPropagation();closeProjMenus();showToast(\'正在打开项目编辑...\',\'info\')"><span class="mi-icon">✏️</span> 编辑</div>'
-        + (p.status === 'active' ? '<div class="proj-more-item" onclick="event.stopPropagation();closeProjMenus();markProjectDone(' + p.id + ')"><span class="mi-icon">🏁</span> 项目完结确认</div>' : '')
-        + '<div class="proj-more-item danger" onclick="event.stopPropagation();closeProjMenus();deleteProject(' + p.id + ')"><span class="mi-icon">🗑️</span> 删除</div>'
-        + '</div>'
-        + '</div>'
         + '</div>'
         + '</div>'
         + '</div>';
