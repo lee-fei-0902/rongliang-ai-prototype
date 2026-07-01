@@ -609,7 +609,9 @@ a{color:var(--accent);text-decoration:none}
   transition:all .2s;display:flex;align-items:center;gap:6px;border:1px solid transparent}
 .ip-tab:hover{color:var(--text);background:var(--bg-hover)}
 .ip-tab.active{background:var(--accent-bg);color:var(--accent);border-color:var(--accent);font-weight:600}
-.ip-subbar{display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.ip-subbar{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.ip-filter-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ip-filter-label{font-size:12px;color:var(--text-muted);min-width:32px}
 .chip{padding:6px 14px;border:1px solid var(--border);border-radius:20px;font-size:12px;cursor:pointer;
   color:var(--text-secondary);transition:all .2s}
 .chip:hover,.chip.active{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
@@ -946,6 +948,21 @@ select.form-control{cursor:pointer}
 .rank-name{flex:1;font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rank-score{font-size:12px;font-weight:700;color:var(--accent);flex-shrink:0}
 
+/* 商务合作侧边栏 */
+.biz-sidebar-card{padding:16px}
+.biz-sidebar-header{margin-bottom:8px}
+.biz-sidebar-desc{font-size:11px;color:var(--text-muted);line-height:1.5;margin:0 0 12px}
+.biz-sidebar-items{display:flex;flex-direction:column;gap:2px;margin-bottom:12px}
+.biz-sidebar-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;
+  cursor:pointer;transition:all .15s;font-size:12px}
+.biz-sidebar-item:hover{background:var(--bg-hover)}
+.biz-si-icon{font-size:14px;flex-shrink:0}
+.biz-si-label{flex:1;font-weight:500}
+.biz-si-arrow{font-size:11px;color:var(--text-muted);transition:color .15s}
+.biz-sidebar-item:hover .biz-si-arrow{color:var(--accent)}
+.biz-sidebar-contact{display:flex;flex-direction:column;gap:4px;padding-top:10px;
+  border-top:1px solid var(--border);font-size:11px;color:var(--text-muted)}
+
 @media(max-width:900px){
   .profile-layout{flex-direction:column}
   .profile-sidebar{width:100%;flex-direction:row;flex-wrap:wrap}
@@ -1205,7 +1222,9 @@ select.form-control{cursor:pointer}
 
 .ip-tab.active{background:var(--accent-bg);color:var(--accent);border-color:var(--accent);font-weight:600}
 
-.ip-subbar{display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.ip-subbar{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.ip-filter-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ip-filter-label{font-size:12px;color:var(--text-muted);min-width:32px}
 
 .chip{padding:6px 14px;border:1px solid var(--border);border-radius:20px;font-size:12px;cursor:pointer;
   color:var(--text-secondary);transition:all .2s}
@@ -1947,16 +1966,23 @@ select.form-control{cursor:pointer}
         <div class="ip-header"><h2><span>小说IP库</span></h2><p>浏览精选小说IP，选择心仪作品开始漫剧创作之旅</p></div>
         <div class="ip-tabs">
           <div class="ip-tab active" onclick="switchIPTab(this,'ip-tab-trial')">📖 书单广告</div>
-          <div class="ip-tab" onclick="switchIPTab(this,'ip-tab-biz')">🤝 商务合作</div>
           <div class="ip-tab" onclick="switchIPTab(this,'ip-tab-ai')">🤖 AI小说创作</div>
           <div class="ip-tab" onclick="switchIPTab(this,'ip-tab-upload')">📤 上传小说</div>
         </div>
         <div class="ip-tab-panel active" id="ip-tab-trial">
           <div class="ip-subbar">
-            <span style="font-size:12px;color:var(--text-muted);margin-right:4px">分类</span>
-            <span class="chip active">全部</span><span class="chip">男频</span><span class="chip">女频</span>
-            <span style="font-size:12px;color:var(--text-muted);margin:0 4px">状态</span>
-            <span class="chip active">全部</span><span class="chip">连载</span><span class="chip">已完结</span>
+            <div class="ip-filter-row">
+              <span class="ip-filter-label">分类</span>
+              <span class="chip active">全部</span><span class="chip">男频</span><span class="chip">女频</span>
+            </div>
+            <div class="ip-filter-row">
+              <span class="ip-filter-label">状态</span>
+              <span class="chip active">全部</span><span class="chip">连载</span><span class="chip">已完结</span>
+            </div>
+            <div class="ip-filter-row">
+              <span class="ip-filter-label">篇幅</span>
+              <span class="chip active">全部</span><span class="chip">长篇</span><span class="chip">短篇</span>
+            </div>
           </div>
           <div class="ip-novel-grid">
             <div class="novel-card">
@@ -2012,65 +2038,6 @@ select.form-control{cursor:pointer}
                 <div class="novel-stats">865章 · 280万人气 · ⭐8.8</div>
                 <button class="novel-btn" onclick="showToast('试稿申请已发送','success')">合作试稿</button>
               </div>
-            </div>
-          </div>
-        </div>
-        <div class="ip-tab-panel" id="ip-tab-biz">
-          <div class="biz-coop-panel">
-            <div class="biz-header">
-              <h3 style="font-size:16px;font-weight:700;margin:0 0 4px">🤝 商务合作</h3>
-              <p style="font-size:13px;color:var(--text-muted);margin:0">携手容量AI，共创漫剧商业价值新生态</p>
-            </div>
-            <div class="biz-grid">
-              <div class="biz-card" onclick="showToast('IP授权合作咨询已提交','success')">
-                <div class="biz-icon" style="background:rgba(239,68,68,.12)">📜</div>
-                <h4>IP授权合作</h4>
-                <p>优质小说/漫画 IP 授权，联合开发漫剧内容，共享收益分成</p>
-                <ul>
-                  <li>独家 / 非独家授权模式</li>
-                  <li>灵活的收益分成比例</li>
-                  <li>全链路版权保护支持</li>
-                </ul>
-                <button class="novel-btn primary">立即咨询</button>
-              </div>
-              <div class="biz-card" onclick="showToast('内容分发合作申请已提交','success')">
-                <div class="biz-icon" style="background:rgba(77,124,254,.12)">📡</div>
-                <h4>内容分发合作</h4>
-                <p>多渠道内容分发，覆盖主流短视频与漫画平台，最大化作品曝光</p>
-                <ul>
-                  <li>抖音 / 快手 / 小红书分发</li>
-                  <li>腾讯 / 爱奇艺等平台接入</li>
-                  <li>数据驱动的分发策略</li>
-                </ul>
-                <button class="novel-btn primary">立即咨询</button>
-              </div>
-              <div class="biz-card" onclick="showToast('定制化服务需求已记录','success')">
-                <div class="biz-icon" style="background:rgba(0,220,130,.12)">🏢</div>
-                <h4>企业定制服务</h4>
-                <p>为企业客户提供从创意到成片的端到端 AI 漫剧定制解决方案</p>
-                <ul>
-                  <li>品牌故事漫剧化</li>
-                  <li>企业培训/宣发内容</li>
-                  <li>私有化部署方案</li>
-                </ul>
-                <button class="novel-btn primary">立即咨询</button>
-              </div>
-              <div class="biz-card" onclick="showToast('技术对接需求已收到','success')">
-                <div class="biz-icon" style="background:rgba(250,173,20,.12)">🔗</div>
-                <h4>API / 技术对接</h4>
-                <p>开放平台能力接口，支持第三方系统集成与深度技术合作</p>
-                <ul>
-                  <li>AI创作引擎 API</li>
-                  <li>配音 / 视频超分接口</li>
-                  <li>SaaS 白标解决方案</li>
-                </ul>
-                <button class="novel-btn primary">立即咨询</button>
-              </div>
-            </div>
-            <div class="biz-contact-bar">
-              <span>📧 联系邮箱：biz@rongliang.ai</span>
-              <span>📞 商务热线：400-888-9999</span>
-              <span>💬 微信：RongLiang_Biz</span>
             </div>
           </div>
         </div>
@@ -2509,6 +2476,39 @@ select.form-control{cursor:pointer}
               <div class="points-footer">
                 <span>本月消耗 <strong style="color:var(--accent)">-2,400</strong></span>
                 <span>累计获得 <strong>35,200</strong></span>
+              </div>
+            </div>
+            <!-- 商务合作入口 -->
+            <div class="sidebar-card biz-sidebar-card">
+              <div class="biz-sidebar-header">
+                <span class="rank-title">🤝 商务合作</span>
+              </div>
+              <p class="biz-sidebar-desc">携手容量AI，共创漫剧商业价值新生态</p>
+              <div class="biz-sidebar-items">
+                <div class="biz-sidebar-item" onclick="showToast('IP授权合作咨询已提交','success')">
+                  <span class="biz-si-icon">📜</span>
+                  <span class="biz-si-label">IP授权合作</span>
+                  <span class="biz-si-arrow">→</span>
+                </div>
+                <div class="biz-sidebar-item" onclick="showToast('内容分发合作申请已提交','success')">
+                  <span class="biz-si-icon">📡</span>
+                  <span class="biz-si-label">内容分发合作</span>
+                  <span class="biz-si-arrow">→</span>
+                </div>
+                <div class="biz-sidebar-item" onclick="showToast('定制化服务需求已记录','success')">
+                  <span class="biz-si-icon">🏢</span>
+                  <span class="biz-si-label">企业定制服务</span>
+                  <span class="biz-si-arrow">→</span>
+                </div>
+                <div class="biz-sidebar-item" onclick="showToast('技术对接需求已收到','success')">
+                  <span class="biz-si-icon">🔗</span>
+                  <span class="biz-si-label">API/技术对接</span>
+                  <span class="biz-si-arrow">→</span>
+                </div>
+              </div>
+              <div class="biz-sidebar-contact">
+                <div>📧 biz@rongliang.ai</div>
+                <div>📞 400-888-9999</div>
               </div>
             </div>
             <!-- 项目排行卡片 -->
