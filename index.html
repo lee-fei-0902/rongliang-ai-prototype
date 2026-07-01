@@ -1497,11 +1497,9 @@ select.form-control{cursor:pointer}
       
       <a class="nav-item" data-page="assets" onclick="navTo(this,'assets')">资产库</a>
       <a class="nav-item" data-page="tools" onclick="navTo(this,'tools')">Agent工具</a>
-      <a class="nav-item" data-page="data-view" onclick="navTo(this,'data-view')">数据分析</a>
       <a class="nav-item" data-page="team" onclick="navTo(this,'team')" style="display:none">团队管理</a>
     </div>
     <div class="topbar-actions">
-      <span class="topbar-badge">🟢 创作中</span>
       <div class="user-divider"></div>
       <div class="user-center-wrap" id="userCenterWrap">
         <!-- 未登录状态 -->
@@ -1524,6 +1522,7 @@ select.form-control{cursor:pointer}
         <!-- 下拉菜单 -->
         <div class="user-dropdown" id="userDropdown">
           <div class="user-dropdown-item" onclick="navToPage('team')">👥 团队管理</div>
+          <div class="user-dropdown-item" onclick="navToPage('data-view')">📊 数据分析</div>
           <div class="user-dropdown-item" onclick="showToast('个人设置功能开发中')">⚙️ 个人设置</div>
           <div class="user-dropdown-divider"></div>
           <div class="user-dropdown-item danger" onclick="doLogout()">🚪 退出登录</div>
@@ -1595,7 +1594,7 @@ select.form-control{cursor:pointer}
                 <!-- 工作流展示 -->
         <div class="workflow-section">
           <div class="workflow-header">
-            <h3>全流程一体化创作</h3>
+            <h3>全业态一体化创作</h3>
             <p>从剧本到成片，一个平台完成AI短剧创作全链路</p>
           </div>
           <div class="workflow-steps">
