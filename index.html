@@ -568,7 +568,7 @@ a{color:var(--accent);text-decoration:none}
 }
 
 /* ===== IP / Script / Comic pages ===== *//* ===== IP / Script / Comic pages ===== */
-.ip-header{margin:20px 0 16px}
+.ip-header{margin:0 0 16px}
 .ip-header h2{font-size:22px;font-weight:700;margin-bottom:4px}
 .ip-header h2 span{background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .ip-header p{font-size:13px;color:var(--text-secondary)}
@@ -1041,7 +1041,7 @@ select.form-control{cursor:pointer}
 .btn-action-sec:hover{border-color:var(--accent);color:var(--accent)}
 
 /* ========== 新增：资产库页面样式 ========== */
-.assets-layout{display:flex;min-height:calc(100vh - 120px)}
+.assets-layout{display:flex;min-height:calc(100vh - 160px)}
 .assets-sidebar{width:180px;flex-shrink:0;background:var(--card-bg);border:1px solid var(--border);border-right:none;border-radius:12px 0 0 12px;padding:20px 0}
 .as-title{font-size:14px;font-weight:700;color:var(--text-muted);padding:0 20px;margin-bottom:16px}
 .as-nav-item{padding:10px 20px;font-size:14px;color:var(--text-secondary);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px}
@@ -1086,7 +1086,7 @@ select.form-control{cursor:pointer}
 
 
 /* ===== IP / Script / Comic pages ===== */
-.ip-header{margin:20px 0 16px}
+.ip-header{margin:0 0 16px}
 
 .ip-header h2{font-size:22px;font-weight:700;margin-bottom:4px}
 
@@ -1292,7 +1292,7 @@ select.form-control{cursor:pointer}
       <a class="nav-item" data-page="my-works" onclick="navTo(this,'my-works')">工作台</a>
       <a class="nav-item" data-page="novel-ip" onclick="navTo(this,'novel-ip')">小说IP库</a>
       <a class="nav-item" data-page="script" onclick="navTo(this,'script')">剧本库</a>
-      <a class="nav-item" data-page="comic-create" onclick="navTo(this,'comic-create')">AI短剧创作 <span class="nav-badge">HOT</span></a>
+      
       <a class="nav-item" data-page="assets" onclick="navTo(this,'assets')">资产库</a>
       <a class="nav-item" data-page="tools" onclick="navTo(this,'tools')">Agent工具</a>
       <a class="nav-item" data-page="data-view" onclick="navTo(this,'data-view')">数据分析</a>
@@ -1683,10 +1683,7 @@ select.form-control{cursor:pointer}
       </div>
 
       <div class="page" id="page-script">
-        <div class="ip-page-header">
-          <h2>剧本库</h2>
-          <p class="ip-page-desc">平台剧本库 + AI智能改编引擎</p>
-        </div>
+        <div class="ip-header"><h2><span>剧本库</span></h2><p>平台剧本库 + AI智能改编引擎</p></div>
         <div class="ip-tabs">
           <div class="ip-tab active" onclick="switchIPTab(this,'scr-tab-platform')">📚 平台剧本</div>
           <div class="ip-tab" onclick="switchIPTab(this,'scr-tab-ai')">🤖 AI创作</div>
@@ -1860,6 +1857,7 @@ select.form-control{cursor:pointer}
       </div>
 
       <div class="page" id="page-tools">
+        <div class="ip-header"><h2><span>Agent工具</span></h2><p>AI驱动的创作工具箱，覆盖从拆书到成片的每个环节</p></div>
         <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;display:flex;align-items:center;gap:8px"><span style="color:var(--accent)">→</span> 左右滑动浏览全部工具</div>
         <div class="tools-grid">
           <div class="tool-card">
@@ -2333,7 +2331,7 @@ select.form-control{cursor:pointer}
   })();
 
   // ===== Navigation =====  // ===== Navigation =====
-  var pageTitles={home:'首页','my-works':'工作台','novel-ip':'小说IP库',script:'剧本库','comic-create':'AI短剧创作',assets:'资产库',tools:'Agent工具','data-view':'数据分析',team:'团队管理'};
+  var pageTitles={home:'首页','my-works':'工作台','novel-ip':'小说IP库',script:'剧本库',assets:'资产库',tools:'Agent工具','data-view':'数据分析',team:'团队管理'};
   var isLoggedIn = false;
 
   function navTo(el,pageId){
