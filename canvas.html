@@ -479,6 +479,7 @@
             const st = data.status || 'ready';
             const [expanded, setExpanded] = useState(false);
             const [showImportMenu, setShowImportMenu] = useState(false);
+            const [showRefHover, setShowRefHover] = useState(false);
             const [showTopToolbar, setShowTopToolbar] = useState(false);
 
             const statusColor = {
@@ -696,11 +697,38 @@
                             React.createElement('span',{style:{fontSize:'10px',color:'#5c5f66'}},'角色风格'),
                         ),
                         React.createElement('div',{
-                            style:{width:'60px',height:'60px',borderRadius:'10px',border:'1px dashed rgba(255,255,255,0.15)',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',transition:'all 0.15s'},
-                            onClick:(e)=>{e.stopPropagation(); showToast('添加参考图功能开发中...','info');},
-                            onMouseEnter:e=>e.currentTarget.style.borderColor='rgba(76,110,245,0.5)',
-                            onMouseLeave:e=>e.currentTarget.style.borderColor='rgba(255,255,255,0.15)',
-                        }, React.createElement('span',{style:{fontSize:'24px',color:'#5c5f66'}},'+')),
+                            style:{width:'60px',height:'60px',borderRadius:'10px',border:'1px dashed rgba(255,255,255,0.15)',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',transition:'all 0.15s',position:'relative'},
+                            onMouseEnter:e=>{e.currentTarget.style.borderColor='rgba(76,110,245,0.5)'; setShowRefHover(true);},
+                            onMouseLeave:e=>{e.currentTarget.style.borderColor='rgba(255,255,255,0.15)'; setShowRefHover(false);},
+                        },
+                            React.createElement('span',{style:{fontSize:'24px',color:'#5c5f66'}},'+'),
+                            // Hover dropdown for upload/import
+                            showRefHover ? React.createElement('div',{
+                                style:{
+                                    position:'absolute', top:'calc(100% + 6px)', left:'0',
+                                    background:'#1a1b1e', border:'1px solid rgba(255,255,255,0.1)',
+                                    borderRadius:'10px', padding:'4px', minWidth:'140px',
+                                    boxShadow:'0 16px 48px rgba(0,0,0,0.5)', zIndex:200,
+                                    animation:'menuIn 0.12s ease-out',
+                                },
+                                onClick:e=>e.stopPropagation(),
+                                onMouseEnter:()=>setShowRefHover(true),
+                                onMouseLeave:()=>setShowRefHover(false),
+                            },
+                                React.createElement('div',{
+                                    style:{padding:'7px 10px',borderRadius:'6px',cursor:'pointer',fontSize:'12px',color:'#c1c2c5',display:'flex',alignItems:'center',gap:'7px',transition:'all 0.1s'},
+                                    onMouseEnter:e=>e.target.style.background='rgba(255,255,255,0.06)',
+                                    onMouseLeave:e=>e.target.style.background='transparent',
+                                    onClick:(e)=>{e.stopPropagation(); setShowRefHover(false); showToast('本地上传功能开发中...','info'); },
+                                }, React.createElement('span',null,'📁'), '本地上传'),
+                                React.createElement('div',{
+                                    style:{padding:'7px 10px',borderRadius:'6px',cursor:'pointer',fontSize:'12px',color:'#c1c2c5',display:'flex',alignItems:'center',gap:'7px',transition:'all 0.1s'},
+                                    onMouseEnter:e=>e.target.style.background='rgba(255,255,255,0.06)',
+                                    onMouseLeave:e=>e.target.style.background='transparent',
+                                    onClick:(e)=>{e.stopPropagation(); setShowRefHover(false); showToast('从资产库导入功能开发中...','info'); },
+                                }, React.createElement('span',null,'🗂️'), '从资产库导入'),
+                            ) : null,
+                        ),
                     ),
 
                     // Prompt area
@@ -770,46 +798,6 @@
                             onMouseLeave:e=>e.target.style.transform='scale(1)',
                             onClick:(e)=>{e.stopPropagation(); showToast('AI 生成角色形象...','info'); },
                         }, React.createElement('span',null,'✨'), 'AI 生成'),
-                        // Upload button
-                        React.createElement('button',{
-                            style:{padding:'8px 14px',borderRadius:'8px',border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.04)',color:'#c1c2c5',fontSize:'12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:'4px',transition:'all 0.15s'},
-                            onMouseEnter:e=>e.target.style.background='rgba(255,255,255,0.08)',
-                            onMouseLeave:e=>e.target.style.background='rgba(255,255,255,0.04)',
-                            onClick:(e)=>{e.stopPropagation(); showToast('上传功能开发中...','info'); },
-                        }, React.createElement('span',null,'⬆️'), '上传'),
-                        // Import dropdown
-                        React.createElement('div',{style:{position:'relative'}},
-                            React.createElement('button',{
-                                style:{padding:'8px 14px',borderRadius:'8px',border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.04)',color:'#c1c2c5',fontSize:'12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:'4px',transition:'all 0.15s'},
-                                onMouseEnter:e=>e.target.style.background='rgba(255,255,255,0.08)',
-                                onMouseLeave:e=>e.target.style.background='rgba(255,255,255,0.04)',
-                                onClick:(e)=>{e.stopPropagation(); setShowImportMenu(prev=>!prev); },
-                            }, React.createElement('span',null,'🗂️'), '从资产库导入', React.createElement('span',{style:{fontSize:'8px',marginLeft:'2px'}},'▼')),
-                            // Dropdown menu
-                            showImportMenu ? React.createElement('div',{
-                                style:{
-                                    position:'absolute', bottom:'calc(100% + 6px)', right:'0',
-                                    background:'#1a1b1e', border:'1px solid rgba(255,255,255,0.1)',
-                                    borderRadius:'10px', padding:'4px', minWidth:'160px',
-                                    boxShadow:'0 16px 48px rgba(0,0,0,0.5)', zIndex:200,
-                                    animation:'menuIn 0.12s ease-out',
-                                },
-                                onClick:e=>e.stopPropagation(),
-                            },
-                                React.createElement('div',{
-                                    style:{padding:'7px 10px',borderRadius:'6px',cursor:'pointer',fontSize:'12px',color:'#c1c2c5',display:'flex',alignItems:'center',gap:'7px',transition:'all 0.1s'},
-                                    onMouseEnter:e=>e.target.style.background='rgba(255,255,255,0.06)',
-                                    onMouseLeave:e=>e.target.style.background='transparent',
-                                    onClick:(e)=>{e.stopPropagation(); setShowImportMenu(false); showToast('本地上传功能开发中...','info'); },
-                                }, React.createElement('span',null,'📁'), '本地上传'),
-                                React.createElement('div',{
-                                    style:{padding:'7px 10px',borderRadius:'6px',cursor:'pointer',fontSize:'12px',color:'#c1c2c5',display:'flex',alignItems:'center',gap:'7px',transition:'all 0.1s'},
-                                    onMouseEnter:e=>e.target.style.background='rgba(255,255,255,0.06)',
-                                    onMouseLeave:e=>e.target.style.background='transparent',
-                                    onClick:(e)=>{e.stopPropagation(); setShowImportMenu(false); showToast('从资产库导入功能开发中...','info'); },
-                                }, React.createElement('span',null,'🗂️'), '从资产库导入'),
-                            ) : null,
-                        ),
                     ),
                 ) : null
             );
@@ -821,6 +809,7 @@
             const st = data.status || 'ready';
             const [expanded, setExpanded] = useState(false);
             const [showImportMenu, setShowImportMenu] = useState(false);
+            const [showRefHover, setShowRefHover] = useState(false);
             const [referenceImages, setReferenceImages] = useState(data.referenceImages||[]);
 
             const statusColor = {
@@ -1019,11 +1008,38 @@
                             React.createElement('span',{style:{fontSize:'10px',color:'#5c5f66'}},'画面风格'),
                         ),
                         React.createElement('div',{
-                            style:{width:'60px',height:'60px',borderRadius:'10px',border:'1px dashed rgba(255,255,255,0.15)',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',transition:'all 0.15s'},
-                            onClick:(e)=>{e.stopPropagation(); addReferenceImage();},
-                            onMouseEnter:e=>e.currentTarget.style.borderColor='rgba(76,110,245,0.5)',
-                            onMouseLeave:e=>e.currentTarget.style.borderColor='rgba(255,255,255,0.15)',
-                        }, React.createElement('span',{style:{fontSize:'24px',color:'#5c5f66'}},'+')),
+                            style:{width:'60px',height:'60px',borderRadius:'10px',border:'1px dashed rgba(255,255,255,0.15)',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',transition:'all 0.15s',position:'relative'},
+                            onMouseEnter:e=>{e.currentTarget.style.borderColor='rgba(76,110,245,0.5)'; setShowRefHover(true);},
+                            onMouseLeave:e=>{e.currentTarget.style.borderColor='rgba(255,255,255,0.15)'; setShowRefHover(false);},
+                        },
+                            React.createElement('span',{style:{fontSize:'24px',color:'#5c5f66'}},'+'),
+                            // Hover dropdown for upload/import
+                            showRefHover ? React.createElement('div',{
+                                style:{
+                                    position:'absolute', top:'calc(100% + 6px)', left:'0',
+                                    background:'#1a1b1e', border:'1px solid rgba(255,255,255,0.1)',
+                                    borderRadius:'10px', padding:'4px', minWidth:'140px',
+                                    boxShadow:'0 16px 48px rgba(0,0,0,0.5)', zIndex:200,
+                                    animation:'menuIn 0.12s ease-out',
+                                },
+                                onClick:e=>e.stopPropagation(),
+                                onMouseEnter:()=>setShowRefHover(true),
+                                onMouseLeave:()=>setShowRefHover(false),
+                            },
+                                React.createElement('div',{
+                                    style:{padding:'7px 10px',borderRadius:'6px',cursor:'pointer',fontSize:'12px',color:'#c1c2c5',display:'flex',alignItems:'center',gap:'7px',transition:'all 0.1s'},
+                                    onMouseEnter:e=>e.target.style.background='rgba(255,255,255,0.06)',
+                                    onMouseLeave:e=>e.target.style.background='transparent',
+                                    onClick:(e)=>{e.stopPropagation(); setShowRefHover(false); showToast('本地上传功能开发中...','info'); },
+                                }, React.createElement('span',null,'📁'), '本地上传'),
+                                React.createElement('div',{
+                                    style:{padding:'7px 10px',borderRadius:'6px',cursor:'pointer',fontSize:'12px',color:'#c1c2c5',display:'flex',alignItems:'center',gap:'7px',transition:'all 0.1s'},
+                                    onMouseEnter:e=>e.target.style.background='rgba(255,255,255,0.06)',
+                                    onMouseLeave:e=>e.target.style.background='transparent',
+                                    onClick:(e)=>{e.stopPropagation(); setShowRefHover(false); showToast('从资产库导入功能开发中...','info'); },
+                                }, React.createElement('span',null,'🗂️'), '从资产库导入'),
+                            ) : null,
+                        ),
                         // Existing reference thumbnails
                         ...referenceImages.map((src,i)=>React.createElement('div',{key:i,
                             style:{width:'60px',height:'60px',borderRadius:'10px',overflow:'hidden',border:'1px solid rgba(255,255,255,0.08)',position:'relative',cursor:'pointer'}
@@ -1103,46 +1119,6 @@
                             onMouseLeave:e=>e.target.style.transform='scale(1)',
                             onClick:(e)=>{e.stopPropagation(); showToast('AI 生成中...','info'); },
                         }, React.createElement('span',null,'✨'), 'AI 生成'),
-                        // Upload button
-                        React.createElement('button',{
-                            style:{padding:'8px 14px',borderRadius:'8px',border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.04)',color:'#c1c2c5',fontSize:'12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:'4px',transition:'all 0.15s'},
-                            onMouseEnter:e=>e.target.style.background='rgba(255,255,255,0.08)',
-                            onMouseLeave:e=>e.target.style.background='rgba(255,255,255,0.04)',
-                            onClick:(e)=>{e.stopPropagation(); showToast('上传功能开发中...','info'); },
-                        }, React.createElement('span',null,'⬆️'), '上传'),
-                        // Import dropdown
-                        React.createElement('div',{style:{position:'relative'}},
-                            React.createElement('button',{
-                                style:{padding:'8px 14px',borderRadius:'8px',border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.04)',color:'#c1c2c5',fontSize:'12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:'4px',transition:'all 0.15s'},
-                                onMouseEnter:e=>e.target.style.background='rgba(255,255,255,0.08)',
-                                onMouseLeave:e=>e.target.style.background='rgba(255,255,255,0.04)',
-                                onClick:(e)=>{e.stopPropagation(); setShowImportMenu(!showImportMenu); },
-                            }, React.createElement('span',null,'🗂️'), '从资产库导入', React.createElement('span',{style:{fontSize:'8px',marginLeft:'2px'}},'▼')),
-                            // Dropdown menu
-                            showImportMenu ? React.createElement('div',{
-                                style:{
-                                    position:'absolute', bottom:'calc(100% + 6px)', right:'0',
-                                    background:'#1a1b1e', border:'1px solid rgba(255,255,255,0.1)',
-                                    borderRadius:'10px', padding:'4px', minWidth:'160px',
-                                    boxShadow:'0 16px 48px rgba(0,0,0,0.5)', zIndex:200,
-                                    animation:'menuIn 0.12s ease-out',
-                                },
-                                onClick:e=>e.stopPropagation(),
-                            },
-                                React.createElement('div',{
-                                    style:{padding:'7px 10px',borderRadius:'6px',cursor:'pointer',fontSize:'12px',color:'#c1c2c5',display:'flex',alignItems:'center',gap:'7px',transition:'all 0.1s'},
-                                    onMouseEnter:e=>e.target.style.background='rgba(255,255,255,0.06)',
-                                    onMouseLeave:e=>e.target.style.background='transparent',
-                                    onClick:(e)=>{e.stopPropagation(); setShowImportMenu(false); showToast('本地上传功能开发中...','info'); },
-                                }, React.createElement('span',null,'📁'), '本地上传'),
-                                React.createElement('div',{
-                                    style:{padding:'7px 10px',borderRadius:'6px',cursor:'pointer',fontSize:'12px',color:'#c1c2c5',display:'flex',alignItems:'center',gap:'7px',transition:'all 0.1s'},
-                                    onMouseEnter:e=>e.target.style.background='rgba(255,255,255,0.06)',
-                                    onMouseLeave:e=>e.target.style.background='transparent',
-                                    onClick:(e)=>{e.stopPropagation(); setShowImportMenu(false); showToast('从资产库导入功能开发中...','info'); },
-                                }, React.createElement('span',null,'🗂️'), '从资产库导入'),
-                            ) : null,
-                        ),
                     ),
                 ) : null
             );
@@ -1914,9 +1890,6 @@
                         React.createElement('svg',{width:'14',height:'14',viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'2'},React.createElement('path',{d:'M3 10h10a5 5 0 010 10H9'}),React.createElement('path',{d:'M7 6l-4 4 4 4'}))),
                     React.createElement('button',{onClick:redo,title:'重做 Ctrl+Shift+Z',style:{width:'28px',height:'28px',borderRadius:'6px',border:'none',background:'transparent',color:'#909296',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},onMouseEnter:e=>e.target.style.background='rgba(255,255,255,0.05)',onMouseLeave:e=>e.target.style.background='transparent'},
                         React.createElement('svg',{width:'14',height:'14',viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'2'},React.createElement('path',{d:'M21 10H11a5 5 0 000 10h4'}),React.createElement('path',{d:'M17 6l4 4-4 4'}))),
-                    React.createElement('div',{style:{width:'1px',height:'18px',background:'rgba(255,255,255,0.08)'}}),
-                    React.createElement('button',{onClick:execAll,style:{height:'28px',padding:'0 12px',borderRadius:'6px',border:'none',background:'linear-gradient(135deg,#4c6ef5,#7950f2)',color:'white',fontSize:'11px',fontWeight:600,cursor:'pointer',display:'flex',alignItems:'center',gap:'5px'},onMouseEnter:e=>e.target.style.boxShadow='0 4px 12px rgba(76,110,245,0.35)',onMouseLeave:e=>e.target.style.boxShadow='none'},
-                        React.createElement('svg',{width:'12',height:'12',viewBox:'0 0 24 24',fill:'white'},React.createElement('polygon',{points:'5 3 19 12 5 21 5 3'})),'全部执行'),
                     React.createElement('div',{style:{width:'1px',height:'18px',background:'rgba(255,255,255,0.08)'}}),
                     React.createElement('button',{onClick:exportFn,title:'导出',style:{width:'28px',height:'28px',borderRadius:'6px',border:'none',background:'transparent',color:'#909296',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},onMouseEnter:e=>e.target.style.background='rgba(255,255,255,0.05)',onMouseLeave:e=>e.target.style.background='transparent'},
                         React.createElement('svg',{width:'14',height:'14',viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'2'},React.createElement('path',{d:'M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4'}),React.createElement('polyline',{points:'7 10 12 15 17 10'}),React.createElement('line',{x1:'12',y1:'15',x2:'12',y2:'3'}))),
