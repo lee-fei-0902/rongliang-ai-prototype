@@ -775,9 +775,27 @@
                             React.createElement('span',{style:{fontSize:'8px'}},'▼'),
                         ),
 
-                        // Parameter summary
-                        React.createElement('span',{style:{fontSize:'11px',color:'#909296'}},
-                            `${resolution} · ${ratio}`
+                        // Resolution selector
+                        React.createElement('div',{style:{display:'flex',alignItems:'center',gap:'4px'}},
+                            React.createElement('span',{style:{fontSize:'10px',color:'#5c5f66'}},'📺'),
+                            React.createElement('select',{
+                                className:'node-select',value:resolution,
+                                onChange:e=>setResolution(e.target.value),
+                                style:{width:'auto',minWidth:'56px',fontSize:'11px',padding:'4px 6px'}
+                            },['480P','720P','1080P','2K'].map(r=>React.createElement('option',{key:r,value:r},r))),
+                        ),
+
+                        // Divider
+                        React.createElement('div',{style:{width:'1px',height:'16px',background:'rgba(255,255,255,0.08)'}}),
+
+                        // Ratio selector
+                        React.createElement('div',{style:{display:'flex',alignItems:'center',gap:'4px'}},
+                            React.createElement('span',{style:{fontSize:'10px',color:'#5c5f66'}},'📐'),
+                            React.createElement('select',{
+                                className:'node-select',value:ratio,
+                                onChange:e=>setRatio(e.target.value),
+                                style:{width:'auto',minWidth:'50px',fontSize:'11px',padding:'4px 6px'}
+                            },['9:16','16:9','4:3','3:4','1:1'].map(r=>React.createElement('option',{key:r,value:r},r))),
                         ),
 
                         React.createElement('div',{style:{flex:1}}),
@@ -1096,9 +1114,27 @@
                             React.createElement('span',{style:{fontSize:'8px'}},'▼'),
                         ),
 
-                        // Parameter summary
-                        React.createElement('span',{style:{fontSize:'11px',color:'#909296'}},
-                            `${resolution} · ${ratio}`
+                        // Resolution selector
+                        React.createElement('div',{style:{display:'flex',alignItems:'center',gap:'4px'}},
+                            React.createElement('span',{style:{fontSize:'10px',color:'#5c5f66'}},'📺'),
+                            React.createElement('select',{
+                                className:'node-select',value:resolution,
+                                onChange:e=>setResolution(e.target.value),
+                                style:{width:'auto',minWidth:'56px',fontSize:'11px',padding:'4px 6px'}
+                            },['480P','720P','1080P','2K'].map(r=>React.createElement('option',{key:r,value:r},r))),
+                        ),
+
+                        // Divider
+                        React.createElement('div',{style:{width:'1px',height:'16px',background:'rgba(255,255,255,0.08)'}}),
+
+                        // Ratio selector
+                        React.createElement('div',{style:{display:'flex',alignItems:'center',gap:'4px'}},
+                            React.createElement('span',{style:{fontSize:'10px',color:'#5c5f66'}},'📐'),
+                            React.createElement('select',{
+                                className:'node-select',value:ratio,
+                                onChange:e=>setRatio(e.target.value),
+                                style:{width:'auto',minWidth:'50px',fontSize:'11px',padding:'4px 6px'}
+                            },['9:16','16:9','4:3','3:4','1:1'].map(r=>React.createElement('option',{key:r,value:r},r))),
                         ),
 
                         React.createElement('div',{style:{flex:1}}),
