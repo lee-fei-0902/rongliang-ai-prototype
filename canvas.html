@@ -1711,6 +1711,8 @@
             const [showCanvasMenu, setShowCanvasMenu] = useState(false);
             const [canvasCtxMenu, setCanvasCtxMenu] = useState(null);
             const [editingCanvas, setEditingCanvas] = useState(null);
+            const [canvasSearch, setCanvasSearch] = useState('');
+            const [elementSearch, setElementSearch] = useState('');
             const [showShortcuts, setShowShortcuts] = useState(false);
             const [history, setHistory] = useState([]);
             const [hIdx, setHIdx] = useState(-1);
@@ -1942,9 +1944,20 @@
                                 title:'新建画布',
                             },'+'),
                         ),
+                        // Canvas search
+                        React.createElement('div',{style:{padding:'8px 12px',borderBottom:'1px solid rgba(255,255,255,0.04)'}},
+                            React.createElement('input',{
+                                value:canvasSearch,
+                                onChange:e=>setCanvasSearch(e.target.value),
+                                placeholder:'搜索画布...',
+                                style:{width:'100%',background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.06)',borderRadius:'6px',color:'#c1c2c5',fontSize:'11px',padding:'6px 8px',outline:'none'},
+                                onFocus:e=>e.target.style.borderColor='rgba(76,110,245,0.4)',
+                                onBlur:e=>e.target.style.borderColor='rgba(255,255,255,0.06)',
+                            }),
+                        ),
                         // Canvas list
-                        React.createElement('div',{style:{flex:1,overflowY:'auto',padding:'8px'}},
-                            ...canvases.map(c=>React.createElement('div',{key:c.id,
+                        React.createElement('div',{style:{flex:'0 0 auto',maxHeight:'50%',overflowY:'auto',padding:'8px'}},
+                            ...canvases.filter(c=>!canvasSearch||c.name.toLowerCase().includes(canvasSearch.toLowerCase())).map(c=>React.createElement('div',{key:c.id,
                                 style:{
                                     padding:'10px',borderRadius:'10px',cursor:'pointer',marginBottom:'6px',
                                     background:c.active?'rgba(255,255,255,0.06)':'transparent',
@@ -1991,8 +2004,53 @@
                                 ) : React.createElement('div',{style:{fontSize:'10px',color:'#5c5f66',paddingLeft:'22px'}},'空画布'),
                             )),
                         ),
+                        // Elements section
+                        React.createElement('div',{style:{flex:1,display:'flex',flexDirection:'column',borderTop:'1px solid rgba(255,255,255,0.06)',minHeight:0}},
+                            // Elements header
+                            React.createElement('div',{style:{padding:'8px 14px 6px',display:'flex',alignItems:'center',justifyContent:'space-between'}},
+                                React.createElement('span',{style:{fontSize:'10px',color:'#5c5f66',textTransform:'uppercase',letterSpacing:'0.5px'}},'画布元素'),
+                                React.createElement('span',{style:{fontSize:'10px',color:'#5c5f66'}},nodes.length),
+                            ),
+                            // Elements search
+                            React.createElement('div',{style:{padding:'0 12px 6px'}},
+                                React.createElement('input',{
+                                    value:elementSearch,
+                                    onChange:e=>setElementSearch(e.target.value),
+                                    placeholder:'搜索元素...',
+                                    style:{width:'100%',background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.06)',borderRadius:'6px',color:'#c1c2c5',fontSize:'11px',padding:'5px 8px',outline:'none'},
+                                    onFocus:e=>e.target.style.borderColor='rgba(76,110,245,0.4)',
+                                    onBlur:e=>e.target.style.borderColor='rgba(255,255,255,0.06)',
+                                }),
+                            ),
+                            // Elements list
+                            React.createElement('div',{style:{flex:1,overflowY:'auto',padding:'0 8px 8px'}},
+                                ...nodes.filter(n=>{
+                                    if(!elementSearch)return true;
+                                    const cfg=NODE_TYPES_CONFIG[n.data?.nodeType];
+                                    const label=n.data?.label||cfg?.label||'';
+                                    const typeLabel=cfg?.label||'';
+                                    return label.toLowerCase().includes(elementSearch.toLowerCase())||typeLabel.toLowerCase().includes(elementSearch.toLowerCase());
+                                }).map(n=>{
+                                    const cfg=NODE_TYPES_CONFIG[n.data?.nodeType];
+                                    const label=n.data?.label||cfg?.label||n.type;
+                                    const icon=cfg?.icon||'📦';
+                                    return React.createElement('div',{key:n.id,
+                                        style:{display:'flex',alignItems:'center',gap:'6px',padding:'6px 8px',borderRadius:'6px',cursor:'pointer',transition:'all 0.15s',marginBottom:'2px'},
+                                        onClick:()=>{/* focus/select node */},
+                                        onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.06)',
+                                        onMouseLeave:e=>e.currentTarget.style.background='transparent',
+                                    },
+                                        React.createElement('span',{style:{fontSize:'12px'}},icon),
+                                        React.createElement('span',{style:{fontSize:'11px',color:'#c1c2c5',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',flex:1}},label),
+                                        React.createElement('span',{style:{fontSize:'9px',color:n.data?.status==='completed'?'#20c997':n.data?.status==='running'?'#f59f00':'#5c5f66'}},
+                                            n.data?.status==='completed'?'✓':n.data?.status==='running'?'⏳':'○'),
+                                    );
+                                }),
+                                nodes.length===0 ? React.createElement('div',{style:{fontSize:'10px',color:'#5c5f66',textAlign:'center',padding:'16px'}},'暂无元素') : null,
+                            ),
+                        ),
                         // Canvas count
-                        React.createElement('div',{style:{padding:'8px 14px',borderTop:'1px solid rgba(255,255,255,0.06)',fontSize:'10px',color:'#5c5f66'}},
+                        React.createElement('div',{style:{padding:'6px 14px',borderTop:'1px solid rgba(255,255,255,0.06)',fontSize:'10px',color:'#5c5f66'}},
                             '共 '+canvases.length+' 画布',
                         ),
                     ),
