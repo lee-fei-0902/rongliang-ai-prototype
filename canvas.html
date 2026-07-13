@@ -119,7 +119,7 @@
             storyboard_gen: { label:'分镜生成', icon:'🎞️', color:'#ff8787', bg:'rgba(255,135,135,0.10)', input:['script','character','scene','prop'], output:['storyboard'] },
             video_gen:      { label:'视频生成', icon:'🎥', color:'#f06595', bg:'rgba(240,101,149,0.10)', input:['storyboard','image'], output:['video'] },
             image_gen:      { label:'图片生成', icon:'🖼️', color:'#20c997', bg:'rgba(32,201,151,0.10)',  input:['script','storyboard'], output:['image'] },
-            video_compose:  { label:'视频合成', icon:'✂️', color:'#e0e0e0', bg:'rgba(224,224,224,0.10)', input:['video'], output:['video'] },
+            video_compose:  { label:'视频合成', icon:'✂️', color:'#e0e0e0', bg:'rgba(224,224,224,0.10)', input:['storyboard','video'], output:['video'] },
         };
 
         const EDGE_COLORS = {
