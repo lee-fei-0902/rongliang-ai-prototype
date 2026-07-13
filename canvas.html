@@ -1672,13 +1672,7 @@
             { id:'n6', type:'visualNode', position:{x:820,y:340},
                 data:{nodeType:'prop_gen',label:'道具·教室用品',status:'ready',
                     description:'课本、铅笔、橡皮擦、水杯等教室常见物品',cost:15} },
-            { id:'n7', type:'customNode', position:{x:1220,y:60},
-                data:{nodeType:'video_gen',label:'视频·镜头1-15',status:'ready',
-                    description:'图生视频，5秒推镜头，1080P',cost:68} },
-            { id:'n8', type:'visualNode', position:{x:1220,y:260},
-                data:{nodeType:'image_gen',label:'海报·宣传图',status:'ready',
-                    description:'角色海报，9:16竖版，2K分辨率',cost:22} },
-            { id:'n9', type:'videoComposeNode', position:{x:1520,y:100},
+            { id:'n9', type:'videoComposeNode', position:{x:1220,y:60},
                 data:{nodeType:'video_compose',label:'视频合成',status:'ready',
                     description:'视频合成节点',segments:[]} },
         ];
@@ -1691,8 +1685,6 @@
             { id:'e3-5',source:'n3',target:'n5',style:{stroke:'#4dabf7',strokeWidth:2},markerEnd:{type:MarkerType.ArrowClosed,color:'#4dabf7'} },
             { id:'e4-5',source:'n4',target:'n5',style:{stroke:'#ffd43b',strokeWidth:2},markerEnd:{type:MarkerType.ArrowClosed,color:'#ffd43b'} },
             { id:'e4-6',source:'n4',target:'n6',style:{stroke:'#ffd43b',strokeWidth:2},markerEnd:{type:MarkerType.ArrowClosed,color:'#ffd43b'} },
-            { id:'e5-7',source:'n5',target:'n7',animated:true,style:{stroke:'#ff8787',strokeWidth:2.5},markerEnd:{type:MarkerType.ArrowClosed,color:'#ff8787'} },
-            { id:'e5-8',source:'n5',target:'n8',style:{stroke:'#ff8787',strokeWidth:2},markerEnd:{type:MarkerType.ArrowClosed,color:'#ff8787'} },
         ];
 
         // ==================== MAIN APP ====================
@@ -1711,10 +1703,7 @@
                     {type:'character_gen',label:'角色·陈宇',icon:'👤'},
                     {type:'scene_gen',label:'场景·高三教室',icon:'🏞️'},
                 ]},
-                {id:'c2',name:'Seedance2.0体验',active:false,elements:[
-                    {type:'video_gen',label:'视频·镜头1-15',icon:'🎥'},
-                    {type:'image_gen',label:'海报·宣传图',icon:'🖼️'},
-                ]},
+                {id:'c2',name:'Seedance2.0体验',active:false,elements:[]},
                 {id:'c3',name:'双击画布 - 上传...',active:false,elements:[
                     {type:'storyboard_gen',label:'分镜·第1-30镜',icon:'🎞️'},
                 ]},
