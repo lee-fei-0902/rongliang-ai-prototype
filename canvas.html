@@ -1731,8 +1731,8 @@
                         background:'#1a1b1e',
                         border:'1.5px solid '+(selected ? cfg.color : statusColor),
                         borderRadius:'16px',
-                        width:'400px',
-                        minHeight:'240px',
+                        width:'280px',
+                        minHeight:'320px',
                         boxShadow:shadow,
                         transition:'box-shadow 0.2s, border-color 0.2s',
                         cursor:'pointer',
@@ -1752,64 +1752,52 @@
                             borderBottom:'1px solid rgba(255,255,255,0.04)',
                         },
                     },
-                        React.createElement('div', {style:{display:'flex',alignItems:'center',gap:'8px'}},
-                            React.createElement('span',{style:{fontSize:'14px',color:'#5c5f66'}},'✂️'),
-                            React.createElement('span',{style:{fontSize:'13px',fontWeight:600,color:'#e4e5e7'}},cfg.label),
-                        ),
-                        React.createElement('span',{style:{fontSize:'11px',color:'#5c5f66'}},'视频合成 '+videoSegments.length),
+                        React.createElement('span',{style:{fontSize:'13px',fontWeight:600,color:'#e4e5e7'}},'视频合成 3'),
+                        React.createElement('span',{style:{fontSize:'11px',color:'#5c5f66'}},cfg.label),
                     ),
 
-                    // Content area
-                    hasVideos ? React.createElement('div',{
-                        style:{padding:'14px',display:'flex',flexDirection:'column',gap:'8px'},
-                    },
-                        ...videoSegments.map((seg,idx)=>React.createElement('div',{
-                            key:idx,
-                            style:{
-                                display:'flex',alignItems:'center',gap:'10px',
-                                padding:'8px 10px',background:'rgba(255,255,255,0.03)',
-                                borderRadius:'8px',border:'1px solid rgba(255,255,255,0.06)',
-                            },
-                        },
-                            React.createElement('div',{
-                                style:{width:'40px',height:'30px',background:'#242529',borderRadius:'4px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'12px'},
-                            }, '🎬'),
-                            React.createElement('div',{style:{flex:1}},
-                                React.createElement('div',{style:{fontSize:'12px',color:'#e4e5e7'}},seg.name||'视频片段 '+(idx+1)),
-                                React.createElement('div',{style:{fontSize:'10px',color:'#5c5f66'}},seg.duration||'5s'),
-                            ),
-                            React.createElement('button',{
-                                style:{width:'20px',height:'20px',borderRadius:'4px',border:'none',background:'transparent',color:'#5c5f66',fontSize:'12px',cursor:'pointer'},
-                                onClick:(e)=>{e.stopPropagation(); showToast('移除片段功能开发中...','info'); },
-                            }, '✕'),
-                        )),
-                        React.createElement('button',{
-                            style:{
-                                marginTop:'8px',padding:'8px',borderRadius:'8px',border:'1px dashed rgba(255,255,255,0.15)',
-                                background:'transparent',color:'#5c5f66',fontSize:'12px',cursor:'pointer',
-                                display:'flex',alignItems:'center',justifyContent:'center',gap:'6px',
-                            },
-                            onClick:(e)=>{e.stopPropagation(); showToast('添加视频片段功能开发中...','info'); },
-                        }, '➕ 添加视频片段'),
-                    ) : React.createElement('div', {
+                    // Content area - large card with scissors icon
+                    React.createElement('div', {
                         style:{
                             flex:1,
                             display:'flex',
                             flexDirection:'column',
                             alignItems:'center',
                             justifyContent:'center',
-                            padding:'40px 20px',
-                            minHeight:'180px',
+                            padding:'20px',
+                            gap:'16px',
                         },
                     },
-                        React.createElement('svg',{width:'48',height:'48',viewBox:'0 0 24 24',fill:'none',stroke:'#5c5f66',strokeWidth:'1.5',style:{marginBottom:'12px',opacity:0.6}},
-                            React.createElement('circle',{cx:'6',cy:'6',r:'3'}),
-                            React.createElement('circle',{cx:'6',cy:'18',r:'3'}),
-                            React.createElement('line',{x1:'20',y1:'4',x2:'8.12',y2:'15.88'}),
-                            React.createElement('line',{x1:'14.47',y1:'14.48',x2:'20',y2:'20'}),
-                            React.createElement('line',{x1:'8.12',y1:'8.12',x2:'12',y2:'12'}),
+                        // Scissors icon in rounded square
+                        React.createElement('div',{
+                            style:{
+                                width:'80px',height:'80px',borderRadius:'16px',
+                                background:'rgba(255,255,255,0.03)',
+                                border:'1px solid rgba(255,255,255,0.06)',
+                                display:'flex',alignItems:'center',justifyContent:'center',
+                            },
+                        },
+                            React.createElement('svg',{width:'36',height:'36',viewBox:'0 0 24 24',fill:'none',stroke:'#5c5f66',strokeWidth:'1.5',opacity:'0.5'},
+                                React.createElement('circle',{cx:'6',cy:'6',r:'3'}),
+                                React.createElement('circle',{cx:'6',cy:'18',r:'3'}),
+                                React.createElement('line',{x1:'20',y1:'4',x2:'8.12',y2:'15.88'}),
+                                React.createElement('line',{x1:'14.47',y1:'14.48',x2:'20',y2:'20'}),
+                                React.createElement('line',{x1:'8.12',y1:'8.12',x2:'12',y2:'12'}),
+                            ),
                         ),
-                        React.createElement('div',{style:{fontSize:'14px',color:'#5c5f66',marginBottom:'4px'}},'空空如也，请连接视频节点后操作'),
+                        // Open button
+                        React.createElement('button',{
+                            style:{
+                                padding:'8px 20px',borderRadius:'8px',
+                                border:'1px solid rgba(255,255,255,0.1)',
+                                background:'rgba(255,255,255,0.04)',
+                                color:'#909296',fontSize:'13px',cursor:'pointer',
+                                transition:'all 0.15s',
+                            },
+                            onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
+                            onMouseLeave:e=>e.currentTarget.style.background='rgba(255,255,255,0.04)',
+                            onClick:(e)=>{e.stopPropagation(); setShowComposePage(true);},
+                        },'打开视频合成'),
                     ),
                 ),
             );
