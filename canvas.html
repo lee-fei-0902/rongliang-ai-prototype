@@ -37,6 +37,14 @@
         .react-flow__controls { border-radius:8px !important; overflow:hidden !important; border:1px solid rgba(255,255,255,0.08) !important; background:rgba(20,21,23,0.95) !important; }
         .react-flow__controls-button { background:transparent !important; border-bottom:1px solid rgba(255,255,255,0.06) !important; fill:#909296 !important; width:28px !important; height:28px !important; }
         .react-flow__controls-button:hover { background:rgba(255,255,255,0.06) !important; }
+        .react-flow__controls-button { position:relative !important; }
+        .react-flow__controls-button::after {
+            content:attr(data-tooltip); position:absolute; left:110%; top:50%; transform:translateY(-50%);
+            background:rgba(0,0,0,0.85); color:#e0e0e0; font-size:10px; padding:3px 8px; border-radius:4px;
+            white-space:nowrap; pointer-events:none; opacity:0; transition:opacity 0.15s;
+            font-family:'Inter',sans-serif; line-height:1.4;
+        }
+        .react-flow__controls-button:hover::after { opacity:1; }
         .react-flow__attribution { display:none !important; }
 
         @keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
@@ -113,7 +121,7 @@
 
         // ==================== 8 NODE TYPES ====================
         const NODE_TYPES_CONFIG = {
-            script_parse:   { label:'剧本解析', icon:'📜', color:'#748ffc', bg:'rgba(116,143,252,0.10)', input:[], output:['script'] },
+            text_node:   { label:'文本节点', icon:'📜', color:'#748ffc', bg:'rgba(116,143,252,0.10)', input:[], output:['script'] },
             character_gen:  { label:'角色生成', icon:'👤', color:'#4dabf7', bg:'rgba(77,171,247,0.10)',  input:['script'], output:['character'] },
             scene_gen:      { label:'场景生成', icon:'🏞️', color:'#ffd43b', bg:'rgba(255,212,59,0.10)', input:['script'], output:['scene'] },
             prop_gen:       { label:'道具生成', icon:'💎', color:'#da77f2', bg:'rgba(218,119,242,0.10)', input:['script','scene'], output:['prop'] },
@@ -136,7 +144,7 @@
 
         // Model options per node type
         const MODEL_OPTIONS = {
-            script_parse: ['豆包大模型','DeepSeek Chat','GPT-4o'],
+            text_node: ['豆包大模型','DeepSeek Chat','GPT-4o'],
             character_gen: ['Seedream 5.0','Seedream 4.5','LibNano Pro'],
             scene_gen: ['Seedream 5.0','Seedream 4.5','Qwen Image'],
             prop_gen: ['Seedream 5.0','LibNano Pro','Qwen Image'],
@@ -149,7 +157,7 @@
 
         // ==================== NODE COMPONENT (clean card + expandable panel) ====================
         function CustomNode({ id, data, selected }) {
-            const cfg = NODE_TYPES_CONFIG[data.nodeType] || NODE_TYPES_CONFIG.script_parse;
+            const cfg = NODE_TYPES_CONFIG[data.nodeType] || NODE_TYPES_CONFIG.text_node;
             const hasIn = cfg.input.length > 0;
             const hasOut = cfg.output.length > 0;
             const st = data.status || 'ready';
@@ -177,7 +185,7 @@
             const [file, setFile] = useState(data.fileName||null);
             const [desc, setDesc] = useState(data.description||'');
 
-            const isScript = data.nodeType === 'script_parse';
+            const isScript = data.nodeType === 'text_node';
 
             const computeCost = useCallback((m,r,d,res) => {
                 let base = 5;
@@ -2331,7 +2339,7 @@
         // ==================== INITIAL DEMO DATA ====================
         const initialNodes = [
             { id:'n1', type:'customNode', position:{x:60,y:160},
-                data:{nodeType:'script_parse',label:'剧本·都市甜宠',status:'completed',
+                data:{nodeType:'text_node',label:'剧本·都市甜宠',status:'completed',
                     description:'身形修长的人形机器人，1960年代原子朋克风格设计。拥有自主意识。面部led显示屏代替五官，显示马像素风格的表情。',cost:8} },
             { id:'n2', type:'characterNode', position:{x:420,y:40},
                 data:{nodeType:'character_gen',label:'角色·林晚',status:'completed',
@@ -2374,7 +2382,7 @@
             const [panelOpen, setPanelOpen] = useState(false);
             const [canvases, setCanvases] = useState([
                 {id:'c1',name:'画布 1',active:true,elements:[
-                    {type:'script_parse',label:'剧本·都市甜宠',icon:'📜'},
+                    {type:'text_node',label:'剧本·都市甜宠',icon:'📜'},
                     {type:'character_gen',label:'角色·林晚',icon:'👤'},
                     {type:'character_gen',label:'角色·陈宇',icon:'👤'},
                     {type:'scene_gen',label:'场景·高三教室',icon:'🏞️'},
@@ -2390,6 +2398,11 @@
             const [canvasSearch, setCanvasSearch] = useState('');
             const [elementSearch, setElementSearch] = useState('');
             const [showShortcuts, setShowShortcuts] = useState(false);
+            const [showHistoryModal, setShowHistoryModal] = useState(false);
+            const [historyTab, setHistoryTab] = useState('image');
+            const [selectedHistoryItems, setSelectedHistoryItems] = useState([]);
+            const [historyZoom, setHistoryZoom] = useState(1);
+            const [historyCategory, setHistoryCategory] = useState('all');
             const [history, setHistory] = useState([]);
             const [hIdx, setHIdx] = useState(-1);
             const nodeIdRef = useRef(initialNodes.length);
@@ -2554,6 +2567,16 @@
             useEffect(()=>{const t=setTimeout(()=>{try{localStorage.setItem('canvas_v2',JSON.stringify({nodes,edges}));}catch(e){}},2000);return ()=>clearTimeout(t);},[nodes,edges]);
             useEffect(()=>{const t=setTimeout(()=>rfi.fitView({padding:0.15,duration:600}),350);return ()=>clearTimeout(t);},[]);
             useEffect(()=>{const p=new URLSearchParams(window.location.search);const n=p.get('project');if(n)setProjectName(decodeURIComponent(n));},[]);
+
+            // Add Chinese tooltips to ReactFlow Controls buttons
+            useEffect(()=>{
+                const t=setTimeout(()=>{
+                    const btns=document.querySelectorAll('.react-flow__controls-button');
+                    const tips=['放大','缩小','适合屏幕'];
+                    btns.forEach((b,i)=>{if(i<3)b.setAttribute('data-tooltip',tips[i]);});
+                },400);
+                return ()=>clearTimeout(t);
+            },[]);
 
             // Animate connected edges when a node is selected
             useEffect(()=>{
@@ -2853,6 +2876,14 @@
                             onMouseLeave:e=>e.target.style.background='transparent',
                             title:'快捷键',
                         },'⌨️'),
+                        // History button
+                        React.createElement('button',{
+                            style:{width:'28px',height:'28px',borderRadius:'50%',border:'none',background:'transparent',color:'#909296',fontSize:'13px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',transition:'all 0.15s'},
+                            onClick:()=>setShowHistoryModal(true),
+                            onMouseEnter:e=>e.target.style.background='rgba(255,255,255,0.08)',
+                            onMouseLeave:e=>e.target.style.background='transparent',
+                            title:'历史记录',
+                        },'🕐'),
                     ),
                     React.createElement('div',{style:{flex:1}}),
                     React.createElement('span',null,'自动保存'),
@@ -2867,7 +2898,7 @@
                     ),
                     ...Object.entries(NODE_TYPES_CONFIG).filter(([k])=>!['video_gen','image_gen'].includes(k)).map(([k,c])=>{
                         const subtitles = {
-                            script_parse:'剧本解析、角色设定',
+                            text_node:'文本解析、角色设定',
                             character_gen:'角色形象、三视图',
                             scene_gen:'场景概念、环境设定',
                             prop_gen:'道具资产、物品生成',
@@ -2989,6 +3020,152 @@
                             ),
                         ),
                     ),
+                ):null,
+
+                // === HISTORY MODAL (Portal) ===
+                showHistoryModal ? ReactDOM.createPortal(
+                    React.createElement('div',{
+                        style:{position:'fixed',inset:0,zIndex:99999,display:'flex',flexDirection:'column',background:'#0f1117',animation:'fadeIn 0.2s ease-out'},
+                    },
+                        // === HEADER ===
+                        React.createElement('div',{style:{height:'52px',display:'flex',alignItems:'center',padding:'0 16px',borderBottom:'1px solid rgba(255,255,255,0.08)',gap:'16px',flexShrink:0}},
+                            React.createElement('div',{style:{fontSize:'16px',fontWeight:700,color:'#e4e5e7'}},'历史资产'),
+                            React.createElement('div',{style:{flex:1}}),
+                            // Zoom controls
+                            React.createElement('div',{style:{display:'flex',alignItems:'center',gap:'4px',background:'#1a1b1e',borderRadius:'6px',padding:'2px 4px',border:'1px solid rgba(255,255,255,0.08)'}},
+                                React.createElement('button',{
+                                    onClick:()=>setHistoryZoom(z=>Math.max(0.25,z-0.25)),
+                                    style:{width:'26px',height:'26px',borderRadius:'4px',border:'none',background:'transparent',color:'#909296',fontSize:'14px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},
+                                },'−'),
+                                React.createElement('span',{style:{fontSize:'11px',color:'#e4e5e7',minWidth:'40px',textAlign:'center',fontWeight:500}},Math.round(historyZoom*100)+'%'),
+                                React.createElement('button',{
+                                    onClick:()=>setHistoryZoom(z=>Math.min(4,z+0.25)),
+                                    style:{width:'26px',height:'26px',borderRadius:'4px',border:'none',background:'transparent',color:'#909296',fontSize:'14px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},
+                                },'+'),
+                            ),
+                            // Close button
+                            React.createElement('button',{
+                                onClick:()=>setShowHistoryModal(false),
+                                style:{width:'32px',height:'32px',borderRadius:'8px',border:'none',background:'#1a1b1e',color:'#909296',fontSize:'18px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',transition:'all 0.15s'},
+                                onMouseEnter:e=>{e.target.style.background='#25262b';e.target.style.color='#e4e5e7';},
+                                onMouseLeave:e=>{e.target.style.background='#1a1b1e';e.target.style.color='#909296';},
+                            },'✕'),
+                        ),
+
+                        // === CATEGORY FILTER CHIPS ===
+                        React.createElement('div',{style:{display:'flex',alignItems:'center',gap:'8px',padding:'10px 16px',borderBottom:'1px solid rgba(255,255,255,0.06)',flexShrink:0}},
+                            ...['all','character_gen','scene_gen','prop_gen','storyboard_gen','video_compose'].map(cat=>{
+                                const labels = {all:'全部',character_gen:'角色生成',scene_gen:'场景生成',prop_gen:'道具生成',storyboard_gen:'分镜生成',video_compose:'视频合成'};
+                                const icons = {all:'📋',character_gen:'👤',scene_gen:'🏞️',prop_gen:'💎',storyboard_gen:'🎞️',video_compose:'✂️'};
+                                const active = historyCategory===cat;
+                                return React.createElement('button',{
+                                    key:cat,
+                                    onClick:()=>setHistoryCategory(cat),
+                                    style:{padding:'6px 14px',borderRadius:'16px',border:'1px solid '+(active?'rgba(255,255,255,0.2)':'rgba(255,255,255,0.08)'),background:active?'rgba(255,255,255,0.1)':'transparent',color:active?'#e4e5e7':'#909296',fontSize:'11px',cursor:'pointer',display:'flex',alignItems:'center',gap:'6px',transition:'all 0.15s',fontWeight:active?600:400},
+                                    onMouseEnter:e=>{if(!active){e.target.style.background='rgba(255,255,255,0.05)';e.target.style.color='#c1c2c5';}},
+                                    onMouseLeave:e=>{if(!active){e.target.style.background='transparent';e.target.style.color='#909296';}},
+                                }, icons[cat], ' ', labels[cat]);
+                            }),
+                        ),
+
+                        // === ACTION BAR ===
+                        React.createElement('div',{style:{display:'flex',alignItems:'center',padding:'0 16px',borderBottom:'1px solid rgba(255,255,255,0.06)',flexShrink:0,height:'40px'}},
+                            React.createElement('div',{style:{flex:1}}),
+                            // Action bar (right side)
+                            selectedHistoryItems.length>0 ? React.createElement('div',{style:{display:'flex',alignItems:'center',gap:'10px'}},
+                                React.createElement('span',{style:{fontSize:'11px',color:'#4c6ef5',fontWeight:500}},'已选 '+selectedHistoryItems.length+' 项'),
+                                React.createElement('button',{
+                                    onClick:()=>{showToast('下载功能开发中...','info');},
+                                    style:{padding:'5px 12px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.1)',background:'transparent',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',display:'flex',alignItems:'center',gap:'4px',transition:'all 0.15s'},
+                                    onMouseEnter:e=>{e.target.style.background='rgba(255,255,255,0.06)';e.target.style.color='#e4e5e7';},
+                                    onMouseLeave:e=>{e.target.style.background='transparent';e.target.style.color='#c1c2c5';},
+                                },'⬇ 下载'),
+                                React.createElement('button',{
+                                    onClick:()=>{showToast('删除功能开发中...','info');},
+                                    style:{padding:'5px 12px',borderRadius:'6px',border:'1px solid rgba(255,107,107,0.3)',background:'transparent',color:'#ff6b6b',fontSize:'11px',cursor:'pointer',display:'flex',alignItems:'center',gap:'4px',transition:'all 0.15s'},
+                                    onMouseEnter:e=>{e.target.style.background='rgba(255,107,107,0.1)';},
+                                    onMouseLeave:e=>{e.target.style.background='transparent';},
+                                },'🗑 删除'),
+                                React.createElement('button',{
+                                    onClick:()=>{showToast('使用功能开发中...','info');setSelectedHistoryItems([]);},
+                                    style:{padding:'5px 12px',borderRadius:'6px',border:'1px solid rgba(76,110,245,0.4)',background:'rgba(76,110,245,0.1)',color:'#4c6ef5',fontSize:'11px',cursor:'pointer',display:'flex',alignItems:'center',gap:'4px',transition:'all 0.15s'},
+                                    onMouseEnter:e=>{e.target.style.background='rgba(76,110,245,0.2)';},
+                                    onMouseLeave:e=>{e.target.style.background='rgba(76,110,245,0.1)';},
+                                },'✅ 使用'),
+                                React.createElement('button',{
+                                    onClick:()=>setSelectedHistoryItems([]),
+                                    style:{padding:'5px 10px',borderRadius:'6px',border:'none',background:'transparent',color:'#909296',fontSize:'11px',cursor:'pointer'},
+                                    onMouseEnter:e=>{e.target.style.color='#e4e5e7';},
+                                    onMouseLeave:e=>{e.target.style.color='#909296';},
+                                },'取消选择'),
+                            ):null,
+                        ),
+
+                        // === CONTENT: Date-grouped thumbnail grid ===
+                        React.createElement('div',{
+                            style:{flex:1,overflow:'auto',padding:'20px 16px'},
+                        },
+                            // Mock history data grouped by date
+                            (()=>{
+                                const mockData = [
+                                    {date:'2025-01-18',items:[
+                                        {id:'h1',name:'角色·林晚 正面',thumb:'👤',type:'character_gen',cat:'角色'},
+                                        {id:'h2',name:'场景·高三教室',thumb:'🏞️',type:'scene_gen',cat:'场景'},
+                                        {id:'h3',name:'分镜·01-开篇',thumb:'🎞️',type:'storyboard_gen',cat:'分镜'},
+                                    ]},
+                                    {date:'2025-01-17',items:[
+                                        {id:'h4',name:'角色·陈宇 侧面',thumb:'👤',type:'character_gen',cat:'角色'},
+                                        {id:'h5',name:'道具·教室课桌',thumb:'💎',type:'prop_gen',cat:'道具'},
+                                        {id:'h6',name:'合成·第一集初稿',thumb:'✂️',type:'video_compose',cat:'合成'},
+                                        {id:'h7',name:'角色·林晚 表情集',thumb:'😊',type:'character_gen',cat:'角色'},
+                                    ]},
+                                    {date:'2025-01-16',items:[
+                                        {id:'h8',name:'分镜·02-特写',thumb:'🎞️',type:'storyboard_gen',cat:'分镜'},
+                                        {id:'h9',name:'场景·校园走廊',thumb:'🏞️',type:'scene_gen',cat:'场景'},
+                                    ]},
+                                ];
+                                // Filter by category only
+                                const filtered = historyCategory==='all' ? mockData : mockData.map(g=>({...g,items:g.items.filter(i=>i.type===historyCategory)})).filter(g=>g.items.length>0);
+
+                                return filtered.map((group,gi)=>(
+                                    React.createElement('div',{key:group.date,style:{marginBottom:'24px'}},
+                                        React.createElement('div',{style:{fontSize:'13px',fontWeight:600,color:'#e4e5e7',marginBottom:'12px',paddingLeft:'4px'}},group.date),
+                                        React.createElement('div',{
+                                            style:{display:'grid',gridTemplateColumns:'repeat(auto-fill, minmax(140px, 1fr))',gap:'10px'},
+                                        },
+                                            ...group.items.map(item=>{
+                                                const isSelected = selectedHistoryItems.includes(item.id);
+                                                const thumbColors = {
+                                                    character_gen:'rgba(77,171,247,0.15)',scene_gen:'rgba(255,212,59,0.15)',prop_gen:'rgba(218,119,242,0.15)',
+                                                    storyboard_gen:'rgba(255,135,135,0.15)',video_compose:'rgba(224,224,224,0.15)',
+                                                };
+                                                return React.createElement('div',{
+                                                    key:item.id,
+                                                    onClick:()=>{
+                                                        setSelectedHistoryItems(prev=>prev.includes(item.id)?prev.filter(x=>x!==item.id):[...prev,item.id]);
+                                                    },
+                                                    style:{position:'relative',background:'#1a1b1e',borderRadius:'10px',border:'1px solid '+(isSelected?'#4c6ef5':'rgba(255,255,255,0.06)'),overflow:'hidden',cursor:'pointer',transition:'all 0.15s',boxShadow:isSelected?'0 0 0 1px #4c6ef5, 0 0 12px rgba(76,110,245,0.15)':'none'},
+                                                    onMouseEnter:e=>{if(!isSelected){e.currentTarget.style.borderColor='rgba(255,255,255,0.14)';e.currentTarget.style.background='#1e1f23';}},
+                                                    onMouseLeave:e=>{if(!isSelected){e.currentTarget.style.borderColor='rgba(255,255,255,0.06)';e.currentTarget.style.background='#1a1b1e';}},
+                                                },
+                                                    // Checkbox
+                                                    React.createElement('div',{style:{position:'absolute',top:'8px',right:'8px',zIndex:2,width:'20px',height:'20px',borderRadius:'4px',border:'2px solid '+(isSelected?'#4c6ef5':'rgba(255,255,255,0.2)'),background:isSelected?'#4c6ef5':'rgba(0,0,0,0.3)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'11px',color:'#fff'}},isSelected?'✓':''),
+                                                    // Thumbnail
+                                                    React.createElement('div',{style:{height:'100px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'40px',background:thumbColors[item.type]||'rgba(255,255,255,0.03)'}},item.thumb),
+                                                    // Info
+                                                    React.createElement('div',{style:{padding:'8px 10px'}},
+                                                        React.createElement('div',{style:{fontSize:'11px',color:'#c1c2c5',fontWeight:500,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},item.name),
+                                                        React.createElement('div',{style:{fontSize:'10px',color:'#5c5f66',marginTop:'3px'}},item.cat),
+                                                    ),
+                                                );
+                                            }),
+                                        ),
+                                    )
+                                ));
+                            })(),
+                        ),
+                    ),
+                    document.body
                 ):null,
             );
         }
