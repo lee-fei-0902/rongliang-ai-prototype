@@ -592,31 +592,67 @@
                         title:'下载',
                     }, '⬇️'),
                 ) : null,
-
-                // === TOP FLOATING TOOLBAR (for non-completed states: upload/import) ===
+                // === TOP FLOATING TOOLBAR (visible when selected/expanded) ===
                 (selected || expanded) && !isCompleted ? React.createElement('div', {
                     style:{
                         position:'absolute', top:'-44px', left:'50%', transform:'translateX(-50%)',
-                        display:'flex', gap:'8px', zIndex:60,
+                        display:'flex', alignItems:'center', gap:'4px', zIndex:60,
                         background:'#1a1b1e', border:'1px solid rgba(255,255,255,0.1)',
-                        borderRadius:'10px', padding:'6px 12px',
+                        borderRadius:'10px', padding:'5px 10px',
                         boxShadow:'0 8px 32px rgba(0,0,0,0.4)',
                         animation:'menuIn 0.15s ease-out',
                     },
                     onClick:e=>e.stopPropagation(),
                 },
+                    // Image Edit dropdown (always shown for image nodes)
+                    React.createElement('div',{
+                        style:{position:'relative'},
+                    },
+                        React.createElement('button', {
+                            style:{display:'flex',alignItems:'center',gap:'4px',padding:'5px 10px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'rgba(255,255,255,0.03)',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
+                            onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
+                            onMouseLeave:e=>e.currentTarget.style.background='rgba(255,255,255,0.03)',
+                            onClick:(e)=>{e.stopPropagation(); setShowTopToolbar(p=>!p); },
+                        }, React.createElement('span',null,'🎨'), '图片编辑', React.createElement('span',null,'▼')),
+                        showTopToolbar ? React.createElement('div',{
+                            style:{position:'absolute',top:'calc(100% + 6px)',left:'0',background:'#1a1b1e',border:'1px solid rgba(255,255,255,0.1)',borderRadius:'10px',padding:'4px',minWidth:'140px',boxShadow:'0 16px 48px rgba(0,0,0,0.5)',zIndex:200,animation:'menuIn 0.12s ease-out'},
+                            onClick:e=>e.stopPropagation(),
+                        },
+                            ['裁剪','重绘','抠图','超分','擦除','去水印','扩图'].map((item,idx)=>React.createElement('div',{
+                                key:idx,
+                                style:{padding:'7px 10px',borderRadius:'6px',cursor:'pointer',fontSize:'12px',color:'#c1c2c5',transition:'all 0.1s'},
+                                onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.06)',
+                                onMouseLeave:e=>e.currentTarget.style.background='transparent',
+                                onClick:(e)=>{e.stopPropagation(); setShowTopToolbar(false); showToast(item+'功能开发中...','info'); },
+                            }, item)),
+                        ) : null,
+                    ),
+                    // Separator
+                    React.createElement('div',{style:{width:'1px',height:'20px',background:'rgba(255,255,255,0.08)'}}),
+                    // 本地上传 button
                     React.createElement('button', {
-                        style:{display:'flex',alignItems:'center',gap:'4px',padding:'5px 10px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'rgba(255,255,255,0.03)',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
+                        style:{display:'flex',alignItems:'center',gap:'4px',padding:'5px 10px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'transparent',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
                         onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
-                        onMouseLeave:e=>e.currentTarget.style.background='rgba(255,255,255,0.03)',
-                        onClick:(e)=>{e.stopPropagation(); showToast('上传功能开发中...','info'); },
-                    }, React.createElement('span',null,'⬆️'), '上传'),
+                        onMouseLeave:e=>e.currentTarget.style.background='transparent',
+                        onClick:(e)=>{e.stopPropagation(); showToast('本地上传功能开发中...','info'); },
+                    }, React.createElement('span',null,'📁'), '本地上传'),
+                    // 资产库导入 button
                     React.createElement('button', {
-                        style:{display:'flex',alignItems:'center',gap:'4px',padding:'5px 10px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'rgba(255,255,255,0.03)',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
+                        style:{display:'flex',alignItems:'center',gap:'4px',padding:'5px 10px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'transparent',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
                         onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
-                        onMouseLeave:e=>e.currentTarget.style.background='rgba(255,255,255,0.03)',
+                        onMouseLeave:e=>e.currentTarget.style.background='transparent',
                         onClick:(e)=>{e.stopPropagation(); showToast('从资产库导入功能开发中...','info'); },
-                    }, React.createElement('span',null,'🗂️'), '从资产库导入'),
+                    }, React.createElement('span',null,'🗂️'), '资产库导入'),
+                    // Separator
+                    React.createElement('div',{style:{width:'1px',height:'20px',background:'rgba(255,255,255,0.08)'}}),
+                    // Download button
+                    React.createElement('button', {
+                        style:{padding:'5px',borderRadius:'6px',border:'none',background:'transparent',color:'#909296',fontSize:'13px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',transition:'all 0.15s'},
+                        onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
+                        onMouseLeave:e=>e.currentTarget.style.background='transparent',
+                        onClick:(e)=>{e.stopPropagation(); showToast('下载功能开发中...','info'); },
+                        title:'下载',
+                    }, '⬇️'),
                 ) : null,
 
                 // === LEFT QUICK ADD BUTTON (visible when selected) ===
@@ -1041,31 +1077,67 @@
                         title:'下载',
                     }, '⬇️'),
                 ) : null,
-
-                // === TOP FLOATING TOOLBAR (for non-completed states: upload/import) ===
+                // === TOP FLOATING TOOLBAR (visible when selected/expanded) ===
                 (selected || expanded) && !isCompleted ? React.createElement('div', {
                     style:{
                         position:'absolute', top:'-44px', left:'50%', transform:'translateX(-50%)',
-                        display:'flex', gap:'8px', zIndex:60,
+                        display:'flex', alignItems:'center', gap:'4px', zIndex:60,
                         background:'#1a1b1e', border:'1px solid rgba(255,255,255,0.1)',
-                        borderRadius:'10px', padding:'6px 12px',
+                        borderRadius:'10px', padding:'5px 10px',
                         boxShadow:'0 8px 32px rgba(0,0,0,0.4)',
                         animation:'menuIn 0.15s ease-out',
                     },
                     onClick:e=>e.stopPropagation(),
                 },
+                    // Image Edit dropdown (always shown for image nodes)
+                    React.createElement('div',{
+                        style:{position:'relative'},
+                    },
+                        React.createElement('button', {
+                            style:{display:'flex',alignItems:'center',gap:'4px',padding:'5px 10px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'rgba(255,255,255,0.03)',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
+                            onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
+                            onMouseLeave:e=>e.currentTarget.style.background='rgba(255,255,255,0.03)',
+                            onClick:(e)=>{e.stopPropagation(); setShowTopToolbar(p=>!p); },
+                        }, React.createElement('span',null,'🎨'), '图片编辑', React.createElement('span',null,'▼')),
+                        showTopToolbar ? React.createElement('div',{
+                            style:{position:'absolute',top:'calc(100% + 6px)',left:'0',background:'#1a1b1e',border:'1px solid rgba(255,255,255,0.1)',borderRadius:'10px',padding:'4px',minWidth:'140px',boxShadow:'0 16px 48px rgba(0,0,0,0.5)',zIndex:200,animation:'menuIn 0.12s ease-out'},
+                            onClick:e=>e.stopPropagation(),
+                        },
+                            ['裁剪','重绘','抠图','超分','擦除','去水印','扩图'].map((item,idx)=>React.createElement('div',{
+                                key:idx,
+                                style:{padding:'7px 10px',borderRadius:'6px',cursor:'pointer',fontSize:'12px',color:'#c1c2c5',transition:'all 0.1s'},
+                                onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.06)',
+                                onMouseLeave:e=>e.currentTarget.style.background='transparent',
+                                onClick:(e)=>{e.stopPropagation(); setShowTopToolbar(false); showToast(item+'功能开发中...','info'); },
+                            }, item)),
+                        ) : null,
+                    ),
+                    // Separator
+                    React.createElement('div',{style:{width:'1px',height:'20px',background:'rgba(255,255,255,0.08)'}}),
+                    // 本地上传 button
                     React.createElement('button', {
-                        style:{display:'flex',alignItems:'center',gap:'4px',padding:'5px 10px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'rgba(255,255,255,0.03)',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
+                        style:{display:'flex',alignItems:'center',gap:'4px',padding:'5px 10px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'transparent',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
                         onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
-                        onMouseLeave:e=>e.currentTarget.style.background='rgba(255,255,255,0.03)',
-                        onClick:(e)=>{e.stopPropagation(); showToast('上传功能开发中...','info'); },
-                    }, React.createElement('span',null,'⬆️'), '上传'),
+                        onMouseLeave:e=>e.currentTarget.style.background='transparent',
+                        onClick:(e)=>{e.stopPropagation(); showToast('本地上传功能开发中...','info'); },
+                    }, React.createElement('span',null,'📁'), '本地上传'),
+                    // 资产库导入 button
                     React.createElement('button', {
-                        style:{display:'flex',alignItems:'center',gap:'4px',padding:'5px 10px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'rgba(255,255,255,0.03)',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
+                        style:{display:'flex',alignItems:'center',gap:'4px',padding:'5px 10px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'transparent',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
                         onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
-                        onMouseLeave:e=>e.currentTarget.style.background='rgba(255,255,255,0.03)',
+                        onMouseLeave:e=>e.currentTarget.style.background='transparent',
                         onClick:(e)=>{e.stopPropagation(); showToast('从资产库导入功能开发中...','info'); },
-                    }, React.createElement('span',null,'🗂️'), '从资产库导入'),
+                    }, React.createElement('span',null,'🗂️'), '资产库导入'),
+                    // Separator
+                    React.createElement('div',{style:{width:'1px',height:'20px',background:'rgba(255,255,255,0.08)'}}),
+                    // Download button
+                    React.createElement('button', {
+                        style:{padding:'5px',borderRadius:'6px',border:'none',background:'transparent',color:'#909296',fontSize:'13px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',transition:'all 0.15s'},
+                        onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
+                        onMouseLeave:e=>e.currentTarget.style.background='transparent',
+                        onClick:(e)=>{e.stopPropagation(); showToast('下载功能开发中...','info'); },
+                        title:'下载',
+                    }, '⬇️'),
                 ) : null,
 
                 // === LEFT QUICK ADD BUTTON (visible when selected) ===
@@ -1428,8 +1500,8 @@
             ];
 
             return React.createElement('div', { style:{ position:'relative', zIndex:expanded?50:1 } },
-                // === TOP FLOATING TOOLBAR (visible when selected/expanded, for completed video) ===
-                (selected || expanded) && st === 'completed' ? React.createElement('div', {
+                // === TOP FLOATING TOOLBAR (visible when selected/expanded) ===
+                (selected || expanded) ? React.createElement('div', {
                     style:{
                         position:'absolute', top:'-44px', left:'50%', transform:'translateX(-50%)',
                         display:'flex', alignItems:'center', gap:'4px', zIndex:60,
@@ -1846,14 +1918,14 @@
             const st = data.status || 'ready';
             const [expanded, setExpanded] = useState(false);
             const [showComposePage, setShowComposePage] = useState(false);
-            const [videoSegments, setVideoSegments] = useState(data.segments || [
-                {name:'视频节点 8', duration:'00:00-15:02', thumb:null},
-                {name:'视频节点 11', duration:'00:00-15:02', thumb:null},
-            ]);
             const [showExportMenu, setShowExportMenu] = useState(false);
             const [playheadTime, setPlayheadTime] = useState('00:00');
             const [totalDuration] = useState('00:30');
             const [isPlaying, setIsPlaying] = useState(false);
+            const [videoSegments, setVideoSegments] = useState(data.segments || [
+                {name:'视频节点 8', duration:'00:00-15:02', thumb:null},
+                {name:'视频节点 11', duration:'00:00-15:02', thumb:null},
+            ]);
 
             const statusColor = {
                 ready:'rgba(255,255,255,0.10)', queued:'#4c6ef5', running:'#f59f00',
@@ -1864,7 +1936,6 @@
 
             const onCardClick = useCallback((e) => {
                 e.stopPropagation();
-                // Open full-screen compose page instead of just expanding
                 setShowComposePage(true);
             }, []);
 
@@ -1885,33 +1956,19 @@
                     id:'out', key:'out'
                 }),
 
-                // === COMPOSE MODAL OVERLAY ===
+                // === FULL-SCREEN COMPOSE PAGE ===
                 showComposePage ? React.createElement('div',{
                     style:{
                         position:'fixed', inset:0, zIndex:9999,
-                        background:'rgba(0,0,0,0.7)',
-                        display:'flex', alignItems:'center', justifyContent:'center',
+                        background:'#0f1117',
+                        display:'flex', flexDirection:'column',
                         animation:'fadeIn 0.2s ease-out',
                     },
-                    onClick:e=>{e.stopPropagation(); setShowComposePage(false);},
-                    },
-                    // Modal card
-                    React.createElement('div',{
-                        style:{
-                            width:'1000px', maxHeight:'90vh',
-                            background:'#0a0a0c',
-                            borderRadius:'16px',
-                            border:'1px solid rgba(255,255,255,0.08)',
-                            boxShadow:'0 24px 80px rgba(0,0,0,0.6)',
-                            display:'flex', flexDirection:'column',
-                            overflow:'hidden',
-                            animation:'menuIn 0.25s ease-out',
-                        },
-                        onClick:e=>e.stopPropagation(),
+                    onClick:e=>e.stopPropagation(),
                     },
                     // ===== HEADER BAR =====
-                    React.createElement('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'12px 20px',borderBottom:'1px solid rgba(255,255,255,0.08)',flexShrink:0}},
-                        React.createElement('span',{style:{fontSize:'14px',color:'#e4e5e7',fontWeight:600}},'视频合成'),
+                    React.createElement('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'12px 20px',borderBottom:'1px solid rgba(255,255,255,0.06)',flexShrink:0}},
+                        React.createElement('span',{style:{fontSize:'14px',color:'#e4e5e7',fontWeight:600}},cfg.label),
                         React.createElement('div',{style:{display:'flex',alignItems:'center',gap:'8px'}},
                             // Export dropdown button
                             React.createElement('div',{style:{position:'relative'}},
@@ -1947,34 +2004,30 @@
                         ),
                     ),
 
-                    // ===== PREVIEW CANVAS AREA =====
-                    React.createElement('div',{style:{flex:1,display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden',position:'relative',minHeight:0}},
-                        // Preview image/video placeholder (anime-style illustration per screenshot)
-                        React.createElement('div',{style:{maxWidth:'100%',maxHeight:'100%',display:'flex',alignItems:'center',justifyContent:'center'}},
-                            React.createElement('div',{
-                                style:{width:'720px',height:'405px',background:'#1a1b1e',borderRadius:'8px',
-                                    display:'flex',alignItems:'center',justifyContent:'center',
-                                    overflow:'hidden',position:'relative',
-                                    border:'1px solid rgba(255,255,255,0.04)',
-                                },
-                                },
-                                // Simulated anime-style preview content
-                                React.createElement('div',{style:{textAlign:'center',opacity:0.5}},
-                                    React.createElement('svg',{width:'80',height:'80',viewBox:'0 0 24 24',fill:'none',stroke:'#5c5f66',strokeWidth:'1'},
-                                        React.createElement('polygon',{points:'5 3 19 12 5 21'}),
-                                    ),
-                                    React.createElement('div',{style:{marginTop:'12px',fontSize:'13px',color:'#5c5f66'}},'视频预览区域'),
-                                    React.createElement('div',{style:{marginTop:'4px',fontSize:'11px',color:'#3d3f45'}},hasVideos?'已连接 '+videoSegments.length+' 个视频片段':'请连接分镜生成节点获取素材'),
+                    // ===== PREVIEW AREA =====
+                    React.createElement('div',{style:{flex:1,display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden',position:'relative',minHeight:0,padding:'20px'}},
+                        React.createElement('div',{
+                            style:{width:'100%',maxWidth:'1280px',aspectRatio:'16/9',background:'#1a1b1e',borderRadius:'8px',
+                                display:'flex',alignItems:'center',justifyContent:'center',
+                                overflow:'hidden',position:'relative',
+                                border:'1px solid rgba(255,255,255,0.04)',
+                            },
+                            },
+                            // Simulated video preview content
+                            React.createElement('div',{style:{textAlign:'center',opacity:0.5}},
+                                React.createElement('svg',{width:'80',height:'80',viewBox:'0 0 24 24',fill:'none',stroke:'#5c5f66',strokeWidth:'1'},
+                                    React.createElement('polygon',{points:'5 3 19 12 5 21'}),
                                 ),
+                                React.createElement('div',{style:{marginTop:'12px',fontSize:'13px',color:'#5c5f66'}},'视频预览区域'),
+                                React.createElement('div',{style:{marginTop:'4px',fontSize:'11px',color:'#3d3f45'}},hasVideos?'已连接 '+videoSegments.length+' 个视频片段':'请连接分镜生成节点获取素材'),
                             ),
                         ),
                     ),
 
-                    // ===== BOTTOM TIMELINE / TRACK EDITOR =====
-                    React.createElement('div',{style:{height:'180px',background:'#111214',borderTop:'1px solid rgba(255,255,255,0.08)',display:'flex',flexDirection:'column',flexShrink:0}},
+                    // ===== BOTTOM TIMELINE =====
+                    React.createElement('div',{style:{height:'200px',background:'#111214',borderTop:'1px solid rgba(255,255,255,0.08)',display:'flex',flexDirection:'column',flexShrink:0}},
                         // Toolbar row
                         React.createElement('div',{style:{display:'flex',alignItems:'center',gap:'6px',padding:'8px 14px 4px',borderBottom:'1px solid rgba(255,255,255,0.04)'}},
-                            // Playback controls
                             React.createElement('button',{title:'撤销',style:{width:'24px',height:'24px',borderRadius:'4px',border:'none',background:'transparent',color:'#5c5f66',fontSize:'12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},onMouseEnter:e=>{e.currentTarget.style.color='#e4e5e7';},onMouseLeave:e=>{e.currentTarget.style.color='#5c5f66';}},'↶'),
                             React.createElement('button',{title:'重做',style:{width:'24px',height:'24px',borderRadius:'4px',border:'none',background:'transparent',color:'#5c5f66',fontSize:'12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},onMouseEnter:e=>{e.currentTarget.style.color='#e4e5e7';},onMouseLeave:e=>{e.currentTarget.style.color='#5c5f66';}},'↷'),
                             React.createElement('button',{title:'分割',style:{width:'24px',height:'24px',borderRadius:'4px',border:'none',background:'transparent',color:'#5c5f66',fontSize:'12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},onMouseEnter:e=>{e.currentTarget.style.color='#e4e5e7';},onMouseLeave:e=>{e.currentTarget.style.color='#5c5f66';}},'✂️'),
@@ -1982,19 +2035,15 @@
                             React.createElement('button',{title:'文字',style:{width:'24px',height:'24px',borderRadius:'4px',border:'none',background:'transparent',color:'#5c5f66',fontSize:'12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},onMouseEnter:e=>{e.currentTarget.style.color='#e4e5e7';},onMouseLeave:e=>{e.currentTarget.style.color='#5c5f66';}},'T'),
                             React.createElement('button',{title:'全屏预览',style:{width:'24px',height:'24px',borderRadius:'4px',border:'none',background:'transparent',color:'#5c5f66',fontSize:'12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},onMouseEnter:e=>{e.currentTarget.style.color='#e4e5e7';},onMouseLeave:e=>{e.currentTarget.style.color='#5c5f66';}},'⛶'),
 
-                            // Spacer
                             React.createElement('div',{style:{flex:1}}),
 
-                            // Time display
                             React.createElement('span',{style:{fontSize:'12px',color:'#e4e5e7',fontFamily:'monospace',marginRight:'4px'}},playheadTime),
-                            // Play button
                             React.createElement('button',{
                                 style:{width:'26px',height:'26px',borderRadius:'50%',border:'none',background:isPlaying?'#4c6ef5':'rgba(255,255,255,0.1)',color:isPlaying?'white':'#e4e5e7',fontSize:'11px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},
                                 onClick:e=>{e.stopPropagation(); setIsPlaying(prev=>!prev);},
                             }, isPlaying ? '⏸' : '▶'),
                             React.createElement('span',{style:{fontSize:'12px',color:'#909296',fontFamily:'monospace',marginLeft:'4px'}},totalDuration),
 
-                            // Right tools
                             React.createElement('div',{style:{marginLeft:'12px',display:'flex',alignItems:'center',gap:'6px'}},
                                 React.createElement('button',{title:'历史记录',style:{width:'22px',height:'22px',borderRadius:'4px',border:'none',background:'transparent',color:'#5c5f66',fontSize:'11px',cursor:'pointer'},onMouseEnter:e=>{e.currentTarget.style.color='#e4e5e7';},onMouseLeave:e=>{e.currentTarget.style.color='#5c5f66';}},'🕐'),
                                 React.createElement('button',{title:'保存快照',style:{width:'22px',height:'22px',borderRadius:'4px',border:'none',background:'transparent',color:'#5c5f66',fontSize:'11px',cursor:'pointer'},onMouseEnter:e=>{e.currentTarget.style.color='#e4e5e7';},onMouseLeave:e=>{e.currentTarget.style.color='#5c5f66';}},'💾'),
@@ -2035,7 +2084,6 @@
                                             flexShrink:0,
                                         },'🎬')),
                                     ),
-                                    // Segment label overlay
                                     React.createElement('div',{style:{position:'absolute',left:4,top:2,fontSize:'9px',color:'#bac8ff',fontWeight:500,whiteSpace:'nowrap',textShadow:'0 1px 3px rgba(0,0,0,0.8)',zIndex:2}},seg.name),
                                     React.createElement('div',{style:{position:'absolute',right:4,bottom:2,fontSize:'8px',color:'#5c5f66',zIndex:2}},seg.duration),
                                 )),
@@ -2045,11 +2093,9 @@
                                 React.createElement('span',{style:{fontSize:'11px',color:'#5c5f66'}},'🔊'),
                                 React.createElement('span',{style:{fontSize:'10px',color:'#5c5f66'}},'音频轨道'),
                             ),
-                            // Audio track timeline (empty)
                             React.createElement('div',{style:{height:'36px',background:'rgba(255,255,255,0.01)',borderRadius:'4px',border:'1px dashed rgba(255,255,255,0.06)'}}),
                         ),
                     ),
-                    ), // close modal card
                 ) :
 
                 // === MAIN CARD (shown when compose page is closed) ===
