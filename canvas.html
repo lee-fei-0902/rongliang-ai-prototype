@@ -530,8 +530,101 @@
             const hasImage = data.preview || isCompleted;
 
             return React.createElement('div', { style:{ position:'relative', zIndex:expanded?50:1 } },
-                // === TOP FLOATING TOOLBAR (visible when selected/expanded) ===
-                (selected || expanded) ? React.createElement('div', {
+                // === TOP FLOATING TOOLBAR (visible when selected/expanded, for completed images) ===
+                (selected || expanded) && isCompleted ? React.createElement('div', {
+                    style:{
+                        position:'absolute', top:'-44px', left:'50%', transform:'translateX(-50%)',
+                        display:'flex', alignItems:'center', gap:'4px', zIndex:60,
+                        background:'#1a1b1e', border:'1px solid rgba(255,255,255,0.1)',
+                        borderRadius:'10px', padding:'5px 10px',
+                        boxShadow:'0 8px 32px rgba(0,0,0,0.4)',
+                        animation:'menuIn 0.15s ease-out',
+                    },
+                    onClick:e=>e.stopPropagation(),
+                },
+                    // Image Edit dropdown
+                    React.createElement('div',{
+                        style:{position:'relative'},
+                    },
+                        React.createElement('button', {
+                            style:{display:'flex',alignItems:'center',gap:'4px',padding:'5px 10px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'rgba(255,255,255,0.03)',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
+                            onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
+                            onMouseLeave:e=>e.currentTarget.style.background='rgba(255,255,255,0.03)',
+                            onClick:(e)=>{e.stopPropagation(); setShowTopToolbar(p=>!p); },
+                        }, React.createElement('span',null,'🎨'), '图片编辑', React.createElement('span',null,'▼')),
+                        showTopToolbar ? React.createElement('div',{
+                            style:{position:'absolute',top:'calc(100% + 6px)',left:'0',background:'#1a1b1e',border:'1px solid rgba(255,255,255,0.1)',borderRadius:'10px',padding:'4px',minWidth:'140px',boxShadow:'0 16px 48px rgba(0,0,0,0.5)',zIndex:200,animation:'menuIn 0.12s ease-out'},
+                            onClick:e=>e.stopPropagation(),
+                        },
+                            ['裁剪','重绘','抠图','超分','擦除','去水印','扩图'].map((item,idx)=>React.createElement('div',{
+                                key:idx,
+                                style:{padding:'7px 10px',borderRadius:'6px',cursor:'pointer',fontSize:'12px',color:'#c1c2c5',transition:'all 0.1s'},
+                                onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.06)',
+                                onMouseLeave:e=>e.currentTarget.style.background='transparent',
+                                onClick:(e)=>{e.stopPropagation(); setShowTopToolbar(false); showToast(item+'功能开发中...','info'); },
+                            }, item)),
+                        ) : null,
+                    ),
+                    // Separator
+                    React.createElement('div',{style:{width:'1px',height:'20px',background:'rgba(255,255,255,0.08)'}}),
+                    // Quick action buttons
+                    React.createElement('button', {
+                        style:{padding:'5px 8px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'transparent',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
+                        onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
+                        onMouseLeave:e=>e.currentTarget.style.background='transparent',
+                        onClick:(e)=>{e.stopPropagation(); showToast('全景功能开发中...','info'); },
+                    }, '全景'),
+                    React.createElement('button', {
+                        style:{padding:'5px 8px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'transparent',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
+                        onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
+                        onMouseLeave:e=>e.currentTarget.style.background='transparent',
+                        onClick:(e)=>{e.stopPropagation(); showToast('多角度功能开发中...','info'); },
+                    }, '多角度'),
+                    React.createElement('button', {
+                        style:{padding:'5px 8px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'transparent',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
+                        onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
+                        onMouseLeave:e=>e.currentTarget.style.background='transparent',
+                        onClick:(e)=>{e.stopPropagation(); showToast('打光功能开发中...','info'); },
+                    }, '打光'),
+                    React.createElement('button', {
+                        style:{padding:'5px 8px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'transparent',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
+                        onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
+                        onMouseLeave:e=>e.currentTarget.style.background='transparent',
+                        onClick:(e)=>{e.stopPropagation(); showToast('九宫格功能开发中...','info'); },
+                    }, '九宫格'),
+                    React.createElement('button', {
+                        style:{padding:'5px 8px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'transparent',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
+                        onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
+                        onMouseLeave:e=>e.currentTarget.style.background='transparent',
+                        onClick:(e)=>{e.stopPropagation(); showToast('重绘功能开发中...','info'); },
+                    }, '重绘'),
+                    React.createElement('button', {
+                        style:{padding:'5px 8px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'transparent',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
+                        onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
+                        onMouseLeave:e=>e.currentTarget.style.background='transparent',
+                        onClick:(e)=>{e.stopPropagation(); showToast('宫格切分功能开发中...','info'); },
+                    }, '宫格切分'),
+                    // Separator
+                    React.createElement('div',{style:{width:'1px',height:'20px',background:'rgba(255,255,255,0.08)'}}),
+                    // Icon buttons
+                    React.createElement('button', {
+                        style:{padding:'5px',borderRadius:'6px',border:'none',background:'transparent',color:'#909296',fontSize:'13px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',transition:'all 0.15s'},
+                        onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
+                        onMouseLeave:e=>e.currentTarget.style.background='transparent',
+                        onClick:(e)=>{e.stopPropagation(); showToast('下载功能开发中...','info'); },
+                        title:'下载',
+                    }, '⬇️'),
+                    React.createElement('button', {
+                        style:{padding:'5px',borderRadius:'6px',border:'none',background:'transparent',color:'#909296',fontSize:'13px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',transition:'all 0.15s'},
+                        onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
+                        onMouseLeave:e=>e.currentTarget.style.background='transparent',
+                        onClick:(e)=>{e.stopPropagation(); setPanelExpanded(true); },
+                        title:'全屏编辑',
+                    }, '⛶'),
+                ) : null,
+
+                // === TOP FLOATING TOOLBAR (for non-completed states: upload/import) ===
+                (selected || expanded) && !isCompleted ? React.createElement('div', {
                     style:{
                         position:'absolute', top:'-44px', left:'50%', transform:'translateX(-50%)',
                         display:'flex', gap:'8px', zIndex:60,
