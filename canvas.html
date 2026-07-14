@@ -153,6 +153,7 @@
             const hasOut = cfg.output.length > 0;
             const st = data.status || 'ready';
             const [expanded, setExpanded] = useState(false);
+            const [panelExpanded, setPanelExpanded] = useState(false);
 
             const statusColor = {
                 ready:'rgba(255,255,255,0.10)', queued:'#4c6ef5', running:'#f59f00',
@@ -276,7 +277,14 @@
 
                 // === EXPANDED PANEL ===
                 expanded ? React.createElement('div', {
-                    style:{
+                    style: panelExpanded ? {
+                        position:'fixed', inset:'40px', zIndex:9999,
+                        background:'#1a1b1e',
+                        borderRadius:'16px', border:'1px solid rgba(255,255,255,0.08)',
+                        boxShadow:'0 24px 80px rgba(0,0,0,0.6)',
+                        padding:'24px', overflow:'auto',
+                        animation:'menuIn 0.25s ease-out',
+                    } : {
                         position:'absolute', top:'calc(100% + 8px)', left:'0',
                         width: isScript ? '480px' : '420px', background:'#1a1b1e',
                         borderRadius:'12px', border:'1px solid rgba(255,255,255,0.08)',
@@ -286,6 +294,14 @@
                     },
                     onClick:e=>e.stopPropagation(),
                 },
+                    // Expand/Shrink button bar
+                    React.createElement('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'12px'}},
+                        React.createElement('span',{style:{fontSize:'12px',fontWeight:600,color:'#e4e5e7'}},cfg.label+(panelExpanded?' - 全屏编辑':'')),
+                        React.createElement('button',{
+                            style:{padding:'4px 10px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.04)',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',display:'flex',alignItems:'center',gap:'4px'},
+                            onClick:e=>{e.stopPropagation(); setPanelExpanded(prev=>!prev);},
+                        },panelExpanded?'⛶ 缩小':'⛶ 放大'),
+                    ),
                     isScript ? React.createElement('div',null,
                         // Top action buttons (like screenshot)
                         React.createElement('div',{style:{display:'flex',gap:'6px',marginBottom:'14px'}},
@@ -467,6 +483,7 @@
             const cfg = NODE_TYPES_CONFIG.character_gen;
             const st = data.status || 'ready';
             const [expanded, setExpanded] = useState(false);
+            const [panelExpanded, setPanelExpanded] = useState(false);
             const [showImportMenu, setShowImportMenu] = useState(false);
             const [showRefHover, setShowRefHover] = useState(false);
             const [showTopToolbar, setShowTopToolbar] = useState(false);
@@ -662,7 +679,14 @@
 
                 // === EXPANDED EDITING PANEL ===
                 expanded ? React.createElement('div', {
-                    style:{
+                    style: panelExpanded ? {
+                        position:'fixed', inset:'40px', zIndex:9999,
+                        background:'#1a1b1e',
+                        borderRadius:'16px', border:'1px solid rgba(255,255,255,0.08)',
+                        boxShadow:'0 24px 80px rgba(0,0,0,0.6)',
+                        padding:'24px', overflow:'auto',
+                        animation:'menuIn 0.25s ease-out',
+                    } : {
                         position:'absolute',
                         top:'calc(100% + 12px)',
                         left:'0',
@@ -674,6 +698,14 @@
                     },
                     onClick:e=>e.stopPropagation(),
                 },
+                    // Expand/Shrink button bar
+                    React.createElement('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'12px'}},
+                        React.createElement('span',{style:{fontSize:'12px',fontWeight:600,color:'#e4e5e7'}},cfg.label+(panelExpanded?' - 全屏编辑':'')),
+                        React.createElement('button',{
+                            style:{padding:'4px 10px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.04)',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',display:'flex',alignItems:'center',gap:'4px'},
+                            onClick:e=>{e.stopPropagation(); setPanelExpanded(prev=>!prev);},
+                        },panelExpanded?'⛶ 缩小':'⛶ 放大'),
+                    ),
                     // Style image upload area (reference StoryboardNode)
                     React.createElement('div',{style:{display:'flex',alignItems:'center',gap:'12px',marginBottom:'16px'}},
                         React.createElement('div',{
@@ -815,6 +847,7 @@
             const cfg = NODE_TYPES_CONFIG[data.nodeType] || NODE_TYPES_CONFIG.scene_gen;
             const st = data.status || 'ready';
             const [expanded, setExpanded] = useState(false);
+            const [panelExpanded, setPanelExpanded] = useState(false);
             const [showImportMenu, setShowImportMenu] = useState(false);
             const [showRefHover, setShowRefHover] = useState(false);
             const [referenceImages, setReferenceImages] = useState(data.referenceImages||[]);
@@ -991,7 +1024,14 @@
 
                 // === EXPANDED EDITING PANEL ===
                 expanded ? React.createElement('div', {
-                    style:{
+                    style: panelExpanded ? {
+                        position:'fixed', inset:'40px', zIndex:9999,
+                        background:'#1a1b1e',
+                        borderRadius:'16px', border:'1px solid rgba(255,255,255,0.08)',
+                        boxShadow:'0 24px 80px rgba(0,0,0,0.6)',
+                        padding:'24px', overflow:'auto',
+                        animation:'menuIn 0.25s ease-out',
+                    } : {
                         position:'absolute',
                         top:'calc(100% + 12px)',
                         left:'0',
@@ -1003,6 +1043,14 @@
                     },
                     onClick:e=>e.stopPropagation(),
                 },
+                    // Expand/Shrink button bar
+                    React.createElement('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'12px'}},
+                        React.createElement('span',{style:{fontSize:'12px',fontWeight:600,color:'#e4e5e7'}},cfg.label+(panelExpanded?' - 全屏编辑':'')),
+                        React.createElement('button',{
+                            style:{padding:'4px 10px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.04)',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',display:'flex',alignItems:'center',gap:'4px'},
+                            onClick:e=>{e.stopPropagation(); setPanelExpanded(prev=>!prev);},
+                        },panelExpanded?'⛶ 缩小':'⛶ 放大'),
+                    ),
                     // Reference Images + Style upload area (StoryboardNode style)
                     React.createElement('div',{style:{display:'flex',alignItems:'center',gap:'12px',marginBottom:'16px'}},
                         React.createElement('div',{
@@ -1154,6 +1202,7 @@
             const cfg = NODE_TYPES_CONFIG[data.nodeType] || NODE_TYPES_CONFIG.storyboard_gen;
             const st = data.status || 'ready';
             const [expanded, setExpanded] = useState(false);
+            const [panelExpanded, setPanelExpanded] = useState(false);
             const [prompt, setPrompt] = useState(data.prompt || data.description || '');
             const [genMode, setGenMode] = useState(data.genMode || 'text'); // text, firstLast, reference
             const [ratio, setRatio] = useState(data.ratio || '16:9');
@@ -1299,7 +1348,14 @@
 
                 // === EXPANDED EDITING PANEL ===
                 expanded ? React.createElement('div', {
-                    style:{
+                    style: panelExpanded ? {
+                        position:'fixed', inset:'40px', zIndex:9999,
+                        background:'#1a1b1e',
+                        borderRadius:'16px', border:'1px solid rgba(255,255,255,0.08)',
+                        boxShadow:'0 24px 80px rgba(0,0,0,0.6)',
+                        padding:'24px', overflow:'auto',
+                        animation:'menuIn 0.25s ease-out',
+                    } : {
                         position:'absolute',
                         top:'calc(100% + 12px)',
                         left:'0',
@@ -1314,6 +1370,14 @@
                     },
                     onClick:e=>e.stopPropagation(),
                 },
+                    // Expand/Shrink button bar
+                    React.createElement('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'12px'}},
+                        React.createElement('span',{style:{fontSize:'12px',fontWeight:600,color:'#e4e5e7'}},cfg.label+(panelExpanded?' - 全屏编辑':'')),
+                        React.createElement('button',{
+                            style:{padding:'4px 10px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.04)',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',display:'flex',alignItems:'center',gap:'4px'},
+                            onClick:e=>{e.stopPropagation(); setPanelExpanded(prev=>!prev);},
+                        },panelExpanded?'⛶ 缩小':'⛶ 放大'),
+                    ),
                     // Style image upload area
                     React.createElement('div',{style:{display:'flex',alignItems:'center',gap:'12px',marginBottom:'16px'}},
                         React.createElement('div',{
@@ -2031,6 +2095,16 @@
             useEffect(()=>{const t=setTimeout(()=>{try{localStorage.setItem('canvas_v2',JSON.stringify({nodes,edges}));}catch(e){}},2000);return ()=>clearTimeout(t);},[nodes,edges]);
             useEffect(()=>{const t=setTimeout(()=>rfi.fitView({padding:0.15,duration:600}),350);return ()=>clearTimeout(t);},[]);
             useEffect(()=>{const p=new URLSearchParams(window.location.search);const n=p.get('project');if(n)setProjectName(decodeURIComponent(n));},[]);
+
+            // Animate connected edges when a node is selected
+            useEffect(()=>{
+                const selectedIds = new Set(nodes.filter(n=>n.selected).map(n=>n.id));
+                setEdges(eds=>eds.map(e=>({
+                    ...e,
+                    animated: selectedIds.has(e.source) || selectedIds.has(e.target),
+                    style:{...e.style,strokeWidth: (selectedIds.has(e.source)||selectedIds.has(e.target))?3:2},
+                })));
+            },[nodes.map(n=>n.selected).join(','), nodes.length]);
 
             // ==================== RENDER ====================
             return React.createElement('div',{style:{width:'100vw',height:'100vh',display:'flex',flexDirection:'column',background:'#0f1117'}},
