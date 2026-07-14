@@ -1941,30 +1941,17 @@
 
             const hasVideos = videoSegments.length > 0;
 
-            return React.createElement('div', { style:{ position:'relative', zIndex:showComposePage?9999:(expanded?50:1) } },
-                // Input handle (from video nodes)
-                React.createElement(Handle, {
-                    type:'target', position:Position.Left,
-                    style:{background:'#f06595',border:'2px solid #1a1b1e',width:'10px',height:'10px'},
-                    id:'video-in', key:'video-in'
-                }),
-
-                // Output handle
-                React.createElement(Handle, {
-                    type:'source', position:Position.Right,
-                    style:{background:'#e0e0e0',border:'2px solid #1a1b1e',width:'10px',height:'10px'},
-                    id:'out', key:'out'
-                }),
-
-                // === FULL-SCREEN COMPOSE PAGE ===
-                showComposePage ? React.createElement('div',{
-                    style:{
-                        position:'fixed', inset:0, zIndex:9999,
-                        background:'#0f1117',
-                        display:'flex', flexDirection:'column',
-                        animation:'fadeIn 0.2s ease-out',
-                    },
-                    onClick:e=>e.stopPropagation(),
+            return React.createElement(React.Fragment, null,
+                // === FULL-SCREEN COMPOSE PAGE (portal to body) ===
+                showComposePage ? ReactDOM.createPortal(
+                    React.createElement('div',{
+                        style:{
+                            position:'fixed', inset:0, zIndex:99999,
+                            background:'#0f1117',
+                            display:'flex', flexDirection:'column',
+                            animation:'fadeIn 0.2s ease-out',
+                        },
+                        onClick:e=>e.stopPropagation(),
                     },
                     // ===== HEADER BAR =====
                     React.createElement('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'12px 20px',borderBottom:'1px solid rgba(255,255,255,0.06)',flexShrink:0}},
@@ -2096,9 +2083,10 @@
                             React.createElement('div',{style:{height:'36px',background:'rgba(255,255,255,0.01)',borderRadius:'4px',border:'1px dashed rgba(255,255,255,0.06)'}}),
                         ),
                     ),
-                ) :
+                    ), document.body) : null,
 
-                // === MAIN CARD (shown when compose page is closed) ===
+                // === NODE WRAPPER ===
+                React.createElement('div', { style:{ position:'relative', zIndex:expanded?50:1 } },                // === MAIN CARD (shown when compose page is closed) ===
                 React.createElement('div', {
                     style:{
                         background:'#1a1b1e',
@@ -2173,6 +2161,7 @@
                         },'打开视频合成'),
                     ),
                 ),
+            ),
             );
         }
 
