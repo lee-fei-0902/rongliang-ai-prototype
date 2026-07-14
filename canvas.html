@@ -2086,7 +2086,22 @@
                     ), document.body) : null,
 
                 // === NODE WRAPPER ===
-                React.createElement('div', { style:{ position:'relative', zIndex:expanded?50:1 } },                // === MAIN CARD (shown when compose page is closed) ===
+                React.createElement('div', { style:{ position:'relative', zIndex:expanded?50:1 } },
+                // Input handle (from video nodes)
+                React.createElement(Handle, {
+                    type:'target', position:Position.Left,
+                    style:{background:'#f06595',border:'2px solid #1a1b1e',width:'10px',height:'10px'},
+                    id:'video-in', key:'video-in'
+                }),
+
+                // Output handle
+                React.createElement(Handle, {
+                    type:'source', position:Position.Right,
+                    style:{background:'#e0e0e0',border:'2px solid #1a1b1e',width:'10px',height:'10px'},
+                    id:'out', key:'out'
+                }),
+
+                // === MAIN CARD (shown when compose page is closed) ===
                 React.createElement('div', {
                     style:{
                         background:'#1a1b1e',
