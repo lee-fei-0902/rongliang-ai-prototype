@@ -567,46 +567,23 @@
                     ),
                     // Separator
                     React.createElement('div',{style:{width:'1px',height:'20px',background:'rgba(255,255,255,0.08)'}}),
-                    // Quick action buttons
+                    // 本地上传 button
                     React.createElement('button', {
-                        style:{padding:'5px 8px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'transparent',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
+                        style:{display:'flex',alignItems:'center',gap:'4px',padding:'5px 10px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'transparent',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
                         onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
                         onMouseLeave:e=>e.currentTarget.style.background='transparent',
-                        onClick:(e)=>{e.stopPropagation(); showToast('全景功能开发中...','info'); },
-                    }, '全景'),
+                        onClick:(e)=>{e.stopPropagation(); showToast('本地上传功能开发中...','info'); },
+                    }, React.createElement('span',null,'📁'), '本地上传'),
+                    // 资产库导入 button
                     React.createElement('button', {
-                        style:{padding:'5px 8px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'transparent',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
+                        style:{display:'flex',alignItems:'center',gap:'4px',padding:'5px 10px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'transparent',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
                         onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
                         onMouseLeave:e=>e.currentTarget.style.background='transparent',
-                        onClick:(e)=>{e.stopPropagation(); showToast('多角度功能开发中...','info'); },
-                    }, '多角度'),
-                    React.createElement('button', {
-                        style:{padding:'5px 8px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'transparent',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
-                        onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
-                        onMouseLeave:e=>e.currentTarget.style.background='transparent',
-                        onClick:(e)=>{e.stopPropagation(); showToast('打光功能开发中...','info'); },
-                    }, '打光'),
-                    React.createElement('button', {
-                        style:{padding:'5px 8px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'transparent',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
-                        onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
-                        onMouseLeave:e=>e.currentTarget.style.background='transparent',
-                        onClick:(e)=>{e.stopPropagation(); showToast('九宫格功能开发中...','info'); },
-                    }, '九宫格'),
-                    React.createElement('button', {
-                        style:{padding:'5px 8px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'transparent',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
-                        onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
-                        onMouseLeave:e=>e.currentTarget.style.background='transparent',
-                        onClick:(e)=>{e.stopPropagation(); showToast('重绘功能开发中...','info'); },
-                    }, '重绘'),
-                    React.createElement('button', {
-                        style:{padding:'5px 8px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.08)',background:'transparent',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',transition:'all 0.15s',whiteSpace:'nowrap'},
-                        onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
-                        onMouseLeave:e=>e.currentTarget.style.background='transparent',
-                        onClick:(e)=>{e.stopPropagation(); showToast('宫格切分功能开发中...','info'); },
-                    }, '宫格切分'),
+                        onClick:(e)=>{e.stopPropagation(); showToast('从资产库导入功能开发中...','info'); },
+                    }, React.createElement('span',null,'🗂️'), '资产库导入'),
                     // Separator
                     React.createElement('div',{style:{width:'1px',height:'20px',background:'rgba(255,255,255,0.08)'}}),
-                    // Icon buttons
+                    // Download button
                     React.createElement('button', {
                         style:{padding:'5px',borderRadius:'6px',border:'none',background:'transparent',color:'#909296',fontSize:'13px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',transition:'all 0.15s'},
                         onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
@@ -614,13 +591,6 @@
                         onClick:(e)=>{e.stopPropagation(); showToast('下载功能开发中...','info'); },
                         title:'下载',
                     }, '⬇️'),
-                    React.createElement('button', {
-                        style:{padding:'5px',borderRadius:'6px',border:'none',background:'transparent',color:'#909296',fontSize:'13px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',transition:'all 0.15s'},
-                        onMouseEnter:e=>e.currentTarget.style.background='rgba(255,255,255,0.08)',
-                        onMouseLeave:e=>e.currentTarget.style.background='transparent',
-                        onClick:(e)=>{e.stopPropagation(); setPanelExpanded(true); },
-                        title:'全屏编辑',
-                    }, '⛶'),
                 ) : null,
 
                 // === TOP FLOATING TOOLBAR (for non-completed states: upload/import) ===
