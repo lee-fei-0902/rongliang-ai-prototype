@@ -42,6 +42,7 @@
         @keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
         @keyframes toastIn { from { opacity:0; transform:translateX(-50%) translateY(-10px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
         @keyframes menuIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
         @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
 
         .toast {
@@ -1517,7 +1518,15 @@
             const cfg = { label:'视频合成', icon:'✂️', color:'#e0e0e0', bg:'rgba(224,224,224,0.10)' };
             const st = data.status || 'ready';
             const [expanded, setExpanded] = useState(false);
-            const [videoSegments, setVideoSegments] = useState(data.segments || []);
+            const [showComposePage, setShowComposePage] = useState(false);
+            const [videoSegments, setVideoSegments] = useState(data.segments || [
+                {name:'视频节点 8', duration:'00:00-15:02', thumb:null},
+                {name:'视频节点 11', duration:'00:00-15:02', thumb:null},
+            ]);
+            const [showExportMenu, setShowExportMenu] = useState(false);
+            const [playheadTime, setPlayheadTime] = useState('00:00');
+            const [totalDuration] = useState('00:30');
+            const [isPlaying, setIsPlaying] = useState(false);
 
             const statusColor = {
                 ready:'rgba(255,255,255,0.10)', queued:'#4c6ef5', running:'#f59f00',
@@ -1528,12 +1537,13 @@
 
             const onCardClick = useCallback((e) => {
                 e.stopPropagation();
-                setExpanded(prev => !prev);
+                // Open full-screen compose page instead of just expanding
+                setShowComposePage(true);
             }, []);
 
             const hasVideos = videoSegments.length > 0;
 
-            return React.createElement('div', { style:{ position:'relative', zIndex:expanded?50:1 } },
+            return React.createElement('div', { style:{ position:'relative', zIndex:showComposePage?9999:(expanded?50:1) } },
                 // Input handle (from video nodes)
                 React.createElement(Handle, {
                     type:'target', position:Position.Left,
@@ -1548,7 +1558,157 @@
                     id:'out', key:'out'
                 }),
 
-                // === MAIN CARD ===
+                // === FULL-SCREEN COMPOSE PAGE OVERLAY ===
+                showComposePage ? React.createElement('div',{
+                    style:{
+                        position:'fixed', inset:0, zIndex:9999,
+                        background:'#0a0a0c',
+                        display:'flex', flexDirection:'column',
+                        animation:'fadeIn 0.2s ease-out',
+                    },
+                    },
+                    // ===== HEADER BAR =====
+                    React.createElement('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'12px 20px',borderBottom:'1px solid rgba(255,255,255,0.08)',flexShrink:0}},
+                        React.createElement('span',{style:{fontSize:'14px',color:'#e4e5e7',fontWeight:600}},'视频合成'),
+                        React.createElement('div',{style:{display:'flex',alignItems:'center',gap:'8px'}},
+                            // Export dropdown button
+                            React.createElement('div',{style:{position:'relative'}},
+                                React.createElement('button',{
+                                    style:{padding:'6px 14px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.12)',background:'rgba(255,255,255,0.05)',color:'#c1c2c5',fontSize:'12px',cursor:'pointer',display:'flex',alignItems:'center',gap:'4px'},
+                                    onClick:e=>{e.stopPropagation(); setShowExportMenu(prev=>!prev);},
+                                },'导出 ',React.createElement('span',{style:{fontSize:'10px'}},'▼')),
+                                showExportMenu ? React.createElement('div',{
+                                    style:{position:'absolute',top:'calc(100% + 6px)',right:0,minWidth:'160px',background:'#1a1b1e',border:'1px solid rgba(255,255,255,0.12)',borderRadius:'10px',padding:'4px',boxShadow:'0 16px 48px rgba(0,0,0,0.5)',zIndex:10001,animation:'menuIn 0.12s ease-out'},
+                                    onClick:e=>e.stopPropagation(),
+                                },
+                                    React.createElement('div',{style:{padding:'6px 10px',fontSize:'11px',color:'#5c5f66',fontWeight:500}},'导出位置'),
+                                    React.createElement('div',{
+                                        style:{padding:'8px 12px',borderRadius:'6px',cursor:'pointer',fontSize:'12px',color:'#c1c2c5',display:'flex',alignItems:'center',gap:'8px',transition:'all 0.1s'},
+                                        onMouseEnter:e=>e.target.style.background='rgba(255,255,255,0.06)',
+                                        onMouseLeave:e=>e.target.style.background='transparent',
+                                        onClick:e=>{e.stopPropagation(); setShowExportMenu(false); showToast('导出到本地功能开发中...','info');},
+                                    },React.createElement('span',null,'⬇️'),' 导出到本地'),
+                                    React.createElement('div',{
+                                        style:{padding:'8px 12px',borderRadius:'6px',cursor:'pointer',fontSize:'12px',color:'#c1c2c5',display:'flex',alignItems:'center',gap:'8px',transition:'all 0.1s'},
+                                        onMouseEnter:e=>e.target.style.background='rgba(255,255,255,0.06)',
+                                        onMouseLeave:e=>e.target.style.background='transparent',
+                                        onClick:e=>{e.stopPropagation(); setShowExportMenu(false); showToast('已导出至画布','success'); setShowComposePage(false);},
+                                    },React.createElement('span',null,'📋'),' 导出到画布'),
+                                ) : null,
+                            ),
+                            // Close button
+                            React.createElement('button',{
+                                style:{width:'28px',height:'28px',borderRadius:'50%',border:'1px solid rgba(255,255,255,0.12)',background:'transparent',color:'#909296',fontSize:'16px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},
+                                onClick:e=>{e.stopPropagation(); setShowComposePage(false);},
+                                title:'关闭',
+                            },'×'),
+                        ),
+                    ),
+
+                    // ===== PREVIEW CANVAS AREA =====
+                    React.createElement('div',{style:{flex:1,display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden',position:'relative',minHeight:0}},
+                        // Preview image/video placeholder (anime-style illustration per screenshot)
+                        React.createElement('div',{style:{maxWidth:'100%',maxHeight:'100%',display:'flex',alignItems:'center',justifyContent:'center'}},
+                            React.createElement('div',{
+                                style:{width:'720px',height:'405px',background:'#1a1b1e',borderRadius:'8px',
+                                    display:'flex',alignItems:'center',justifyContent:'center',
+                                    overflow:'hidden',position:'relative',
+                                    border:'1px solid rgba(255,255,255,0.04)',
+                                },
+                                // Simulated anime-style preview content
+                                React.createElement('div',{style:{textAlign:'center',opacity:0.5}},
+                                    React.createElement('svg',{width:'80',height:'80',viewBox:'0 0 24 24',fill:'none',stroke:'#5c5f66',strokeWidth:'1'},
+                                        React.createElement('polygon',{points:'5 3 19 12 5 21'}),
+                                    ),
+                                    React.createElement('div',{style:{marginTop:'12px',fontSize:'13px',color:'#5c5f66'}},'视频预览区域'),
+                                    React.createElement('div',{style:{marginTop:'4px',fontSize:'11px',color:'#3d3f45'}},hasVideos?'已连接 '+videoSegments.length+' 个视频片段':'请连接分镜生成节点获取素材'),
+                                ),
+                            ),
+                        ),
+                    ),
+
+                    // ===== BOTTOM TIMELINE / TRACK EDITOR =====
+                    React.createElement('div',{style:{height:'180px',background:'#111214',borderTop:'1px solid rgba(255,255,255,0.08)',display:'flex',flexDirection:'column',flexShrink:0}},
+                        // Toolbar row
+                        React.createElement('div',{style:{display:'flex',alignItems:'center',gap:'6px',padding:'8px 14px 4px',borderBottom:'1px solid rgba(255,255,255,0.04)'}},
+                            // Playback controls
+                            React.createElement('button',{title:'撤销',style:{width:'24px',height:'24px',borderRadius:'4px',border:'none',background:'transparent',color:'#5c5f66',fontSize:'12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},onMouseEnter:e=>{e.currentTarget.style.color='#e4e5e7';},onMouseLeave:e=>{e.currentTarget.style.color='#5c5f66';}},'↶'),
+                            React.createElement('button',{title:'重做',style:{width:'24px',height:'24px',borderRadius:'4px',border:'none',background:'transparent',color:'#5c5f66',fontSize:'12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},onMouseEnter:e=>{e.currentTarget.style.color='#e4e5e7';},onMouseLeave:e=>{e.currentTarget.style.color='#5c5f66';}},'↷'),
+                            React.createElement('button',{title:'分割',style:{width:'24px',height:'24px',borderRadius:'4px',border:'none',background:'transparent',color:'#5c5f66',fontSize:'12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},onMouseEnter:e=>{e.currentTarget.style.color='#e4e5e7';},onMouseLeave:e=>{e.currentTarget.style.color='#5c5f66';}},'✂️'),
+                            React.createElement('button',{title:'删除',style:{width:'24px',height:'24px',borderRadius:'4px',border:'none',background:'transparent',color:'#5c5f66',fontSize:'12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},onMouseEnter:e=>{e.currentTarget.style.color='#ff6b6b';},onMouseLeave:e=>{e.currentTarget.style.color='#5c5f66';}},'🗑️'),
+                            React.createElement('button',{title:'文字',style:{width:'24px',height:'24px',borderRadius:'4px',border:'none',background:'transparent',color:'#5c5f66',fontSize:'12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},onMouseEnter:e=>{e.currentTarget.style.color='#e4e5e7';},onMouseLeave:e=>{e.currentTarget.style.color='#5c5f66';}},'T'),
+                            React.createElement('button',{title:'全屏预览',style:{width:'24px',height:'24px',borderRadius:'4px',border:'none',background:'transparent',color:'#5c5f66',fontSize:'12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},onMouseEnter:e=>{e.currentTarget.style.color='#e4e5e7';},onMouseLeave:e=>{e.currentTarget.style.color='#5c5f66';}},'⛶'),
+
+                            // Spacer
+                            React.createElement('div',{style:{flex:1}}),
+
+                            // Time display
+                            React.createElement('span',{style:{fontSize:'12px',color:'#e4e5e7',fontFamily:'monospace',marginRight:'4px'}},playheadTime),
+                            // Play button
+                            React.createElement('button',{
+                                style:{width:'26px',height:'26px',borderRadius:'50%',border:'none',background:isPlaying?'#4c6ef5':'rgba(255,255,255,0.1)',color:isPlaying?'white':'#e4e5e7',fontSize:'11px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},
+                                onClick:e=>{e.stopPropagation(); setIsPlaying(prev=>!prev);},
+                            }, isPlaying ? '⏸' : '▶'),
+                            React.createElement('span',{style:{fontSize:'12px',color:'#909296',fontFamily:'monospace',marginLeft:'4px'}},totalDuration),
+
+                            // Right tools
+                            React.createElement('div',{style:{marginLeft:'12px',display:'flex',alignItems:'center',gap:'6px'}},
+                                React.createElement('button',{title:'历史记录',style:{width:'22px',height:'22px',borderRadius:'4px',border:'none',background:'transparent',color:'#5c5f66',fontSize:'11px',cursor:'pointer'},onMouseEnter:e=>{e.currentTarget.style.color='#e4e5e7';},onMouseLeave:e=>{e.currentTarget.style.color='#5c5f66';}},'🕐'),
+                                React.createElement('button',{title:'保存快照',style:{width:'22px',height:'22px',borderRadius:'4px',border:'none',background:'transparent',color:'#5c5f66',fontSize:'11px',cursor:'pointer'},onMouseEnter:e=>{e.currentTarget.style.color='#e4e5e7';},onMouseLeave:e=>{e.currentTarget.style.color='#5c5f66';}},'💾'),
+                                React.createElement('button',{title:'搜索',style:{width:'22px',height:'22px',borderRadius:'4px',border:'none',background:'transparent',color:'#5c5f66',fontSize:'11px',cursor:'pointer'},onMouseEnter:e=>{e.currentTarget.style.color='#e4e5e7';},onMouseLeave:e=>{e.currentTarget.style.color='#5c5f66';}},'🔍'),
+                                React.createElement('input',{type:'range',min:0,max:100,value:30,style:{width:'60px',accentColor:'#4c6ef5'}}),
+                                React.createElement('button',{title:'放大',style:{width:'22px',height:'22px',borderRadius:'4px',border:'none',background:'transparent',color:'#5c5f66',fontSize:'11px',cursor:'pointer'},onMouseEnter:e=>{e.currentTarget.style.color='#e4e5e7';},onMouseLeave:e=>{e.currentTarget.style.color='#5c5f66';}},'⊕'),
+                                React.createElement('button',{title:'缩小',style:{width:'22px',height:'22px',borderRadius:'4px',border:'none',background:'transparent',color:'#5c5f66',fontSize:'11px',cursor:'pointer'},onMouseEnter:e=>{e.currentTarget.style.color='#e4e5e7';},onMouseLeave:e=>{e.currentTarget.style.color='#5c5f66';}},'⊖'),
+                                React.createElement('button',{title:'适应视图',style:{width:'22px',height:'22px',borderRadius:'4px',border:'none',background:'transparent',color:'#5c5f66',fontSize:'11px',cursor:'pointer'},onMouseEnter:e=>{e.currentTarget.style.color='#e4e5e7';},onMouseLeave:e=>{e.currentTarget.style.color='#5c5f66';}},'⤢'),
+                            ),
+                        ),
+
+                        // Time ruler
+                        React.createElement('div',{style:{padding:'4px 48px 2px',display:'flex',alignItems:'center',fontSize:'10px',color:'#5c5f66',fontFamily:'monospace'}},
+                            ...Array.from({length:18}).map((_,i)=>React.createElement('span',{key:i,style:{marginRight:Math.random()>0.3?'32px':'28px'}},
+                                String(i).padStart(2,'0')+':'+String(Math.floor(Math.random()*60)).padStart(2,'0')
+                            )),
+                        ),
+
+                        // Tracks area
+                        React.createElement('div',{style:{flex:1,display:'flex',flexDirection:'column',padding:'4px 14px',overflowY:'auto',minHeight:0}},
+                            // Video track header
+                            React.createElement('div',{style:{display:'flex',alignItems:'center',gap:'8px',marginBottom:'4px'}},
+                                React.createElement('span',{style:{fontSize:'11px',color:'#5c5f66'}},'🎬'),
+                                React.createElement('span',{style:{fontSize:'10px',color:'#5c5f66'}},'视频轨道'),
+                            ),
+                            // Video track timeline
+                            React.createElement('div',{style:{height:'52px',background:'rgba(255,255,255,0.02)',borderRadius:'4px',position:'relative',display:'flex',alignItems:'stretch',overflow:'hidden',border:'1px solid rgba(255,255,255,0.04)'}},
+                                // Playhead line
+                                React.createElement('div',{style:{position:'absolute',left:'20px',top:0,bottom:0,width:'1px',background:'#fff',zIndex:3,boxShadow:'0 0 4px rgba(255,255,255,0.3)'}}),
+                                // Segment clips
+                                ...videoSegments.map((seg,idx)=>React.createElement('div',{key:idx,
+                                    style:{display:'flex',alignItems:'stretch',minWidth:'200px',maxWidth:'320px',marginRight:'2px',background:'rgba(76,110,245,0.08),border:'1px solid rgba(76,110,245,0.25)',borderRadius:'4px',overflow:'hidden',position:'relative',cursor:'pointer'},
+                                    onClick:e=>{e.stopPropagation(); showToast('选中片段: '+seg.name,'info');},
+                                },
+                                    React.createElement('div',{style:{width:'100%',height:'100%',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#1a1a2e,#16213e)',gap:1,overflow:'hidden'}},
+                                        ...Array.from({length:8}).map((_,ti)=>React.createElement('div',{key:ti,
+                                            style:{width:'38px',height:'100%',background:'#242529',borderRight:'1px solid rgba(255,255,255,0.03)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'8px',color:'#3d3f45'},
+                                            flexShrink:0,
+                                        },'🎬')),
+                                    ),
+                                    // Segment label overlay
+                                    React.createElement('div',{style:{position:'absolute',left:4,top:2,fontSize:'9px',color:'#bac8ff',fontWeight:500,whiteSpace:'nowrap',textShadow:'0 1px 3px rgba(0,0,0,0.8)',zIndex:2}},seg.name),
+                                    React.createElement('div',{style:{position:'absolute',right:4,bottom:2,fontSize:'8px',color:'#5c5f66',zIndex:2}},seg.duration),
+                                )),
+                            ),
+                            // Audio track
+                            React.createElement('div',{style:{display:'flex',alignItems:'center',gap:'8px',marginTop:6,marginBottom:2px'}},
+                                React.createElement('span',{style:{fontSize:'11px',color:'#5c5f66'}},'🔊'),
+                                React.createElement('span',{style:{fontSize:'10px',color:'#5c5f66'}},'音频轨道'),
+                            ),
+                            // Audio track timeline (empty)
+                            React.createElement('div',{style:{height:'36px',background:'rgba(255,255,255,0.01)',borderRadius:'4px',border:'1px dashed rgba(255,255,255,0.06)'}}),
+                        ),
+                    ),
+                ) :
+
+                // === MAIN CARD (shown when compose page is closed) ===
                 React.createElement('div', {
                     style:{
                         background:'#1a1b1e',
