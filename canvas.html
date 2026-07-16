@@ -161,9 +161,11 @@
             const [inputText, setInputText] = useState(desc || '');
             const [isGenerating, setIsGenerating] = useState(false);
             const [genResult, setGenResult] = useState(data.genResult || null);
+            const [promptText, setPromptText] = useState('');  // 保存生成前的提示词
 
             const handleGenerate = () => {
                 if (!inputText.trim()) return;
+                setPromptText(inputText);  // 保存提示词
                 setDesc(inputText);
                 setIsGenerating(true);
                 setTimeout(() => {
@@ -179,7 +181,6 @@
             React.useEffect(() => {
                 if (genResult) {
                     setDesc(genResult.text);
-                    setInputText(genResult.text);
                 }
             }, [genResult]);
 
@@ -237,19 +238,34 @@
                             onMouseLeave: e => { e.target.style.background = 'transparent'; },
                         }, '⬇ 下载'),
                     ),
-                    // Result text preview (full text, editable)
+                    // Result text (top textarea - editable)
                     React.createElement('textarea', {
                         value: genResult.text,
-                        onChange: e => { setInputText(e.target.value); setDesc(e.target.value); },
+                        onChange: e => { setGenResult({...genResult, text:e.target.value}); setDesc(e.target.value); },
                         style: {
                             width:'100%',minHeight:'150px',background:'rgba(0,0,0,0.2)',
                             border:'1px solid rgba(255,255,255,0.06)',borderRadius:'8px',
                             fontSize:'12px',color:'#c1c2c5',lineHeight:1.6,
                             padding:'12px',resize:'vertical',outline:'none',
-                            whiteSpace:'pre-wrap',
+                            whiteSpace:'pre-wrap',marginBottom:'10px',
                         },
                         onFocus: e => { e.target.style.borderColor = 'rgba(76,110,245,0.3)'; },
                         onBlur: e => { e.target.style.borderColor = 'rgba(255,255,255,0.06)'; },
+                    }),
+                    // Prompt text (bottom textarea - the original input before generation)
+                    React.createElement('div', {style:{fontSize:'11px',color:'#5c5f66',marginBottom:'4px'}},'提示词'),
+                    React.createElement('textarea', {
+                        value: promptText,
+                        onChange: e => setPromptText(e.target.value),
+                        placeholder: '生成前的提示词内容',
+                        style: {
+                            width:'100%',minHeight:'60px',background:'rgba(0,0,0,0.15)',
+                            border:'1px solid rgba(255,255,255,0.04)',borderRadius:'8px',
+                            fontSize:'12px',color:'#909296',lineHeight:1.6,
+                            padding:'10px',resize:'vertical',outline:'none',
+                        },
+                        onFocus: e => { e.target.style.borderColor = 'rgba(76,110,245,0.2)'; },
+                        onBlur: e => { e.target.style.borderColor = 'rgba(255,255,255,0.04)'; },
                     }),
                 );
             }
