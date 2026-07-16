@@ -224,20 +224,6 @@
                     style: { width:'100%' },
                     onClick: e => e.stopPropagation(),
                 },
-                    // Header with download
-                    React.createElement('div', {style:{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'10px'}},
-                        React.createElement('span', {style:{fontSize:'13px',fontWeight:600,color:'#e4e5e7'}},'生成结果'),
-                        React.createElement('button', {
-                            onClick: handleDownload,
-                            style: {
-                                padding:'4px 10px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.1)',
-                                background:'transparent',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',
-                                display:'flex',alignItems:'center',gap:'4px',
-                            },
-                            onMouseEnter: e => { e.target.style.background = 'rgba(255,255,255,0.04)'; },
-                            onMouseLeave: e => { e.target.style.background = 'transparent'; },
-                        }, '⬇ 下载'),
-                    ),
                     // Result text (top textarea - editable)
                     React.createElement('textarea', {
                         value: genResult.text,
@@ -485,6 +471,23 @@
                         }) : null,
                         st==='completed' ? React.createElement('span',{style:{color:'#20c997',fontSize:'14px'}},'\u2713') : null,
                         st==='failed' ? React.createElement('span',{style:{color:'#ff6b6b',fontSize:'14px'}},'\u2715') : null,
+                        // Download button (only for text_node with content)
+                        isScript && desc ? React.createElement('button',{
+                            onClick:(e)=>{e.stopPropagation();
+                                const blob = new Blob([desc], {type:'text/plain'});
+                                const url = URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = (data.label || '文本节点') + '.txt';
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a);
+                                URL.revokeObjectURL(url);
+                                showToast('已下载为 txt 文件','success');
+                            },
+                            style:{background:'transparent',border:'none',color:'#5c5f66',cursor:'pointer',padding:'2px',display:'flex',alignItems:'center'},
+                            title:'下载'
+                        }, '⬇') : null,
                         // Expand indicator
                         React.createElement('span',{style:{color:'#5c5f66',fontSize:'10px',transition:'transform 0.2s',transform:expanded?'rotate(180deg)':'rotate(0deg)'}},'▼'),
                     ),
