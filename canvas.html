@@ -154,439 +154,156 @@
 
         const STYLE_OPTIONS = ['2D手绘','3D卡通','仿真真人','赛博朋克','水墨古风','日系动漫','美式漫画'];
 
-        // ==================== TEXT NODE PANEL (multi-state: init/edit/generating/result/collapsed) ====================
+        // ==================== TEXT NODE PANEL (screenshot-matched: edit panel below node) ====================
         function TextNodePanel({ id, data, desc, setDesc, model, setModel, ratio, setRatio, resolution, setResolution, st, expanded, setExpanded, cost, computeCost }) {
-            // State machine for text node: 'init' | 'edit' | 'generating' | 'result'
-            const [panelState, setPanelState] = useState(data.panelState || 'init');
-            const [genProgress, setGenProgress] = useState(0);
             const [inputText, setInputText] = useState(desc || '');
-            const [showCollapsed, setShowCollapsed] = useState(false);
-
-            // Sync panelState with status
-            React.useEffect(() => {
-                if (st === 'running' && panelState !== 'generating') setPanelState('generating');
-                if (st === 'completed' && panelState === 'generating') setPanelState('result');
-            }, [st]);
-
-            // Progress simulation for generating state
-            React.useEffect(() => {
-                if (panelState === 'generating') {
-                    setGenProgress(0);
-                    const interval = setInterval(() => {
-                        setGenProgress(p => {
-                            if (p >= 99) { clearInterval(interval); return 99; }
-                            return p + Math.random() * 15;
-                        });
-                    }, 400);
-                    return () => clearInterval(interval);
-                }
-            }, [panelState]);
-
-            const handleSubmit = () => {
-                if (!inputText.trim()) return;
-                setDesc(inputText);
-                setPanelState('edit');
-            };
+            const [isGenerating, setIsGenerating] = useState(false);
+            const [genResult, setGenResult] = useState(data.genResult || null);
 
             const handleGenerate = () => {
-                setPanelState('generating');
-                // Simulate completion after a delay
+                if (!inputText.trim()) return;
+                setDesc(inputText);
+                setIsGenerating(true);
                 setTimeout(() => {
-                    setPanelState('result');
-                    if (data.onStatusChange) data.onStatusChange('completed');
+                    setIsGenerating(false);
+                    setGenResult({
+                        text: '**场景概念：**\n在现代化的巨型足球场内，一支女子足球队将中国传统武术（如少林腿法、太极运球、咏春截击）完美融合进足球竞技中。画面极具动感与力量感，展现民族文化与体育竞技的碰撞。\n\n**视频脚本（分镜头）：**\n1. **[全景]** 破晓时分，云雾缭绕的山顶足球场，球员身着红黑相间的改良式运动汉服，正进行晨练。\n2. **[特写]** 队长双脚交替拨球，动作如同太极推手般圆转流利，足球在脚尖仿佛产生吸力，不离分毫。',
+                        model: model || 'Lux Gem 3.0',
+                    });
                 }, 3000);
             };
 
-            const panelWidth = 480;
+            const handleUseResult = () => {
+                if (genResult) {
+                    setDesc(genResult.text);
+                    setInputText(genResult.text);
+                    setGenResult(null);
+                    showToast('已应用生成结果到节点','success');
+                }
+            };
 
-            // ===== INIT STATE: compact input =====
-            if (panelState === 'init') {
+            // Generating state
+            if (isGenerating) {
                 return React.createElement('div', {
-                    style: {
-                        position:'absolute', top:'calc(100% + 8px)', left:'0',
-                        width: panelWidth+'px', background:'#1a1b1e',
-                        borderRadius:'12px', border:'1px solid rgba(255,255,255,0.08)',
-                        boxShadow:'0 20px 60px rgba(0,0,0,0.5)',
-                        padding:'16px', zIndex:100,
-                        animation:'menuIn 0.2s ease-out',
-                    },
+                    style: { width:'100%' },
                     onClick: e => e.stopPropagation(),
                 },
-                    // Title
-                    React.createElement('div', {style:{fontSize:'13px',fontWeight:600,color:'#e4e5e7',marginBottom:'12px',display:'flex',alignItems:'center',gap:'8px'}},
-                        React.createElement('span',null,'📜'), '文本节点'
-                    ),
-                    // Input area
-                    React.createElement('div', {style:{display:'flex',gap:'8px',alignItems:'flex-end'}},
-                        React.createElement('textarea', {
-                            value: inputText,
-                            onChange: e => setInputText(e.target.value),
-                            placeholder: '请输入文本内容，输入后点击发送开始创作...',
-                            style: {
-                                flex:1, minHeight:'80px', background:'rgba(0,0,0,0.3)',
-                                border:'1px solid rgba(255,255,255,0.1)', borderRadius:'10px',
-                                color:'#e4e5e7', fontSize:'13px', padding:'10px 12px',
-                                resize:'vertical', outline:'none', lineHeight:1.5,
-                            },
-                            onFocus: e => e.target.style.borderColor = 'rgba(76,110,245,0.4)',
-                            onBlur: e => e.target.style.borderColor = 'rgba(255,255,255,0.1)',
-                        }),
-                        React.createElement('button', {
-                            onClick: handleSubmit,
-                            style: {
-                                width:'40px', height:'40px', borderRadius:'50%',
-                                border:'none', background: inputText.trim() ? 'linear-gradient(135deg,#4c6ef5,#7950f2)' : 'rgba(255,255,255,0.06)',
-                                color: inputText.trim() ? '#fff' : '#5c5f66',
-                                fontSize:'16px', cursor: inputText.trim() ? 'pointer' : 'default',
-                                display:'flex', alignItems:'center', justifyContent:'center',
-                                transition:'all 0.2s', flexShrink:0,
-                            },
-                        }, '➤'),
-                    ),
-                );
-            }
-
-            // ===== GENERATING STATE =====
-            if (panelState === 'generating') {
-                return React.createElement('div', {
-                    style: {
-                        position:'absolute', top:'calc(100% + 8px)', left:'0',
-                        width: panelWidth+'px', background:'#1a1b1e',
-                        borderRadius:'12px', border:'1px solid rgba(255,255,255,0.08)',
-                        boxShadow:'0 20px 60px rgba(0,0,0,0.5)',
-                        padding:'20px', zIndex:100,
-                        animation:'menuIn 0.2s ease-out',
-                    },
-                    onClick: e => e.stopPropagation(),
-                },
-                    React.createElement('div', {style:{textAlign:'center', padding:'20px 0'}},
-                        // Spinner
+                    React.createElement('div', {style:{textAlign:'center',padding:'30px 0'}},
                         React.createElement('div', {
                             style: {
-                                width:'48px', height:'48px', margin:'0 auto 16px',
+                                width:'40px',height:'40px',margin:'0 auto 12px',
                                 border:'3px solid rgba(255,255,255,0.1)',
-                                borderTopColor:'#4c6ef5', borderRadius:'50%',
+                                borderTopColor:'#4c6ef5',borderRadius:'50%',
                                 animation:'spin 0.8s linear infinite',
                             },
                         }),
-                        React.createElement('div', {style:{fontSize:'14px',color:'#e4e5e7',marginBottom:'6px',fontWeight:500}},
-                            'AI 正在生成中...'
-                        ),
-                        React.createElement('div', {style:{fontSize:'12px',color:'#909296',marginBottom:'16px'}},
-                            '正在解析文本并生成图片，请稍候'
-                        ),
-                        // Progress bar
-                        React.createElement('div', {style:{width:'100%',height:'4px',background:'rgba(255,255,255,0.06)',borderRadius:'2px',overflow:'hidden'}},
-                            React.createElement('div', {
-                                style: {
-                                    width: Math.min(genProgress, 100)+'%', height:'100%',
-                                    background:'linear-gradient(90deg,#4c6ef5,#7950f2)',
-                                    borderRadius:'2px', transition:'width 0.3s ease',
-                                },
-                            }),
-                        ),
-                        React.createElement('div', {style:{fontSize:'10px',color:'#5c5f66',marginTop:'8px'}},
-                            Math.floor(Math.min(genProgress, 99))+'%'
-                        ),
+                        React.createElement('div', {style:{fontSize:'13px',color:'#e4e5e7',marginBottom:'4px'}},'AI 正在生成中...'),
+                        React.createElement('div', {style:{fontSize:'11px',color:'#5c5f66'}},'画布文本生成任务'),
                     ),
                 );
             }
 
-            // ===== RESULT STATE (collapsed or expanded) =====
-            if (panelState === 'result') {
-                // Collapsed view: compact result card
-                if (showCollapsed) {
-                    return React.createElement('div', {
-                        style: {
-                            position:'absolute', top:'calc(100% + 8px)', left:'0',
-                            width: panelWidth+'px', background:'#1a1b1e',
-                            borderRadius:'12px', border:'1px solid rgba(255,255,255,0.08)',
-                            boxShadow:'0 20px 60px rgba(0,0,0,0.5)',
-                            padding:'12px 16px', zIndex:100,
-                            animation:'menuIn 0.2s ease-out',
-                            display:'flex', alignItems:'center', gap:'12px',
-                        },
-                        onClick: e => e.stopPropagation(),
-                    },
-                        // Thumbnail
-                        React.createElement('div', {
-                            style: {
-                                width:'56px', height:'56px', borderRadius:'8px',
-                                background:'rgba(255,255,255,0.04)', overflow:'hidden', flexShrink:0,
-                                cursor:'pointer',
-                            },
-                            onClick: () => setShowCollapsed(false),
-                        },
-                            React.createElement('div', {style:{width:'100%',height:'100%',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'24px',color:'#5c5f66'}},'🖼️'),
-                        ),
-                        // Info
-                        React.createElement('div', {style:{flex:1,minWidth:0}},
-                            React.createElement('div', {style:{fontSize:'13px',color:'#e4e5e7',fontWeight:500,marginBottom:'4px'}},'生成结果'),
-                            React.createElement('div', {style:{fontSize:'11px',color:'#909296',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},
-                                inputText.substring(0, 40)+(inputText.length>40?'...':'')
-                            ),
-                        ),
-                        // Expand button
-                        React.createElement('button', {
-                            onClick: () => setShowCollapsed(false),
-                            style: {
-                                padding:'6px 12px', borderRadius:'6px', border:'1px solid rgba(255,255,255,0.1)',
-                                background:'transparent', color:'#c1c2c5', fontSize:'11px', cursor:'pointer',
-                                transition:'all 0.15s', whiteSpace:'nowrap',
-                            },
-                            onMouseEnter: e => { e.target.style.background = 'rgba(255,255,255,0.06)'; },
-                            onMouseLeave: e => { e.target.style.background = 'transparent'; },
-                        }, '展开'),
-                    );
-                }
-
-                // Full result view
+            // Result state (after generation)
+            if (genResult) {
                 return React.createElement('div', {
-                    style: {
-                        position:'absolute', top:'calc(100% + 8px)', left:'0',
-                        width: panelWidth+'px', background:'#1a1b1e',
-                        borderRadius:'12px', border:'1px solid rgba(255,255,255,0.08)',
-                        boxShadow:'0 20px 60px rgba(0,0,0,0.5)',
-                        padding:'16px', zIndex:100,
-                        animation:'menuIn 0.2s ease-out',
-                    },
+                    style: { width:'100%' },
                     onClick: e => e.stopPropagation(),
                 },
-                    // Header
-                    React.createElement('div', {style:{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'14px'}},
-                        React.createElement('div', {style:{display:'flex',alignItems:'center',gap:'8px'}},
-                            React.createElement('span', {style:{fontSize:'14px',fontWeight:600,color:'#e4e5e7'}},'生成结果'),
-                            React.createElement('span', {style:{fontSize:'11px',padding:'2px 8px',borderRadius:'4px',background:'rgba(32,201,151,0.12)',color:'#20c997'}},'已完成'),
-                        ),
-                        React.createElement('div', {style:{display:'flex',gap:'6px'}},
-                            React.createElement('button', {
-                                onClick: () => setShowCollapsed(true),
-                                style: {
-                                    padding:'4px 10px', borderRadius:'6px', border:'1px solid rgba(255,255,255,0.08)',
-                                    background:'transparent', color:'#909296', fontSize:'11px', cursor:'pointer',
-                                },
-                                onMouseEnter: e => { e.target.style.background = 'rgba(255,255,255,0.04)'; },
-                                onMouseLeave: e => { e.target.style.background = 'transparent'; },
-                            }, '收起 ▲'),
-                        ),
-                    ),
-                    // Generated image preview
+                    // Result text preview
                     React.createElement('div', {
                         style: {
-                            width:'100%', height:'280px', borderRadius:'10px',
-                            background:'linear-gradient(135deg,rgba(76,110,245,0.05),rgba(121,80,242,0.05))',
-                            border:'1px solid rgba(255,255,255,0.06)',
-                            display:'flex', alignItems:'center', justifyContent:'center',
-                            marginBottom:'14px', position:'relative', overflow:'hidden',
+                            padding:'12px',background:'rgba(0,0,0,0.2)',borderRadius:'8px',
+                            fontSize:'12px',color:'#c1c2c5',lineHeight:1.6,
+                            maxHeight:'120px',overflow:'auto',marginBottom:'12px',
+                            whiteSpace:'pre-wrap',border:'1px solid rgba(255,255,255,0.06)',
                         },
-                    },
-                        React.createElement('div', {style:{textAlign:'center'}},
-                            React.createElement('div', {style:{fontSize:'48px',marginBottom:'8px',opacity:0.3}},'🖼️'),
-                            React.createElement('div', {style:{fontSize:'12px',color:'#5c5f66'}},'图片生成结果预览'),
-                        ),
-                    ),
-                    // Info row
-                    React.createElement('div', {style:{display:'flex',gap:'24px',marginBottom:'14px',fontSize:'11px',color:'#909296'}},
-                        React.createElement('div',null,React.createElement('span',{style:{color:'#5c5f66'}},'模型 '),model||'Seedream 5.0'),
-                        React.createElement('div',null,React.createElement('span',{style:{color:'#5c5f66'}},'比例 '),ratio||'9:16'),
-                        React.createElement('div',null,React.createElement('span',{style:{color:'#5c5f66'}},'分辨率 '),resolution||'1K'),
-                    ),
-                    // Input text summary
-                    React.createElement('div', {
-                        style: {
-                            padding:'10px 12px', borderRadius:'8px',
-                            background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.06)',
-                            fontSize:'12px', color:'#909296', marginBottom:'14px',
-                            maxHeight:'60px', overflow:'hidden',
-                        },
-                    }, inputText.substring(0, 100)+(inputText.length>100?'...':'')),
+                    }, genResult.text.substring(0, 200) + '...'),
                     // Action buttons
                     React.createElement('div', {style:{display:'flex',gap:'8px'}},
                         React.createElement('button', {
-                            onClick: () => showToast('已设为参考图','success'),
+                            onClick: handleUseResult,
                             style: {
-                                flex:1, padding:'8px', borderRadius:'8px',
-                                border:'1px solid rgba(255,255,255,0.1)', background:'transparent',
-                                color:'#c1c2c5', fontSize:'12px', cursor:'pointer',
-                                transition:'all 0.15s',
+                                flex:1,padding:'8px',borderRadius:'8px',border:'none',
+                                background:'linear-gradient(135deg,#4c6ef5,#7950f2)',
+                                color:'#fff',fontSize:'12px',cursor:'pointer',fontWeight:500,
                             },
-                            onMouseEnter: e => { e.target.style.background = 'rgba(255,255,255,0.04)'; },
-                            onMouseLeave: e => { e.target.style.background = 'transparent'; },
-                        }, '🖼️ 设为参考图'),
+                        }, '✓ 应用结果'),
                         React.createElement('button', {
-                            onClick: () => { setPanelState('edit'); },
+                            onClick: () => setGenResult(null),
                             style: {
-                                flex:1, padding:'8px', borderRadius:'8px',
-                                border:'1px solid rgba(255,255,255,0.1)', background:'transparent',
-                                color:'#c1c2c5', fontSize:'12px', cursor:'pointer',
-                                transition:'all 0.15s',
+                                flex:1,padding:'8px',borderRadius:'8px',border:'1px solid rgba(255,255,255,0.1)',
+                                background:'transparent',color:'#c1c2c5',fontSize:'12px',cursor:'pointer',
                             },
-                            onMouseEnter: e => { e.target.style.background = 'rgba(255,255,255,0.04)'; },
-                            onMouseLeave: e => { e.target.style.background = 'transparent'; },
-                        }, '🔄 重新生成'),
-                        React.createElement('button', {
-                            onClick: handleGenerate,
-                            style: {
-                                flex:1, padding:'8px', borderRadius:'8px',
-                                border:'none', background:'linear-gradient(135deg,#4c6ef5,#7950f2)',
-                                color:'#fff', fontSize:'12px', cursor:'pointer', fontWeight:500,
-                                transition:'all 0.15s',
-                            },
-                            onMouseEnter: e => { e.target.style.opacity = '0.9'; },
-                            onMouseLeave: e => { e.target.style.opacity = '1'; },
-                        }, '⚡ 应用生成'),
+                        }, '↩ 重新编辑'),
                     ),
                 );
             }
 
-            // ===== EDIT STATE: full configuration panel =====
+            // Edit state (default)
             return React.createElement('div', {
-                style: {
-                    position:'absolute', top:'calc(100% + 8px)', left:'0',
-                    width: panelWidth+'px', background:'#1a1b1e',
-                    borderRadius:'12px', border:'1px solid rgba(255,255,255,0.08)',
-                    boxShadow:'0 20px 60px rgba(0,0,0,0.5)',
-                    padding:'16px', zIndex:100,
-                    animation:'menuIn 0.2s ease-out',
-                },
+                style: { width:'100%' },
                 onClick: e => e.stopPropagation(),
             },
-                // Header
-                React.createElement('div', {style:{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'14px'}},
-                    React.createElement('div', {style:{display:'flex',alignItems:'center',gap:'8px'}},
-                        React.createElement('span',{style:{fontSize:'14px',fontWeight:600,color:'#e4e5e7'}},'📜'),
-                        React.createElement('span',{style:{fontSize:'14px',fontWeight:600,color:'#e4e5e7'}},'文本节点'),
+                // Header: "使用 @ 指定引用素材用途（非必须）"
+                React.createElement('div', {style:{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'10px'}},
+                    React.createElement('div', {style:{display:'flex',alignItems:'center',gap:'6px',fontSize:'12px',color:'#909296'}},
+                        React.createElement('span',null,'使用'),
+                        React.createElement('span', {style:{display:'inline-flex',alignItems:'center',justifyContent:'center',width:'18px',height:'18px',borderRadius:'50%',background:'rgba(76,110,245,0.2)',color:'#8ea5ff',fontSize:'11px',fontWeight:600}}, '@'),
+                        React.createElement('span',null,'指定引用素材用途（非必须）'),
                     ),
-                    React.createElement('div', {style:{display:'flex',gap:'6px'}},
-                        React.createElement('button', {
-                            onClick: () => { setPanelState('init'); },
-                            style: {
-                                padding:'4px 10px', borderRadius:'6px', border:'1px solid rgba(255,255,255,0.08)',
-                                background:'transparent', color:'#909296', fontSize:'11px', cursor:'pointer',
-                            },
-                        }, '收起'),
-                    ),
+                    React.createElement('button', {
+                        onClick: () => setExpanded(false),
+                        style: {padding:'4px',border:'none',background:'transparent',color:'#5c5f66',fontSize:'12px',cursor:'pointer'},
+                    }, '✕'),
                 ),
 
-                // Prompt textarea
-                React.createElement('div', {style:{marginBottom:'14px'}},
-                    React.createElement('div', {style:{fontSize:'11px',color:'#5c5f66',marginBottom:'6px'}},'* 提示词'),
+                // Text input area
+                React.createElement('div', {style:{position:'relative',marginBottom:'12px'}},
                     React.createElement('textarea', {
                         value: inputText,
                         onChange: e => setInputText(e.target.value),
-                        placeholder: '输入文本内容...\n\n示例：\n高考恶意被毁，0分的我却是清北争抢对象\n\n离高考开场还有十五分钟，我却意外被监考官拦在门外。',
+                        placeholder: '输入你的文本创作需求，可用于生成大纲、脚本、提示词等。例如：写一段赛博朋克风格的短剧开场',
                         style: {
-                            width:'100%', minHeight:'160px', background:'rgba(0,0,0,0.3)',
-                            border:'1px solid rgba(255,255,255,0.1)', borderRadius:'10px',
-                            color:'#e4e5e7', fontSize:'13px', padding:'12px',
-                            resize:'vertical', outline:'none', lineHeight:1.6,
+                            width:'100%',minHeight:'100px',background:'rgba(0,0,0,0.25)',
+                            border:'1px solid rgba(255,255,255,0.08)',borderRadius:'10px',
+                            color:'#e4e5e7',fontSize:'13px',padding:'12px',resize:'vertical',
+                            outline:'none',lineHeight:1.6,
                         },
-                        onFocus: e => e.target.style.borderColor = 'rgba(76,110,245,0.4)',
-                        onBlur: e => e.target.style.borderColor = 'rgba(255,255,255,0.1)',
+                        onFocus: e => e.target.style.borderColor = 'rgba(76,110,245,0.3)',
+                        onBlur: e => e.target.style.borderColor = 'rgba(255,255,255,0.08)',
                     }),
-                    // Word count
-                    React.createElement('div', {style:{textAlign:'right',fontSize:'10px',color:'#5c5f66',marginTop:'4px'}},
-                        (inputText.length||0)+' 字'
-                    ),
                 ),
 
-                // Model selector
-                React.createElement('div', {style:{marginBottom:'12px'}},
-                    React.createElement('div', {style:{fontSize:'11px',color:'#5c5f66',marginBottom:'6px'}},'* 模型'),
-                    React.createElement('select', {
-                        value: model,
-                        onChange: e => setModel(e.target.value),
-                        style: {
-                            width:'100%', padding:'7px 10px', background:'rgba(255,255,255,0.04)',
-                            border:'1px solid rgba(255,255,255,0.1)', borderRadius:'6px',
-                            color:'#c1c2c5', fontSize:'12px', outline:'none',
-                        },
-                    },
-                        React.createElement('option',{value:'Seedream 5.0'},'Seedream 5.0'),
-                        React.createElement('option',{value:'Seedream 4.5'},'Seedream 4.5'),
-                        React.createElement('option',{value:'LibNano Pro'},'LibNano Pro'),
-                        React.createElement('option',{value:'Qwen Image'},'Qwen Image'),
+                // Bottom bar: Model + Generate button
+                React.createElement('div', {style:{display:'flex',alignItems:'center',justifyContent:'space-between'}},
+                    // Model tag (Lux Gem 3.0 style)
+                    React.createElement('div', {style:{display:'flex',alignItems:'center',gap:'6px',padding:'6px 10px',borderRadius:'6px',background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.06)'}},
+                        React.createElement('span', {style:{fontSize:'16px'}}, '🤖'),
+                        React.createElement('span', {style:{fontSize:'12px',color:'#c1c2c5'}}, model || 'Lux Gem 3.0'),
                     ),
-                ),
-
-                // Ratio & Resolution row
-                React.createElement('div', {style:{display:'flex',gap:'8px',marginBottom:'12px'}},
-                    React.createElement('div', {style:{flex:1}},
-                        React.createElement('div', {style:{fontSize:'11px',color:'#5c5f66',marginBottom:'6px'}},'* 比例'),
-                        React.createElement('select', {
-                            value: ratio,
-                            onChange: e => setRatio(e.target.value),
-                            style: {
-                                width:'100%', padding:'7px 10px', background:'rgba(255,255,255,0.04)',
-                                border:'1px solid rgba(255,255,255,0.1)', borderRadius:'6px',
-                                color:'#c1c2c5', fontSize:'12px', outline:'none',
-                            },
-                        },
-                            ['9:16','16:9','1:1','4:3','21:9'].map(r =>
-                                React.createElement('option',{key:r,value:r},r)
-                            ),
-                        ),
-                    ),
-                    React.createElement('div', {style:{flex:1}},
-                        React.createElement('div', {style:{fontSize:'11px',color:'#5c5f66',marginBottom:'6px'}},'* 分辨率'),
-                        React.createElement('select', {
-                            value: resolution,
-                            onChange: e => setResolution(e.target.value),
-                            style: {
-                                width:'100%', padding:'7px 10px', background:'rgba(255,255,255,0.04)',
-                                border:'1px solid rgba(255,255,255,0.1)', borderRadius:'6px',
-                                color:'#c1c2c5', fontSize:'12px', outline:'none',
-                            },
-                        },
-                            ['1K','2K','4K'].map(r =>
-                                React.createElement('option',{key:r,value:r},r)
-                            ),
-                        ),
-                    ),
-                ),
-
-                // Reference image upload
-                React.createElement('div', {style:{marginBottom:'14px'}},
-                    React.createElement('div', {style:{fontSize:'11px',color:'#5c5f66',marginBottom:'6px'}},'参考图 (0/12)'),
-                    React.createElement('div', {
-                        style: {
-                            border:'1px dashed rgba(255,255,255,0.12)', borderRadius:'8px',
-                            padding:'14px', textAlign:'center', cursor:'pointer',
-                            transition:'all 0.15s', background:'rgba(255,255,255,0.01)',
-                        },
-                        onMouseEnter: e => e.target.style.borderColor = 'rgba(76,110,245,0.4)',
-                        onMouseLeave: e => e.target.style.borderColor = 'rgba(255,255,255,0.12)',
-                        onClick: () => showToast('参考图上传功能开发中...','info'),
-                    },
-                        React.createElement('div', {style:{fontSize:'18px',marginBottom:'4px',opacity:0.4}},'+'),
-                        React.createElement('div', {style:{fontSize:'11px',color:'#5c5f66'}},'本地上传 / 资产库导入'),
-                    ),
-                ),
-
-                // Cost & Generate
-                React.createElement('div', {style:{display:'flex',alignItems:'center',justifyContent:'space-between',paddingTop:'12px',borderTop:'1px solid rgba(255,255,255,0.06)'}},
-                    React.createElement('div', {style:{display:'flex',alignItems:'center',gap:'4px'}},
-                        React.createElement('span', {style:{fontSize:'10px',color:'#5c5f66'}},'⚡'),
-                        React.createElement('span', {style:{fontSize:'13px',fontWeight:700,color:'#ffd43b'}}, cost||6),
-                    ),
+                    // Generate button
                     React.createElement('button', {
                         onClick: handleGenerate,
                         style: {
-                            padding:'8px 24px', borderRadius:'8px', border:'none',
+                            padding:'8px 18px',borderRadius:'8px',border:'none',
                             background: inputText.trim() ? 'linear-gradient(135deg,#4c6ef5,#7950f2)' : 'rgba(255,255,255,0.06)',
                             color: inputText.trim() ? '#fff' : '#5c5f66',
-                            fontSize:'13px', fontWeight:600, cursor: inputText.trim() ? 'pointer' : 'default',
-                            display:'flex', alignItems:'center', gap:'6px',
+                            fontSize:'13px',fontWeight:600,cursor: inputText.trim() ? 'pointer' : 'default',
+                            display:'flex',alignItems:'center',gap:'6px',
                             transition:'all 0.15s',
                         },
                         onMouseEnter: e => { if(inputText.trim()) e.target.style.opacity = '0.9'; },
                         onMouseLeave: e => { e.target.style.opacity = '1'; },
-                    }, '⚡ 开始生成'),
+                    },
+                        React.createElement('span',null,'⚡'),
+                        React.createElement('span',null,'1'),
+                        React.createElement('span',null,'生成'),
+                    ),
                 ),
             );
         }
 
-        // ==================== NODE COMPONENT (clean card + expandable panel) ====================
+        // ==================== NODE COMPONENT (clean card + expandable panel) ====================// ==================== NODE COMPONENT (clean card + expandable panel) ====================
         function CustomNode({ id, data, selected }) {
             const cfg = NODE_TYPES_CONFIG[data.nodeType] || NODE_TYPES_CONFIG.text_node;
             const hasIn = cfg.input.length > 0;
@@ -705,6 +422,27 @@
                         // Expand indicator
                         React.createElement('span',{style:{color:'#5c5f66',fontSize:'10px',transition:'transform 0.2s',transform:expanded?'rotate(180deg)':'rotate(0deg)'}},'▼'),
                     ),
+
+                    // Text Node Content Area (when isScript and has content)
+                    isScript && desc ? React.createElement('div', {
+                        style:{
+                            padding:'12px 14px', fontSize:'12px', color:'#c1c2c5',
+                            lineHeight:1.6, maxHeight:'200px', overflow:'auto',
+                            borderTop:'1px solid rgba(255,255,255,0.04)',
+                            whiteSpace:'pre-wrap',
+                        }, key:'content'
+                    }, desc) : null,
+
+                    // Text Node Empty State (when isScript and no content)
+                    isScript && !desc ? React.createElement('div', {
+                        style:{
+                            padding:'24px 14px', textAlign:'center',
+                            borderTop:'1px solid rgba(255,255,255,0.04)',
+                        }, key:'empty'
+                    },
+                        React.createElement('div', {style:{fontSize:'32px',marginBottom:'8px',opacity:0.3}}, '📄'),
+                        React.createElement('div', {style:{fontSize:'12px',color:'#5c5f66'}}, '双击直接编写，或发起生成'),
+                    ) : null,
 
                     // Output handle
                     hasOut ? React.createElement(Handle, {
