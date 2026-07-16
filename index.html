@@ -168,7 +168,14 @@
         .add-image-btn { display:inline-flex; align-items:center; gap:4px; padding:4px 10px; border:1px dashed #d0d0d0; border-radius:4px; font-size:12px; color:#666; cursor:pointer; transition:all 0.15s; }
         .add-image-btn:hover { border-color:#2563eb; color:#2563eb; }
 
-        .detail-header-bar { display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid #e8e8e8; margin-bottom:16px; }
+        .toolbox-card {
+            background:#fff; border-radius:8px; border:1px solid #e8e8e8;
+            width:200px; height:160px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+            cursor:pointer; transition:all 0.15s; gap:12px;
+        }
+        .toolbox-card:hover { box-shadow:0 4px 12px rgba(0,0,0,0.08); border-color:#d0d0d0; }
+        .toolbox-icon { width:48px; height:48px; background:#f0f5ff; border-radius:12px; display:flex; align-items:center; justify-content:center; color:#2563eb; }
+        .toolbox-label { font-size:14px; font-weight:500; color:#333; }
         .detail-header-left { display:flex; align-items:center; gap:12px; }
         .detail-header-title { font-size:16px; font-weight:600; color:#333; }
         .detail-header-action { color:#2563eb; font-size:12px; cursor:pointer; }
@@ -183,7 +190,7 @@
         </div>
         <div style="display:flex; align-items:center; gap:4px; flex:1;">
             <span class="nav-item active" onclick="switchPage('workspace')">工作台</span>
-            <span class="nav-item">工具箱</span>
+            <span class="nav-item" onclick="switchPage('toolbox')">工具箱</span>
             <span class="nav-item">音色库</span>
             <span class="nav-item">视频超分</span>
             <span class="nav-item">资产库</span>
@@ -616,8 +623,10 @@
             document.getElementById('page-' + pageId).classList.add('active');
             // Update nav active state
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            if (pageId === 'workspace') {
-                document.querySelector('.nav-item:first-child').classList.add('active');
+            const navMap = { workspace: 0, toolbox: 1 };
+            const navIndex = navMap[pageId];
+            if (navIndex !== undefined) {
+                document.querySelectorAll('.nav-item')[navIndex].classList.add('active');
             }
         }
 
@@ -698,5 +707,42 @@
 
         renderProjects();
     </script>
+    <!-- ========== TOOLBOX PAGE ========== -->
+    <div id="page-toolbox" class="page-section">
+        <div style="padding:24px; max-width:1400px; margin:0 auto;">
+            <div class="section-title">工具箱</div>
+            <div style="display:flex; gap:16px; flex-wrap:wrap;">
+                <!-- Voice Creation -->
+                <div class="toolbox-card" onclick="alert('配音创作功能开发中...')">
+                    <div class="toolbox-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+                    </div>
+                    <span class="toolbox-label">配音创作</span>
+                </div>
+                <!-- Image Creation -->
+                <div class="toolbox-card" onclick="alert('图片创作功能开发中...')">
+                    <div class="toolbox-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                    </div>
+                    <span class="toolbox-label">图片创作</span>
+                </div>
+                <!-- Video Creation -->
+                <div class="toolbox-card" onclick="alert('视频创作功能开发中...')">
+                    <div class="toolbox-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                    </div>
+                    <span class="toolbox-label">视频创作</span>
+                </div>
+                <!-- Infinite Canvas -->
+                <div class="toolbox-card" onclick="openCanvas()">
+                    <div class="toolbox-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                    </div>
+                    <span class="toolbox-label">创建/进入无限画布</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
