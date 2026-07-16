@@ -413,7 +413,15 @@
                         }, key:'hdr'
                     },
                         React.createElement('span',{style:{fontSize:'18px'}},cfg.icon),
-                        React.createElement('span',{style:{fontSize:'13px',fontWeight:700,color:cfg.color,flex:1}},data.label||cfg.label),
+                        React.createElement('input',{
+                            defaultValue:data.label||cfg.label,
+                            onClick:e=>e.stopPropagation(),
+                            onDoubleClick:e=>{e.target.select();},
+                            style:{
+                                background:'transparent',border:'none',color:cfg.color,
+                                fontSize:'13px',fontWeight:700,flex:1,outline:'none',padding:0,
+                            },
+                        }),
                         st==='running' ? React.createElement('span',{
                             style:{width:'12px',height:'12px',border:'2px solid #f59f00',borderTopColor:'transparent',borderRadius:'50%',animation:'spin 0.8s linear infinite'}
                         }) : null,
@@ -898,42 +906,13 @@
                                 React.createElement('circle',{cx:'12',cy:'8',r:'4'}),
                                 React.createElement('path',{d:'M4 20c0-4 4-6 8-6s8 2 8 6'}),
                             ),
-                            React.createElement('span',{style:{fontSize:'11px',color:'#5c5f66',opacity:0.6}},'点击上传角色形象'),
+                            React.createElement('span',{style:{fontSize:'11px',color:'#5c5f66',opacity:0.6}},'描述内容，开启角色创作'),
                         ) : null,
                         st==='running' ? React.createElement('div',{
                             style:{position:'absolute',inset:0,background:'rgba(0,0,0,0.4)',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:'12px'}
                         }, React.createElement('div',{
                             style:{width:'32px',height:'32px',border:'3px solid rgba(255,255,255,0.3)',borderTopColor:'#fff',borderRadius:'50%',animation:'spin 0.8s linear infinite'}
                         })) : null,
-                    ),
-
-                    // Bottom info bar
-                    React.createElement('div', {
-                        style:{
-                            display:'flex', alignItems:'center', justifyContent:'space-between',
-                            padding:'10px 14px 14px',
-                        }, key:'info'
-                    },
-                        React.createElement('div', {style:{display:'flex',flexDirection:'column',gap:'2px'}},
-                            React.createElement('div', {style:{display:'flex',alignItems:'center',gap:'6px'}},
-                                React.createElement('span',{style:{fontSize:'11px',color:'#5c5f66',fontWeight:500}},'基础形象'),
-                                React.createElement('span',{style:{fontSize:'11px',color:appearance==='待补充'?'#f59f00':'#20c997',fontWeight:600}},appearance),
-                            ),
-                            React.createElement('span',{style:{fontSize:'10px',color:'#5c5f66'}},'出现集数：'+episodes),
-                        ),
-                        React.createElement('div', {style:{display:'flex',alignItems:'center',gap:'8px'}},
-                            React.createElement('button',{
-                                style:{width:'24px',height:'24px',borderRadius:'50%',border:'none',background:'transparent',color:'#5c5f66',fontSize:'12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},
-                                onClick:(e)=>{e.stopPropagation(); showToast('语音功能开发中...','info');},
-                            }, React.createElement('svg',{width:'12',height:'12',viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'2'},
-                                React.createElement('path',{d:'M12 2c-4 0-6 2-6 6v4c0 4 2 6 6 6s6-2 6-6V8c0-4-2-6-6-6z'}),
-                                React.createElement('path',{d:'M8 14v2c0 2 2 4 4 4s4-2 4-4v-2'}),
-                            )),
-                            React.createElement('button',{
-                                style:{width:'24px',height:'24px',borderRadius:'50%',border:'none',background:'transparent',color:'#5c5f66',fontSize:'12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},
-                                onClick:(e)=>{e.stopPropagation(); showToast('更多选项开发中...','info');},
-                            }, '⋯'),
-                        ),
                     ),
 
                     // Output handle
@@ -1324,39 +1303,13 @@
                             style:{display:'flex',flexDirection:'column',alignItems:'center',gap:'8px'}
                         },
                             React.createElement('span',{style:{fontSize:'40px',opacity:'0.4'}},'🖼️'),
-                            React.createElement('span',{style:{fontSize:'11px',color:'#5c5f66',opacity:0.6}},'点击上传图片'),
+                            React.createElement('span',{style:{fontSize:'11px',color:'#5c5f66',opacity:0.6}},'描述内容，开启图片创作'),
                         ) : null,
                         st==='running' ? React.createElement('div',{
                             style:{position:'absolute',inset:0,background:'rgba(0,0,0,0.4)',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:'12px'}
                         }, React.createElement('div',{
                             style:{width:'32px',height:'32px',border:'3px solid rgba(255,255,255,0.3)',borderTopColor:'#fff',borderRadius:'50%',animation:'spin 0.8s linear infinite'}
                         })) : null,
-                    ),
-
-                    // Bottom info bar — simplified, no character-specific info
-                    React.createElement('div', {
-                        style:{
-                            display:'flex', alignItems:'center', justifyContent:'space-between',
-                            padding:'10px 14px 14px',
-                        }, key:'info'
-                    },
-                        React.createElement('div', {style:{display:'flex',flexDirection:'column',gap:'2px'}},
-                            React.createElement('span',{style:{fontSize:'11px',color:'#5c5f66',fontWeight:500}},'图片生成'),
-                            React.createElement('span',{style:{fontSize:'10px',color:'#20c997'}},'模型：'+model),
-                        ),
-                        React.createElement('div', {style:{display:'flex',alignItems:'center',gap:'8px'}},
-                            React.createElement('button',{
-                                style:{width:'24px',height:'24px',borderRadius:'50%',border:'none',background:'transparent',color:'#5c5f66',fontSize:'12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},
-                                onClick:(e)=>{e.stopPropagation(); showToast('语音功能开发中...','info');},
-                            }, React.createElement('svg',{width:'12',height:'12',viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'2'},
-                                React.createElement('path',{d:'M12 2c-4 0-6 2-6 6v4c0 4 2 6 6 6s6-2 6-6V8c0-4-2-6-6-6z'}),
-                                React.createElement('path',{d:'M8 14v2c0 2 2 4 4 4s4-2 4-4v-2'}),
-                            )),
-                            React.createElement('button',{
-                                style:{width:'24px',height:'24px',borderRadius:'50%',border:'none',background:'transparent',color:'#5c5f66',fontSize:'12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},
-                                onClick:(e)=>{e.stopPropagation(); showToast('更多选项开发中...','info');},
-                            }, '⋯'),
-                        ),
                     ),
 
                     // Output handle
@@ -1788,32 +1741,13 @@
                                 React.createElement('circle',{cx:'8.5',cy:'8.5',r:'1.5'}),
                                 React.createElement('path',{d:'M21 15l-5-5L5 21'}),
                             ),
-                            React.createElement('span',{style:{fontSize:'11px',color:'#5c5f66',opacity:0.6}},'点击上传参考图'),
+                            React.createElement('span',{style:{fontSize:'11px',color:'#5c5f66',opacity:0.6}}, data.nodeType==='scene_gen' ? '描述内容，开启场景创作' : '描述内容，开启道具创作'),
                         ) : null,
                         st==='running' ? React.createElement('div',{
                             style:{position:'absolute',inset:0,background:'rgba(0,0,0,0.4)',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:'12px'}
                         }, React.createElement('div',{
                             style:{width:'32px',height:'32px',border:'3px solid rgba(255,255,255,0.3)',borderTopColor:'#fff',borderRadius:'50%',animation:'spin 0.8s linear infinite'}
                         })) : null,
-                    ),
-
-                    // Bottom info bar
-                    React.createElement('div', {
-                        style:{
-                            display:'flex', alignItems:'center', justifyContent:'space-between',
-                            padding:'10px 14px 14px',
-                        }, key:'info'
-                    },
-                        React.createElement('div', {style:{display:'flex',flexDirection:'column',gap:'2px'}},
-                            React.createElement('span',{style:{fontSize:'11px',color:'#5c5f66',fontWeight:500}},cfg.label),
-                            React.createElement('span',{style:{fontSize:'10px',color:st==='ready'?'#f59f00':'#20c997'}},st==='ready'?'待生成':'已完成'),
-                        ),
-                        React.createElement('div', {style:{display:'flex',alignItems:'center',gap:'8px'}},
-                            React.createElement('button',{
-                                style:{width:'24px',height:'24px',borderRadius:'50%',border:'none',background:'transparent',color:'#5c5f66',fontSize:'12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'},
-                                onClick:(e)=>{e.stopPropagation(); showToast('更多选项开发中...','info');},
-                            }, '⋯'),
-                        ),
                     ),
 
                     // Output handle
