@@ -105,8 +105,73 @@
 
         .character-tag { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:4px; font-size:11px; background:rgba(37,99,235,0.08); color:#2563eb; border:1px solid rgba(37,99,235,0.2); }
 
-        .beta-badge { position:relative; }
-        .beta-badge::after { content:'Beta'; position:absolute; top:-6px; right:-28px; background:#ff6b6b; color:#fff; font-size:9px; padding:1px 4px; border-radius:3px; font-weight:600; }
+        .asset-nav-item { padding:10px 12px; border-radius:6px; cursor:pointer; font-size:13px; color:#666; transition:all 0.15s; display:flex; align-items:center; gap:8px; margin-bottom:4px; }
+        .asset-nav-item:hover { background:#f5f5f5; }
+        .asset-nav-item.active { background:#2563eb; color:#fff; }
+        .asset-nav-icon { width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:14px; }
+
+        .character-list-item { padding:10px; border-radius:8px; cursor:pointer; font-size:13px; color:#333; transition:all 0.15s; display:flex; align-items:center; gap:10px; border:2px solid transparent; margin-bottom:6px; }
+        .character-list-item:hover { background:#f8faff; border-color:#e0e0e0; }
+        .character-list-item.active { background:#f8faff; border-color:#2563eb; }
+        .character-list-avatar { width:40px; height:40px; border-radius:8px; background:#f0f0f0; display:flex; align-items:center; justify-content:center; font-size:18px; overflow:hidden; }
+        .character-list-avatar img { width:100%; height:100%; object-fit:cover; }
+        .character-list-info { flex:1; }
+        .character-list-name { font-size:13px; font-weight:500; color:#333; }
+        .character-list-status { font-size:11px; color:#999; margin-top:2px; }
+
+        .view-tabs { display:flex; gap:16px; border-bottom:1px solid #e8e8e8; margin-bottom:16px; }
+        .view-tab { padding-bottom:8px; border-bottom:2px solid transparent; color:#999; font-size:13px; cursor:pointer; transition:all 0.15s; }
+        .view-tab.active { color:#2563eb; border-bottom-color:#2563eb; font-weight:500; }
+
+        .image-preview-area { background:#f8f9fa; border-radius:8px; border:1px solid #e8e8e8; overflow:hidden; position:relative; }
+        .image-toolbar { display:flex; align-items:center; gap:4px; padding:6px 12px; background:#fff; border-bottom:1px solid #e8e8e8; }
+        .image-toolbar-btn { width:28px; height:28px; display:flex; align-items:center; justify-content:center; border-radius:4px; cursor:pointer; color:#666; transition:all 0.15s; }
+        .image-toolbar-btn:hover { background:#f0f0f0; }
+        .image-preview-img { width:100%; height:400px; object-fit:contain; background:#f0f0f0; }
+        .image-tag { position:absolute; top:8px; left:8px; background:#2563eb; color:#fff; font-size:11px; padding:2px 8px; border-radius:4px; }
+        .image-tag-selected { position:absolute; top:8px; right:8px; background:#20c997; color:#fff; font-size:11px; padding:2px 8px; border-radius:4px; }
+
+        .info-row { display:flex; align-items:center; gap:16px; font-size:12px; color:#999; padding:12px 0; border-top:1px solid #e8e8e8; }
+        .info-row-item { display:flex; align-items:center; gap:4px; }
+        .info-row-label { color:#666; }
+        .info-row-value { color:#333; }
+        .info-row-action { margin-left:auto; color:#2563eb; cursor:pointer; font-size:12px; }
+
+        .generate-records { background:#fff; border-radius:8px; border:1px solid #e8e8e8; padding:16px; margin-top:16px; }
+        .generate-records-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+        .generate-records-title { font-size:14px; font-weight:600; color:#333; }
+        .generate-records-count { color:#999; font-size:12px; font-weight:400; }
+        .generate-records-batch { display:flex; align-items:center; gap:4px; padding:6px 12px; border:1px solid #e0e0e0; border-radius:4px; font-size:12px; color:#666; cursor:pointer; margin-bottom:12px; }
+        .generate-records-batch:hover { border-color:#ccc; }
+        .record-thumb { width:80px; height:80px; border-radius:6px; background:#f0f0f0; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; cursor:pointer; }
+        .record-thumb img { width:100%; height:100%; object-fit:cover; }
+        .record-thumb-active { border:2px solid #2563eb; }
+        .record-thumb-badge { position:absolute; bottom:4px; left:4px; background:#20c997; color:#fff; font-size:9px; padding:1px 4px; border-radius:3px; }
+
+        .ai-config-title { font-size:14px; font-weight:600; color:#333; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; }
+        .ai-config-tabs { display:flex; gap:12px; margin-bottom:16px; }
+        .ai-config-tab { padding:4px 10px; border-radius:4px; font-size:12px; cursor:pointer; color:#666; transition:all 0.15s; }
+        .ai-config-tab.active { background:#2563eb; color:#fff; }
+        .ai-config-section { margin-bottom:16px; }
+        .ai-config-label { font-size:12px; color:#666; margin-bottom:6px; }
+        .ai-config-label-required::before { content:'* '; color:#ff6b6b; }
+        .ai-config-upload { border:1px dashed #d0d0d0; border-radius:6px; padding:16px; text-align:center; cursor:pointer; transition:all 0.15s; }
+        .ai-config-upload:hover { border-color:#2563eb; }
+        .ai-config-textarea { width:100%; height:100px; border:1px solid #e0e0e0; border-radius:4px; padding:8px; font-size:12px; resize:vertical; outline:none; }
+        .ai-config-textarea:focus { border-color:#2563eb; }
+        .ai-config-source { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-top:1px solid #e8e8e8; cursor:pointer; font-size:13px; color:#333; }
+        .ai-config-source-arrow { color:#999; transition:transform 0.15s; }
+        .ai-config-source-arrow.expanded { transform:rotate(90deg); }
+
+        .main-image-tag { display:inline-flex; align-items:center; gap:4px; padding:4px 10px; border-radius:4px; font-size:12px; background:#f0f0f0; color:#333; margin-right:8px; }
+        .main-image-tag-dot { width:6px; height:6px; border-radius:50%; background:#20c997; }
+        .add-image-btn { display:inline-flex; align-items:center; gap:4px; padding:4px 10px; border:1px dashed #d0d0d0; border-radius:4px; font-size:12px; color:#666; cursor:pointer; transition:all 0.15s; }
+        .add-image-btn:hover { border-color:#2563eb; color:#2563eb; }
+
+        .detail-header-bar { display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid #e8e8e8; margin-bottom:16px; }
+        .detail-header-left { display:flex; align-items:center; gap:12px; }
+        .detail-header-title { font-size:16px; font-weight:600; color:#333; }
+        .detail-header-action { color:#2563eb; font-size:12px; cursor:pointer; }
     </style>
 </head>
 <body>
@@ -208,13 +273,14 @@
                 <span class="step-arrow">→</span>
                 <span class="step-item"><span style="width:20px; height:20px; border-radius:50%; background:#e0e0e0; color:#999; display:flex; align-items:center; justify-content:center; font-size:11px;">3</span>视频预览</span>
             </div>
-            <!-- Right: Settings + Canvas Entry -->
+            <!-- Right: Settings + Canvas Entry + Task Center -->
             <div style="display:flex; align-items:center; gap:12px;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" style="cursor:pointer;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
                 <button class="btn-outline-blue beta-badge" onclick="openCanvasFromProject()">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-                    创建/进入自由画布
+                    创建/进入无限画布
                 </button>
+                <button class="btn-default" style="font-size:13px;">任务中心</button>
             </div>
         </div>
 
@@ -230,284 +296,246 @@
 
         <!-- Tab Content Area -->
         <div style="display:flex; min-height:calc(100vh - 48px - 56px - 41px);">
-            <!-- Left Sidebar: Episodes -->
-            <div class="detail-sidebar">
-                <div style="font-size:13px; font-weight:600; color:#333; margin-bottom:12px;">集数</div>
-                <div id="episode-list">
-                    <div class="episode-item active" onclick="selectEpisode(this, 'all')">全部</div>
-                    <div class="episode-item" onclick="selectEpisode(this, '1')">第1集 - 高考准考证被毁</div>
-                    <div class="episode-item" onclick="selectEpisode(this, '2')">第2集 - 打印店内的博弈</div>
-                    <div class="episode-item" onclick="selectEpisode(this, '3')">第3集 - 绝望的错失与反击</div>
-                    <div class="episode-item" onclick="selectEpisode(this, '4')">第4集 - 真相与清北特招</div>
-                    <div class="episode-item" onclick="selectEpisode(this, '5')">第5集 - 法律的制裁与结局</div>
+            <!-- Left Sidebar: Asset Type Navigation -->
+            <div class="detail-sidebar" style="width:64px; padding:8px; border-right:1px solid #e8e8e8; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                <div class="asset-nav-item active" data-asset="characters" onclick="switchAssetType('characters')">
+                    <div class="asset-nav-icon">👤</div>
+                    <span style="font-size:11px;">角色</span>
+                </div>
+                <div class="asset-nav-item" data-asset="scenes" onclick="switchAssetType('scenes')">
+                    <div class="asset-nav-icon">🏞️</div>
+                    <span style="font-size:11px;">场景</span>
+                </div>
+                <div class="asset-nav-item" data-asset="props" onclick="switchAssetType('props')">
+                    <div class="asset-nav-icon">💎</div>
+                    <span style="font-size:11px;">道具</span>
+                </div>
+                <div class="asset-nav-item" data-asset="materials" onclick="switchAssetType('materials')">
+                    <div class="asset-nav-icon">📦</div>
+                    <span style="font-size:11px;">通用</span>
                 </div>
             </div>
 
-            <!-- Main Content -->
-            <div class="detail-main" id="tab-content">
-                <!-- Overview Tab -->
-                <div id="tab-overview" class="tab-content active">
-                    <!-- Characters Section -->
-                    <div style="margin-bottom:24px;">
-                        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
-                            <span style="font-size:15px; font-weight:600; color:#333;">角色</span>
+            <!-- Main Content Area -->
+            <div style="flex:1; display:flex; min-width:0;">
+                <!-- Left: Character/Asset List -->
+                <div style="width:220px; background:#fff; border-right:1px solid #e8e8e8; padding:16px; overflow-y:auto;">
+                    <!-- Asset List Header -->
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span id="asset-list-title" style="font-size:14px; font-weight:600; color:#333;">角色</span>
+                            <span id="asset-list-count" style="background:#2563eb; color:#fff; font-size:11px; padding:2px 6px; border-radius:10px;">1</span>
                         </div>
-                        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:16px;">
-                            <!-- Character Card 1 -->
-                            <div class="asset-card">
-                                <div style="padding:12px 16px; display:flex; align-items:center; justify-content:space-between;">
-                                    <span style="font-size:14px; font-weight:500; color:#333;">林夏</span>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" style="cursor:pointer;"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
-                                </div>
-                                <div style="padding:0 16px 8px; display:flex; gap:6px;">
-                                    <span class="character-tag">👤 常态</span>
-                                    <span class="character-tag">💰 666</span>
-                                    <span class="character-tag">👤+</span>
-                                </div>
-                                <div style="height:160px; background:linear-gradient(135deg, #f0f0f0, #e8e8e8); display:flex; align-items:center; justify-content:center; margin:0 16px 16px; border-radius:6px;">
-                                    <span style="font-size:48px; opacity:0.3;">👤</span>
-                                </div>
-                            </div>
-                            <!-- Character Card 2 -->
-                            <div class="asset-card">
-                                <div style="padding:12px 16px; display:flex; align-items:center; justify-content:space-between;">
-                                    <span style="font-size:14px; font-weight:500; color:#333;">监考官</span>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" style="cursor:pointer;"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
-                                </div>
-                                <div style="padding:0 16px 8px; display:flex; gap:6px;">
-                                    <span class="character-tag">👔 工作装</span>
-                                    <span class="character-tag">👤+</span>
-                                </div>
-                                <div style="height:160px; background:linear-gradient(135deg, #f0f0f0, #e8e8e8); display:flex; align-items:center; justify-content:center; margin:0 16px 16px; border-radius:6px;">
-                                    <span style="font-size:48px; opacity:0.3;">👔</span>
-                                </div>
-                            </div>
-                            <!-- Character Card 3 -->
-                            <div class="asset-card">
-                                <div style="padding:12px 16px; display:flex; align-items:center; justify-content:space-between;">
-                                    <span style="font-size:14px; font-weight:500; color:#333;">王翠梅</span>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" style="cursor:pointer;"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
-                                </div>
-                                <div style="padding:0 16px 8px; display:flex; gap:6px;">
-                                    <span class="character-tag">👗 班主任装</span>
-                                    <span class="character-tag">👤+</span>
-                                </div>
-                                <div style="height:160px; background:linear-gradient(135deg, #f0f0f0, #e8e8e8); display:flex; align-items:center; justify-content:center; margin:0 16px 16px; border-radius:6px;">
-                                    <span style="font-size:48px; opacity:0.3;">👗</span>
-                                </div>
-                            </div>
-                        </div>
+                        <span style="width:24px; height:24px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#666; border-radius:4px;" title="新增">+</span>
                     </div>
-
-                    <!-- Scenes Section -->
-                    <div style="margin-bottom:24px;">
-                        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
-                            <span style="font-size:15px; font-weight:600; color:#333;">场景</span>
-                        </div>
-                        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:16px;">
-                            <div class="asset-card">
-                                <div style="padding:12px 16px; display:flex; align-items:center; justify-content:space-between;">
-                                    <span style="font-size:14px; font-weight:500; color:#333;">第一家打印店</span>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" style="cursor:pointer;"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
-                                </div>
-                                <div style="padding:0 16px 8px; display:flex; gap:6px;">
-                                    <span class="character-tag">🌅 白天</span>
-                                    <span class="character-tag">🌙</span>
-                                </div>
-                                <div style="height:160px; background:linear-gradient(135deg, #f0f0f0, #e8e8e8); display:flex; align-items:center; justify-content:center; margin:0 16px 16px; border-radius:6px;">
-                                    <span style="font-size:48px; opacity:0.3;">🏪</span>
-                                </div>
+                    <!-- Search -->
+                    <div style="position:relative; margin-bottom:12px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" style="position:absolute; left:8px; top:50%; transform:translateY(-50%);"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                        <input type="text" id="character-search" placeholder="搜索名称" style="width:100%; border:1px solid #e0e0e0; border-radius:4px; padding:6px 10px 6px 28px; font-size:12px; outline:none;" oninput="filterCharacters(this.value)">
+                    </div>
+                    <!-- Character List -->
+                    <div id="character-list">
+                        <div class="character-list-item active" data-character="liqin" onclick="selectCharacter(this, 'liqin')">
+                            <div class="character-list-avatar">
+                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop" alt="李沁">
                             </div>
-                            <div class="asset-card">
-                                <div style="padding:12px 16px; display:flex; align-items:center; justify-content:space-between;">
-                                    <span style="font-size:14px; font-weight:500; color:#333;">考场门口</span>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" style="cursor:pointer;"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
-                                </div>
-                                <div style="padding:0 16px 8px; display:flex; gap:6px;">
-                                    <span class="character-tag">🌅 白天</span>
-                                    <span class="character-tag">🌙</span>
-                                </div>
-                                <div style="height:160px; background:linear-gradient(135deg, #f0f0f0, #e8e8e8); display:flex; align-items:center; justify-content:center; margin:0 16px 16px; border-radius:6px;">
-                                    <span style="font-size:48px; opacity:0.3;">🏫</span>
-                                </div>
+                            <div class="character-list-info">
+                                <div class="character-list-name">李沁</div>
+                                <div class="character-list-status">1个状态</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Characters Tab -->
-                <div id="tab-characters" class="tab-content" style="display:none;">
-                    <div style="display:flex; gap:20px;">
-                        <!-- Left: Character List -->
-                        <div style="width:200px; background:#fff; border-radius:8px; border:1px solid #e8e8e8; padding:16px;">
-                            <div style="font-size:14px; font-weight:600; color:#333; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
-                                <span>角色</span>
-                                <span style="background:#2563eb; color:#fff; font-size:11px; padding:2px 6px; border-radius:10px;">3</span>
+                <!-- Center: Character Detail -->
+                <div class="detail-main" style="flex:1; padding:20px 24px; overflow-y:auto; min-width:0;">
+                    <!-- Header Bar -->
+                    <div class="detail-header-bar">
+                        <div class="detail-header-left">
+                            <span class="main-image-tag">
+                                <span class="main-image-tag-dot"></span>
+                                主形象
+                            </span>
+                            <span class="add-image-btn">
+                                <span>+</span>
+                                <span>新增形象</span>
+                            </span>
+                        </div>
+                        <button class="btn-default" style="font-size:12px; padding:4px 12px;">批量更新</button>
+                    </div>
+
+                    <!-- View Tabs: Main View / Three Views -->
+                    <div class="view-tabs">
+                        <span class="view-tab active" data-view="main" onclick="switchViewTab('main')">主视图</span>
+                        <span class="view-tab" data-view="three" onclick="switchViewTab('three')">三视图</span>
+                    </div>
+
+                    <!-- Image Preview Area -->
+                    <div class="image-preview-area" style="margin-bottom:16px;">
+                        <!-- Toolbar -->
+                        <div class="image-toolbar">
+                            <span style="font-size:12px; color:#666; margin-right:auto;">应用</span>
+                            <div class="image-toolbar-btn" title="编辑">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                             </div>
-                            <input type="text" placeholder="搜索名称" style="width:100%; border:1px solid #e0e0e0; border-radius:4px; padding:6px 10px; font-size:12px; margin-bottom:12px; outline:none;">
-                            <div style="display:flex; flex-direction:column; gap:4px;">
-                                <div style="padding:8px 10px; border-radius:6px; background:#2563eb; color:#fff; font-size:13px; cursor:pointer; display:flex; align-items:center; gap:8px;">
-                                    <span style="width:28px; height:28px; background:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px;">👤</span>
-                                    <span>庆尘</span>
-                                </div>
-                                <div style="padding:8px 10px; border-radius:6px; font-size:13px; cursor:pointer; color:#666; transition:all 0.15s; display:flex; align-items:center; gap:8px;" onMouseEnter="this.style.background='#f5f5f5'" onMouseLeave="this.style.background='transparent'">
-                                    <span style="width:28px; height:28px; background:#f0f0f0; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px;">👤</span>
-                                    <span>林夏</span>
-                                </div>
-                                <div style="padding:8px 10px; border-radius:6px; font-size:13px; cursor:pointer; color:#666; transition:all 0.15s; display:flex; align-items:center; gap:8px;" onMouseEnter="this.style.background='#f5f5f5'" onMouseLeave="this.style.background='transparent'">
-                                    <span style="width:28px; height:28px; background:#f0f0f0; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px;">👤</span>
-                                    <span>王翠梅</span>
-                                </div>
+                            <div class="image-toolbar-btn" title="下载">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            </div>
+                            <div class="image-toolbar-btn" title="全屏">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
+                            </div>
+                            <div class="image-toolbar-btn" title="列数">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
                             </div>
                         </div>
+                        <!-- Main View Content -->
+                        <div id="view-main-content" style="position:relative;">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&h=800&fit=crop" alt="李沁" class="image-preview-img">
+                            <span class="image-tag">应用</span>
+                            <span class="image-tag-selected">选中</span>
+                        </div>
+                        <!-- Three Views Content (hidden by default) -->
+                        <div id="view-three-content" style="display:none; padding:60px; text-align:center; color:#999;">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d0d0d0" stroke-width="1" style="margin-bottom:12px;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                            <div style="font-size:14px; color:#999;">暂无三视图</div>
+                        </div>
+                    </div>
 
-                        <!-- Center: Character Detail -->
-                        <div style="flex:1; min-width:0;">
-                            <div style="background:#fff; border-radius:8px; border:1px solid #e8e8e8; padding:20px; margin-bottom:16px;">
-                                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
-                                    <span style="font-size:16px; font-weight:600; color:#333;">庆尘</span>
-                                    <button class="btn-default" style="font-size:12px; padding:4px 12px;">批量更新</button>
-                                </div>
-                                <!-- View Tabs -->
-                                <div style="display:flex; gap:16px; border-bottom:1px solid #e8e8e8; margin-bottom:16px;">
-                                    <span style="padding-bottom:8px; border-bottom:2px solid #2563eb; color:#2563eb; font-size:13px; font-weight:500; cursor:pointer;">主视图</span>
-                                    <span style="padding-bottom:8px; border-bottom:2px solid transparent; color:#999; font-size:13px; cursor:pointer;">三视图</span>
-                                </div>
-                                <!-- Image Preview -->
-                                <div style="height:320px; background:linear-gradient(135deg, #f5f5f5, #e8e8e8); border-radius:8px; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
-                                    <span style="font-size:80px; opacity:0.2;">👤</span>
-                                </div>
-                                <!-- Info Bar -->
-                                <div style="display:flex; align-items:center; gap:16px; font-size:12px; color:#999; margin-bottom:16px;">
-                                    <span>来源 AI生成</span>
-                                    <span>模型 GPTImage-2.0</span>
-                                    <span>时间 2026-07-16 10:24</span>
-                                </div>
-                                <!-- Action Buttons -->
-                                <div style="display:flex; gap:8px;">
-                                    <button class="btn-default" style="font-size:12px;">资产引用</button>
-                                    <button class="btn-primary" style="font-size:12px;">一键生成 ⚡ 6</button>
-                                    <button class="btn-default" style="font-size:12px;">设为参考图</button>
-                                </div>
-                            </div>
-                            <!-- Generation Records -->
-                            <div style="background:#fff; border-radius:8px; border:1px solid #e8e8e8; padding:16px;">
-                                <div style="font-size:14px; font-weight:600; color:#333; margin-bottom:12px;">生成记录 <span style="color:#999; font-size:12px; font-weight:400;">1</span></div>
-                                <div style="display:flex; gap:12px;">
-                                    <div style="width:80px; height:80px; background:linear-gradient(135deg, #f0f0f0, #e8e8e8); border-radius:6px; display:flex; align-items:center; justify-content:center; border:2px solid #2563eb;">
-                                        <span style="font-size:24px; opacity:0.3;">👤</span>
-                                        <span style="position:absolute; bottom:4px; left:4px; background:#20c997; color:#fff; font-size:9px; padding:1px 4px; border-radius:3px;">使用中</span>
-                                    </div>
-                                </div>
+                    <!-- Info Row -->
+                    <div class="info-row">
+                        <div class="info-row-item">
+                            <span class="info-row-label">来源</span>
+                            <span class="info-row-value">上传入库</span>
+                        </div>
+                        <div class="info-row-item">
+                            <span class="info-row-label">模型</span>
+                            <span class="info-row-value">-</span>
+                        </div>
+                        <div class="info-row-item">
+                            <span class="info-row-label">时间</span>
+                            <span class="info-row-value">2026-07-16 10:48</span>
+                        </div>
+                        <span class="info-row-action">设为参考图</span>
+                    </div>
+
+                    <!-- Detail Info Row -->
+                    <div style="display:flex; align-items:center; gap:20px; padding:8px 0; font-size:12px; color:#666;">
+                        <div class="info-row-item">
+                            <span class="info-row-label">提示词</span>
+                            <span class="info-row-value">-</span>
+                        </div>
+                        <div class="info-row-item">
+                            <span class="info-row-label">比例</span>
+                            <span class="info-row-value">-</span>
+                        </div>
+                        <div class="info-row-item">
+                            <span class="info-row-label">分辨率</span>
+                            <span class="info-row-value">-</span>
+                        </div>
+                        <div class="info-row-item">
+                            <span class="info-row-label">参考图</span>
+                            <span class="info-row-value">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Generate Records -->
+                    <div class="generate-records">
+                        <div class="generate-records-header">
+                            <div>
+                                <span class="generate-records-title">生成记录</span>
+                                <span class="generate-records-count">1</span>
                             </div>
                         </div>
-
-                        <!-- Right: AI Config Panel -->
-                        <div style="width:300px; background:#fff; border-radius:8px; border:1px solid #e8e8e8; padding:16px;">
-                            <div style="font-size:14px; font-weight:600; color:#333; margin-bottom:16px;">AI 生图配置</div>
-                            <!-- Model -->
-                            <div style="margin-bottom:16px;">
-                                <div style="font-size:12px; color:#666; margin-bottom:6px;">* 模型</div>
-                                <select class="filter-select" style="width:100%;">
-                                    <option>GPTImage-2.0</option>
-                                    <option>Seedream 5.0</option>
-                                    <option>Qwen Image</option>
-                                </select>
+                        <div class="generate-records-batch">
+                            <span>批量生成</span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                        <div style="display:flex; gap:12px;">
+                            <div class="record-thumb record-thumb-active">
+                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop" alt="生成记录">
+                                <span class="record-thumb-badge">使用中</span>
                             </div>
-                            <!-- Resolution & Count & Ratio -->
-                            <div style="display:flex; gap:8px; margin-bottom:16px;">
-                                <div style="flex:1;">
-                                    <div style="font-size:12px; color:#666; margin-bottom:6px;">* 分辨率</div>
-                                    <select class="filter-select" style="width:100%;">
-                                        <option>1K</option>
-                                        <option>2K</option>
-                                        <option>4K</option>
-                                    </select>
-                                </div>
-                                <div style="flex:1;">
-                                    <div style="font-size:12px; color:#666; margin-bottom:6px;">* 数量</div>
-                                    <select class="filter-select" style="width:100%;">
-                                        <option>1个</option>
-                                        <option>2个</option>
-                                        <option>4个</option>
-                                    </select>
-                                </div>
-                                <div style="flex:1;">
-                                    <div style="font-size:12px; color:#666; margin-bottom:6px;">* 比例</div>
-                                    <select class="filter-select" style="width:100%;">
-                                        <option>9:16</option>
-                                        <option>16:9</option>
-                                        <option>1:1</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <!-- Reference Images -->
-                            <div style="margin-bottom:16px;">
-                                <div style="font-size:12px; color:#666; margin-bottom:6px;">参考图 (0/12)</div>
-                                <div style="border:1px dashed #d0d0d0; border-radius:6px; padding:16px; text-align:center; color:#999; font-size:12px; cursor:pointer; transition:all 0.15s;" onMouseEnter="this.style.borderColor='#2563eb'" onMouseLeave="this.style.borderColor='#d0d0d0'">
-                                    <div style="font-size:20px; margin-bottom:4px;">+</div>
-                                    <div>本地上传</div>
-                                    <div style="color:#2563eb;">资产库导入</div>
-                                </div>
-                            </div>
-                            <!-- Prompt -->
-                            <div style="margin-bottom:16px;">
-                                <div style="font-size:12px; color:#666; margin-bottom:6px;">* 提示词</div>
-                                <textarea style="width:100%; height:120px; border:1px solid #e0e0e0; border-radius:4px; padding:8px; font-size:12px; resize:vertical; outline:none;" placeholder="输入角色描述...">[庆尘,主角,男,中国,现代都市超凡,少年]
-【剧情身份】:被夜命名过的高中生,深层夜色权限持有者
-【五官与面部】
-脸型:清瘦利落的少年感瓜子脸
-眉型:平直淡淡适中的剑眉
-眼型:狭长清冷的内双眼
-鼻型:挺直窄鼻梁
-唇型:薄而线条干净的唇
-肤色:冷白肤色
-头发:黑色短发,额前碎发自然垂落
-【身材比例】:身高约178cm,肩背清瘦挺直,四肢修长,少年感强,比例匀称
-【妆造】:干净冷白底妆,眼下带轻微夜行疲惫感,无明显伤痕
-【服装】:黑色连帽卫衣,袖口收紧,下穿深色直筒长裤,脚穿黑色轻便运动鞋</textarea>
-                            </div>
-                            <!-- Generate Button -->
-                            <button class="btn-primary" style="width:100%; padding:10px; font-size:14px; font-weight:500;">
-                                确认生图 ⚡ 6
-                            </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Scenes Tab -->
-                <div id="tab-scenes" class="tab-content" style="display:none;">
-                    <div style="background:#fff; border-radius:8px; border:1px solid #e8e8e8; padding:40px; text-align:center; color:#999;">
-                        <div style="font-size:48px; margin-bottom:16px; opacity:0.3;">🏞️</div>
-                        <div style="font-size:16px; font-weight:500; color:#666; margin-bottom:8px;">场景管理</div>
-                        <div style="font-size:13px; color:#999;">场景列表和预览功能开发中...</div>
+                <!-- Right: AI Config Panel -->
+                <div class="detail-right" style="width:300px; padding:16px; overflow-y:auto;">
+                    <div class="ai-config-title">
+                        <span>AI 生图配置</span>
+                        <div class="ai-config-tabs">
+                            <span class="ai-config-tab active" data-config-tab="main" onclick="switchConfigTab('main')">主视图</span>
+                            <span class="ai-config-tab" data-config-tab="three" onclick="switchConfigTab('three')">三视图</span>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Props Tab -->
-                <div id="tab-props" class="tab-content" style="display:none;">
-                    <div style="background:#fff; border-radius:8px; border:1px solid #e8e8e8; padding:40px; text-align:center; color:#999;">
-                        <div style="font-size:48px; margin-bottom:16px; opacity:0.3;">💎</div>
-                        <div style="font-size:16px; font-weight:500; color:#666; margin-bottom:8px;">道具管理</div>
-                        <div style="font-size:13px; color:#999;">道具列表和预览功能开发中...</div>
+                    <!-- Model -->
+                    <div class="ai-config-section">
+                        <div class="ai-config-label ai-config-label-required">模型</div>
+                        <select class="filter-select" style="width:100%;">
+                            <option>GPTImage-2.0</option>
+                            <option>Seedream 5.0</option>
+                            <option>Qwen Image</option>
+                        </select>
                     </div>
-                </div>
 
-                <!-- Shots Tab -->
-                <div id="tab-shots" class="tab-content" style="display:none;">
-                    <div style="background:#fff; border-radius:8px; border:1px solid #e8e8e8; padding:40px; text-align:center; color:#999;">
-                        <div style="font-size:48px; margin-bottom:16px; opacity:0.3;">🎬</div>
-                        <div style="font-size:16px; font-weight:500; color:#666; margin-bottom:8px;">智能镜头</div>
-                        <div style="font-size:13px; color:#999;">智能镜头管理功能开发中...</div>
+                    <!-- Resolution & Count & Ratio -->
+                    <div style="display:flex; gap:8px; margin-bottom:16px;">
+                        <div style="flex:1;">
+                            <div class="ai-config-label ai-config-label-required">分辨率</div>
+                            <select class="filter-select" style="width:100%;">
+                                <option>1K</option>
+                                <option>2K</option>
+                                <option>4K</option>
+                            </select>
+                        </div>
+                        <div style="flex:1;">
+                            <div class="ai-config-label ai-config-label-required">数量</div>
+                            <select class="filter-select" style="width:100%;">
+                                <option>1个</option>
+                                <option>2个</option>
+                                <option>4个</option>
+                            </select>
+                        </div>
+                        <div style="flex:1;">
+                            <div class="ai-config-label ai-config-label-required">比例</div>
+                            <select class="filter-select" style="width:100%;">
+                                <option>9:16</option>
+                                <option>16:9</option>
+                                <option>1:1</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Materials Tab -->
-                <div id="tab-materials" class="tab-content" style="display:none;">
-                    <div style="background:#fff; border-radius:8px; border:1px solid #e8e8e8; padding:40px; text-align:center; color:#999;">
-                        <div style="font-size:48px; margin-bottom:16px; opacity:0.3;">📦</div>
-                        <div style="font-size:16px; font-weight:500; color:#666; margin-bottom:8px;">通用素材</div>
-                        <div style="font-size:13px; color:#999;">通用素材库功能开发中...</div>
+                    <!-- Reference Images -->
+                    <div class="ai-config-section">
+                        <div class="ai-config-label">参考图 (0/12)</div>
+                        <div class="ai-config-upload">
+                            <div style="font-size:20px; margin-bottom:4px;">+</div>
+                            <div style="font-size:12px; color:#999;">本地上传</div>
+                            <div style="font-size:12px; color:#2563eb;">资产库导入</div>
+                        </div>
+                    </div>
+
+                    <!-- Prompt -->
+                    <div class="ai-config-section">
+                        <div class="ai-config-label ai-config-label-required">提示词</div>
+                        <textarea class="ai-config-textarea" placeholder="请输入生成图片的详细描述，输入 @ 可引用参考图..."></textarea>
+                    </div>
+
+                    <!-- Generate Button -->
+                    <button class="btn-primary" style="width:100%; padding:10px; font-size:14px; font-weight:500; margin-bottom:16px;">
+                        确认生图
+                    </button>
+
+                    <!-- Current Source -->
+                    <div class="ai-config-source" onclick="toggleSourcePanel(this)">
+                        <span>当前状态来源</span>
+                        <svg class="ai-config-source-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                    </div>
+                    <div id="source-panel-content" style="display:none; padding:8px 0; font-size:12px; color:#666;">
+                        <div>来源：上传入库</div>
+                        <div>时间：2026-07-16 10:48</div>
                     </div>
                 </div>
             </div>
@@ -612,6 +640,55 @@
             document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
             const target = document.getElementById('tab-' + tabName);
             if (target) target.style.display = 'block';
+        }
+
+        function switchAssetType(type) {
+            document.querySelectorAll('.asset-nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.asset === type) item.classList.add('active');
+            });
+            // Update list title and count based on type
+            const titles = { characters: '角色', scenes: '场景', props: '道具', materials: '通用素材' };
+            const titleEl = document.getElementById('asset-list-title');
+            if (titleEl) titleEl.textContent = titles[type] || '角色';
+        }
+
+        function selectCharacter(el, id) {
+            document.querySelectorAll('.character-list-item').forEach(item => item.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function filterCharacters(query) {
+            const items = document.querySelectorAll('.character-list-item');
+            items.forEach(item => {
+                const name = item.querySelector('.character-list-name')?.textContent || '';
+                item.style.display = name.toLowerCase().includes(query.toLowerCase()) ? 'flex' : 'none';
+            });
+        }
+
+        function switchViewTab(view) {
+            document.querySelectorAll('.view-tab').forEach(t => {
+                t.classList.remove('active');
+                if (t.dataset.view === view) t.classList.add('active');
+            });
+            const mainContent = document.getElementById('view-main-content');
+            const threeContent = document.getElementById('view-three-content');
+            if (mainContent) mainContent.style.display = view === 'main' ? 'block' : 'none';
+            if (threeContent) threeContent.style.display = view === 'three' ? 'block' : 'none';
+        }
+
+        function switchConfigTab(tab) {
+            document.querySelectorAll('.ai-config-tab').forEach(t => {
+                t.classList.remove('active');
+                if (t.dataset.configTab === tab) t.classList.add('active');
+            });
+        }
+
+        function toggleSourcePanel(el) {
+            const arrow = el.querySelector('.ai-config-source-arrow');
+            const content = document.getElementById('source-panel-content');
+            if (arrow) arrow.classList.toggle('expanded');
+            if (content) content.style.display = content.style.display === 'none' ? 'block' : 'none';
         }
 
         function selectEpisode(el, episodeId) {
