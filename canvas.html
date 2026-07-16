@@ -173,6 +173,14 @@
                 }, 3000);
             };
 
+            // Auto-apply result to node when genResult changes (top-level hook)
+            React.useEffect(() => {
+                if (genResult) {
+                    setDesc(genResult.text);
+                    setInputText(genResult.text);
+                }
+            }, [genResult]);
+
             // Generating state
             if (isGenerating) {
                 return React.createElement('div', {
@@ -196,12 +204,6 @@
 
             // Result state (after generation) — auto-applied, no buttons
             if (genResult) {
-                // Auto-apply result to node
-                React.useEffect(() => {
-                    setDesc(genResult.text);
-                    setInputText(genResult.text);
-                }, [genResult]);
-
                 const handleDownload = () => {
                     const blob = new Blob([genResult.text], {type: 'text/plain'});
                     const url = URL.createObjectURL(blob);
