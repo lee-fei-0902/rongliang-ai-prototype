@@ -173,15 +173,6 @@
                 }, 3000);
             };
 
-            const handleUseResult = () => {
-                if (genResult) {
-                    setDesc(genResult.text);
-                    setInputText(genResult.text);
-                    setGenResult(null);
-                    showToast('已应用生成结果到节点','success');
-                }
-            };
-
             // Generating state
             if (isGenerating) {
                 return React.createElement('div', {
@@ -203,39 +194,59 @@
                 );
             }
 
-            // Result state (after generation)
+            // Result state (after generation) — auto-applied, no buttons
             if (genResult) {
+                // Auto-apply result to node
+                React.useEffect(() => {
+                    setDesc(genResult.text);
+                    setInputText(genResult.text);
+                }, [genResult]);
+
+                const handleDownload = () => {
+                    const blob = new Blob([genResult.text], {type: 'text/plain'});
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = (data.label || '文本节点') + '.txt';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    showToast('已下载为 txt 文件','success');
+                };
+
                 return React.createElement('div', {
                     style: { width:'100%' },
                     onClick: e => e.stopPropagation(),
                 },
-                    // Result text preview
-                    React.createElement('div', {
-                        style: {
-                            padding:'12px',background:'rgba(0,0,0,0.2)',borderRadius:'8px',
-                            fontSize:'12px',color:'#c1c2c5',lineHeight:1.6,
-                            maxHeight:'120px',overflow:'auto',marginBottom:'12px',
-                            whiteSpace:'pre-wrap',border:'1px solid rgba(255,255,255,0.06)',
-                        },
-                    }, genResult.text.substring(0, 200) + '...'),
-                    // Action buttons
-                    React.createElement('div', {style:{display:'flex',gap:'8px'}},
+                    // Header with download
+                    React.createElement('div', {style:{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'10px'}},
+                        React.createElement('span', {style:{fontSize:'13px',fontWeight:600,color:'#e4e5e7'}},'生成结果'),
                         React.createElement('button', {
-                            onClick: handleUseResult,
+                            onClick: handleDownload,
                             style: {
-                                flex:1,padding:'8px',borderRadius:'8px',border:'none',
-                                background:'linear-gradient(135deg,#4c6ef5,#7950f2)',
-                                color:'#fff',fontSize:'12px',cursor:'pointer',fontWeight:500,
+                                padding:'4px 10px',borderRadius:'6px',border:'1px solid rgba(255,255,255,0.1)',
+                                background:'transparent',color:'#c1c2c5',fontSize:'11px',cursor:'pointer',
+                                display:'flex',alignItems:'center',gap:'4px',
                             },
-                        }, '✓ 应用结果'),
-                        React.createElement('button', {
-                            onClick: () => setGenResult(null),
-                            style: {
-                                flex:1,padding:'8px',borderRadius:'8px',border:'1px solid rgba(255,255,255,0.1)',
-                                background:'transparent',color:'#c1c2c5',fontSize:'12px',cursor:'pointer',
-                            },
-                        }, '↩ 重新编辑'),
+                            onMouseEnter: e => { e.target.style.background = 'rgba(255,255,255,0.04)'; },
+                            onMouseLeave: e => { e.target.style.background = 'transparent'; },
+                        }, '⬇ 下载'),
                     ),
+                    // Result text preview (full text, editable)
+                    React.createElement('textarea', {
+                        value: genResult.text,
+                        onChange: e => { setInputText(e.target.value); setDesc(e.target.value); },
+                        style: {
+                            width:'100%',minHeight:'150px',background:'rgba(0,0,0,0.2)',
+                            border:'1px solid rgba(255,255,255,0.06)',borderRadius:'8px',
+                            fontSize:'12px',color:'#c1c2c5',lineHeight:1.6,
+                            padding:'12px',resize:'vertical',outline:'none',
+                            whiteSpace:'pre-wrap',
+                        },
+                        onFocus: e => { e.target.style.borderColor = 'rgba(76,110,245,0.3)'; },
+                        onBlur: e => { e.target.style.borderColor = 'rgba(255,255,255,0.06)'; },
+                    }),
                 );
             }
 
@@ -431,7 +442,7 @@
                         React.createElement('span',{style:{color:'#5c5f66',fontSize:'10px',transition:'transform 0.2s',transform:expanded?'rotate(180deg)':'rotate(0deg)'}},'▼'),
                     ),
 
-                    // Content Area: show text content or empty state prompt
+                    // Content Area: show empty state prompt only (no content text)
                     (() => {
                         const genNodeTypes = ['text_node','character_gen','scene_gen','prop_gen','image_gen'];
                         const isGenNode = genNodeTypes.includes(data.nodeType);
@@ -450,16 +461,7 @@
                             prop_gen: '💎',
                             image_gen: '🖼️',
                         };
-                        if (desc) {
-                            return React.createElement('div', {
-                                style:{
-                                    padding:'12px 14px', fontSize:'12px', color:'#c1c2c5',
-                                    lineHeight:1.6, maxHeight:'200px', overflow:'auto',
-                                    borderTop:'1px solid rgba(255,255,255,0.04)',
-                                    whiteSpace:'pre-wrap',
-                                }, key:'content'
-                            }, desc);
-                        }
+                        // Only show empty state, never show content text on card
                         return React.createElement('div', {
                             style:{
                                 padding:'24px 14px', textAlign:'center',
