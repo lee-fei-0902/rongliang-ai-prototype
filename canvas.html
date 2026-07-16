@@ -309,7 +309,7 @@
             const hasIn = cfg.input.length > 0;
             const hasOut = cfg.output.length > 0;
             const st = data.status || 'ready';
-            const [expanded, setExpanded] = useState(false);
+            const [expanded, setExpanded] = useState(data.expanded || false);
 
             const statusColor = {
                 ready:'rgba(255,255,255,0.10)', queued:'#4c6ef5', running:'#f59f00',
@@ -631,7 +631,7 @@
         function CharacterNode({ id, data, selected }) {
             const cfg = NODE_TYPES_CONFIG.character_gen;
             const st = data.status || 'ready';
-            const [expanded, setExpanded] = useState(false);
+            const [expanded, setExpanded] = useState(data.expanded || false);
             const [showImportMenu, setShowImportMenu] = useState(false);
             const [showRefHover, setShowRefHover] = useState(false);
             const [showTopToolbar, setShowTopToolbar] = useState(false);
@@ -1120,7 +1120,7 @@
         function ImageNode({ id, data, selected }) {
             const cfg = NODE_TYPES_CONFIG.image_gen;
             const st = data.status || 'ready';
-            const [expanded, setExpanded] = useState(false);
+            const [expanded, setExpanded] = useState(data.expanded || false);
             const [showImportMenu, setShowImportMenu] = useState(false);
             const [showRefHover, setShowRefHover] = useState(false);
             const [showTopToolbar, setShowTopToolbar] = useState(false);
@@ -1527,7 +1527,7 @@
         function VisualNode({ id, data, selected }) {
             const cfg = NODE_TYPES_CONFIG[data.nodeType] || NODE_TYPES_CONFIG.scene_gen;
             const st = data.status || 'ready';
-            const [expanded, setExpanded] = useState(false);
+            const [expanded, setExpanded] = useState(data.expanded || false);
             const [panelExpanded, setPanelExpanded] = useState(false);
             const [showImportMenu, setShowImportMenu] = useState(false);
             const [showRefHover, setShowRefHover] = useState(false);
@@ -2033,7 +2033,7 @@
         function StoryboardNode({ id, data, selected }) {
             const cfg = NODE_TYPES_CONFIG[data.nodeType] || NODE_TYPES_CONFIG.storyboard_gen;
             const st = data.status || 'ready';
-            const [expanded, setExpanded] = useState(false);
+            const [expanded, setExpanded] = useState(data.expanded || false);
             const [prompt, setPrompt] = useState(data.prompt || data.description || '');
             const [genMode, setGenMode] = useState(data.genMode || 'text'); // text, firstLast, reference
             const [ratio, setRatio] = useState(data.ratio || '16:9');
@@ -2492,7 +2492,7 @@
         function VideoComposeNode({ id, data, selected }) {
             const cfg = { label:'视频合成', icon:'✂️', color:'#e0e0e0', bg:'rgba(224,224,224,0.10)' };
             const st = data.status || 'ready';
-            const [expanded, setExpanded] = useState(false);
+            const [expanded, setExpanded] = useState(data.expanded || false);
             const [showComposePage, setShowComposePage] = useState(false);
             const [showExportMenu, setShowExportMenu] = useState(false);
             const [playheadTime, setPlayheadTime] = useState('00:00');
@@ -2873,7 +2873,7 @@
                                  type === 'video_compose' ? 'videoComposeNode' : 'customNode';
                 const nd={id,type:nodeType,position:pos,
                     data:{nodeType:type,label:cfg.label,status:'ready',sourceType:'upload',
-                        model:MODEL_OPTIONS[type]?.[0]||'',ratio:'9:16',duration:'5',resolution:'1080P',style:STYLE_OPTIONS[0],cost:0}};
+                        model:MODEL_OPTIONS[type]?.[0]||'',ratio:'9:16',duration:'5',resolution:'1080P',style:STYLE_OPTIONS[0],cost:0,expanded:true}};
                 saveHist();setNodes(nds=>[...nds,nd]);setShowCreateMenu(null);
                 showToast('已添加 '+cfg.label,'success');
             },[setNodes,saveHist,showToast]);
