@@ -1516,7 +1516,7 @@
 
             const isCompleted = st === 'completed';
             const hasImage = data.preview || isCompleted;
-            const nodeLabel = data.label || cfg.label;
+            const [nodeLabel, setNodeLabel] = useState(data.label || cfg.label);
 
             // Reference image upload simulation
             const addReferenceImage = useCallback(() => {
@@ -1724,7 +1724,17 @@
                         }, key:'hdr'
                     },
                         React.createElement('span',{style:{fontSize:'14px',color:'#5c5f66'}},cfg.icon),
-                        React.createElement('span',{style:{fontSize:'13px',fontWeight:600,color:'#e4e5e7',flex:1,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},nodeLabel),
+                        React.createElement('input',{
+                            value:nodeLabel,
+                            onChange:e=>setNodeLabel(e.target.value),
+                            onClick:e=>e.stopPropagation(),
+                            onDoubleClick:e=>{e.target.select();},
+                            style:{
+                                background:'transparent',border:'none',color:'#e4e5e7',
+                                fontSize:'13px',fontWeight:600,flex:1,outline:'none',padding:0,
+                                overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',
+                            },
+                        }),
                     ),
 
                     // Preview area (large)
