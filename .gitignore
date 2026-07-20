@@ -1,0 +1,9 @@
+node_modules/
+package-lock.json
+package.json
+*.png
+test-results/
+test-canvas.js
+test_canvas.js
+generate_prd.py
+generate_prd_v4.py
